@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pathfinder 2 – Charakterbogen-Export (Foundry VTT)</title>
+<link rel="stylesheet" href="styles/app.css">
+<link rel="stylesheet" href="styles/sheet.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Pathfinder&nbsp;2 Charakterbogen-Export</h1>
+    <p>Foundry-VTT-Charakter importieren &amp; als Papier-Charakterbogen (Einsteigerbox-Stil) drucken – komplett auf Deutsch, Maßeinheiten bleiben im englischen (imperialen) System.</p>
+  </header>
+
+  <main class="app-shell">
+    <section class="upload-panel">
+      <h2>1. Charakter aus Foundry exportieren</h2>
+      <div class="steps">
+        <ol>
+          <li>Foundry VTT öffnen, im Actor-Verzeichnis mit der <strong>rechten Maustaste</strong> auf den Charakter klicken.</li>
+          <li><strong>„Export Data“</strong> auswählen – es wird eine <code>.json</code>-Datei heruntergeladen.</li>
+          <li>Diese Datei unten hochladen (oder den Inhalt einfügen) und auf „Bogen erzeugen“ klicken.</li>
+        </ol>
+        <p>Alle Verarbeitung passiert lokal in deinem Browser – es wird nichts hochgeladen oder irgendwohin gesendet.</p>
+      </div>
+
+      <h2>2. Datei laden</h2>
+      <label class="drop-zone" id="drop-zone">
+        <span id="drop-zone-text">Datei hierher ziehen oder klicken, um eine Foundry-Export-JSON-Datei auszuwählen</span>
+        <input type="file" id="file-input" accept="application/json,.json">
+      </label>
+
+      <p>…oder JSON-Inhalt direkt einfügen:</p>
+      <textarea id="json-paste" placeholder="{ &quot;name&quot;: &quot;...&quot;, &quot;type&quot;: &quot;character&quot;, ... }"></textarea>
+
+      <div class="toolbar">
+        <button id="generate-btn">Bogen erzeugen</button>
+        <button id="sample-btn" class="secondary">Beispiel-Charakter laden</button>
+        <button id="print-btn" class="secondary" disabled>Drucken / Als PDF speichern</button>
+        <span id="status-msg" class="status-msg"></span>
+      </div>
+    </section>
+
+    <div id="sheet-output"></div>
+  </main>
+
+  <footer class="app-footer">
+    Inoffizielles Fan-Projekt, nicht mit Paizo Inc. oder Ulisses Spiele verbunden. Regeltexte sind eigene,
+    kurze Zusammenfassungen zum leichteren Verständnis – maßgeblich bleibt das offizielle Regelwerk.
+  </footer>
+
+  <script src="src/i18n.js"></script>
+  <script src="src/explanations.js"></script>
+  <script src="src/parser.js"></script>
+  <script src="src/render.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>

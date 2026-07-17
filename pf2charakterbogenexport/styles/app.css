@@ -1,0 +1,88 @@
+/* Oberfläche der App selbst (nicht Teil des gedruckten Bogens) */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  background: #2c241a;
+  color: #f2ead9;
+}
+.app-header {
+  background: linear-gradient(180deg, #7a1f1f, #591414);
+  padding: 16px 24px;
+  border-bottom: 4px solid #b8860b;
+}
+.app-header h1 { margin: 0 0 4px; font-size: 20px; }
+.app-header p { margin: 0; font-size: 13px; color: #f2ead9cc; }
+
+.app-shell { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+.upload-panel {
+  background: #3a2f22;
+  border: 2px solid #b8860b;
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.upload-panel h2 { font-size: 15px; margin-top: 0; }
+.upload-panel .steps { font-size: 13px; line-height: 1.5; color: #e6dcc4; }
+.upload-panel .steps ol { padding-left: 20px; }
+
+.drop-zone {
+  border: 2px dashed #b8860b;
+  border-radius: 6px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  margin: 12px 0;
+  background: #4a3d29;
+}
+.drop-zone.dragover { background: #6a5638; }
+.drop-zone input[type="file"] { display: none; }
+
+textarea#json-paste {
+  width: 100%;
+  min-height: 100px;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #b8860b;
+  background: #1f1912;
+  color: #f2ead9;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+button {
+  font-family: inherit;
+  font-weight: bold;
+  background: #7a1f1f;
+  color: #fff;
+  border: 2px solid #b8860b;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+}
+button:hover { background: #9a2b2b; }
+button.secondary { background: #4a3d29; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.status-msg { font-size: 12px; }
+.status-msg.error { color: #ff8f8f; }
+.status-msg.ok { color: #a5e0a5; }
+
+.app-footer {
+  text-align: center;
+  font-size: 11px;
+  color: #a99b7c;
+  padding: 20px;
+}
+.app-footer a { color: #d9b96a; }
+
+#sheet-output { margin-top: 20px; }
