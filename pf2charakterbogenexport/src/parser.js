@@ -1105,6 +1105,52 @@
 
   /* ---------------- Inventar ---------------- */
 
+  const RUNE_TIERS = ["", "", "-greater", "-major"];
+
+  /** Beschreibung, Runen und gespeicherte Zauber eines Gegenstands. */
+  function itemDetails(it) {
+    const s = it.system || {};
+    const traits = traitsOf(it);
+    const runes = [];
+    const rs = s.runes || {};
+    const runeEntry = (slug) => {
+      const e = D.entry("eq:" + slug);
+      return { name: (e && e.n) || D.term(slug), summary: (e && e.s) || "" };
+    };
+    if (num(rs.potency, 0) > 0) runes.push(runeEntry(`${it.type === "armor" ? "armor" : "weapon"}-potency-${num(rs.potency, 0)}`));
+    if (num(rs.striking, 0) > 0) runes.push(runeEntry(`striking${RUNE_TIERS[num(rs.striking, 0)] || ""}`));
+    if (num(rs.resilient, 0) > 0) runes.push(runeEntry(`resilient${RUNE_TIERS[num(rs.resilient, 0)] || ""}`));
+    if (num(rs.reinforcing, 0) > 0) runes.push(runeEntry(["", "reinforcing-rune-minor", "reinforcing-rune-lesser", "reinforcing-rune-moderate", "reinforcing-rune-greater", "reinforcing-rune-major", "reinforcing-rune-supreme"][num(rs.reinforcing, 0)] || "reinforcing-rune-minor"));
+    (Array.isArray(rs.property) ? rs.property : []).filter(Boolean).forEach((p) => runes.push(runeEntry(p)));
+
+    // Zauberstab / Schriftrolle: enthaltener Zauber
+    let spell = null;
+    if (s.spell && s.spell.name) {
+      const sp = Object.assign({ type: "spell" }, s.spell);
+      const sum = D.itemSummary(sp);
+      spell = {
+        name: D.itemName(sp),
+        rank: num(get(s.spell, "system.location.heightenedLevel", null) ?? get(s.spell, "system.level.value", 1), 1),
+        summary: sum ? sum.s || "" : "",
+      };
+    }
+
+    const sum = D.itemSummary(it);
+    const magical = traits.includes("magical") || traits.includes("invested") || traits.includes("alchemical") || runes.length > 0 || !!spell ||
+      ["arcane", "divine", "occult", "primal"].some((t) => traits.includes(t));
+    return {
+      magical,
+      rarity: get(s, "traits.rarity", "common"),
+      traitsDe: traits.filter((t) => !["magical"].includes(t)).map(D.trait),
+      desc: sum
+        ? { s: sum.s || "", act: sum.act || "", freq: sum.freq || "", eff: sum.eff || "", trigger: sum.trigger || "", req: sum.req || "", sp: sum.sp || [] }
+        : null,
+      runes,
+      spell,
+      usage: get(s, "usage.value", ""),
+    };
+  }
+
   function parseInventory(items, attrs, numeric) {
     const physical = items.filter((it) => PHYSICAL.includes(it.type));
     const containers = new Map(items.filter((it) => it.type === "backpack").map((b) => [b._id, b]));
@@ -1140,6 +1186,7 @@
         invested: traitsOf(it).includes("invested") ? !!get(s, "equipped.invested", false) : null,
         container: inContainer ? D.itemName(inContainer) : null,
         level: num(get(s, "level.value", 0), 0),
+        ...itemDetails(it),
       });
     });
 

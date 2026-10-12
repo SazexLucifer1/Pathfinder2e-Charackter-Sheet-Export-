@@ -20,6 +20,8 @@
 
   function cleanInline(html) {
     return String(html || "")
+      // Aktionssymbole der Foundry-Schrift
+      .replace(/<span class="action-glyph">\s*([^<]*?)\s*<\/span>/gi, (_, g) => ({ "1": "◆", A: "◆", a: "◆", "2": "◆◆", D: "◆◆", d: "◆◆", "3": "◆◆◆", T: "◆◆◆", t: "◆◆◆", R: "⤾", r: "⤾", F: "◇", f: "◇" })[g] || g)
       // Verweise auf Effekt-Gegenstände ("Zaubereffekt: …") sind nur Foundry-Technik
       .replace(/@UUID\[[^\]]*effect[^\]]*\](\{[^}]*\})?/gi, "")
       .replace(/@UUID\[[^\]]*\]\{([^}]*)\}/g, "$1")
@@ -146,5 +148,71 @@
     return en > de;
   }
 
-  return { summarize, looksEnglish, htmlToText };
+  /**
+   * Kurzfassung für Gegenstände: Beschreibung + Aktivierung/Häufigkeit/Effekt
+   * und ggf. die Zauberliste von Stecken.
+   */
+  const ITEM_LABELS = {
+    aktivierung: "act", aktivieren: "act", activate: "act",
+    häufigkeit: "freq", frequency: "freq",
+    effekt: "eff", effect: "eff",
+    auslöser: "trigger", trigger: "trigger",
+    voraussetzung: "req", voraussetzungen: "req", anforderungen: "req", requirements: "req",
+    nutzung: "use", usage: "use",
+  };
+  const ITEM_RULE_RE =
+    /\d|Bonus|Malus|SG\b|Schaden|TP\b|Aktion|Reaktion|Wurf|würf|Angriff|Zustand|Rüstungsklasse|\bRK\b|Rettungs|Fertigkeit|Kompetenz|Zauber|erhältst|erhält|Erhöhe|erhöh|Treffer|Bewegungsrate|Ladung|investier|aktivier|kannst|Resistenz|Immun|Runde|Minute|Stunde|Traglast|Wirkung|Effekt|Rune/i;
+  const SKIP_LABEL = /herstellung|craft|hinweis|note|kritisch|erfolg|fehlschlag|success|failure|typ\b|type\b|stufe\s*\d|level/i;
+
+  function summarizeItem(html, maxLen) {
+    if (!html) return null;
+    maxLen = maxLen || 260;
+    const blocks = String(html)
+      .split(/<\/p>|<hr\s*\/?>|<\/li>|<\/h\d>/i)
+      .map((b) => b.trim())
+      .filter(Boolean);
+    const res = {};
+    const body = [];
+    const spells = [];
+    for (const block of blocks) {
+      const m = block.match(/^\s*(?:<ul>\s*)?(?:<li>|<p>)?\s*<strong>([^<]+)<\/strong>(.*)$/is);
+      if (m) {
+        const rawLabel = m[1].trim();
+        const label = rawLabel.toLowerCase().replace(/[:\s]+$/, "");
+        const text = htmlToText(m[2]).replace(/^[:\s–—-]+/, "");
+        const key = ITEM_LABELS[label.split(/\s*[—–-]\s*/)[0]];
+        if (key) {
+          const extra = key === "act" && /[—–-]/.test(rawLabel) ? rawLabel.split(/\s*[—–-]\s*/).slice(1).join(" ") + ": " : "";
+          if (text && !res[key]) res[key] = shorten(splitSentences(extra + text), key === "eff" ? 240 : 160);
+          continue;
+        }
+        if (/^(zaubertrick|cantrip|grad \d+|\d+\.? grad|rank \d+|\d+(st|nd|rd|th))/i.test(label)) {
+          if (text) spells.push(`${rawLabel.replace(/:$/, "")}: ${text}`);
+          continue;
+        }
+        if (SKIP_LABEL.test(label)) continue;
+      }
+      if (/^\s*<p>\s*<em>\s*(Hinweis|Note)/i.test(block)) continue;
+      const t = htmlToText(block);
+      if (t) body.push(t);
+      if (body.join(" ").length > maxLen * 3) break;
+    }
+    if (body.length) {
+      // Nur Sätze mit Regelinhalt; reiner Stimmungstext ("Ihre Klingen sind schwer …") entfällt
+      const all = splitSentences(body.join(" "));
+      const rules = all.filter((x) => ITEM_RULE_RE.test(x));
+      let out = "";
+      for (const x of rules) {
+        if (!out) out = x.length > maxLen ? x.slice(0, maxLen - 1).replace(/\s+\S*$/, "") + " …" : x;
+        else if (out.length + 1 + x.length <= maxLen) out += " " + x;
+        else break;
+      }
+      if (!out && all.join(" ").length <= 60) out = all.join(" ");
+      if (out) res.s = out;
+    }
+    if (spells.length) res.sp = spells.slice(0, 12);
+    return Object.keys(res).length ? res : null;
+  }
+
+  return { summarize, summarizeItem, looksEnglish, htmlToText };
 });

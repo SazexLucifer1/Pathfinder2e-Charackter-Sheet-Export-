@@ -348,7 +348,14 @@
 .lp-e .write-line { min-width: 70px; }
 .future-feature { color: var(--pf-muted); font-style: italic; }
 
+.item-star { color: var(--pf-gold); font-weight: 800; }
+.item-card { border-left-color: var(--pf-gold); }
+.item-traits { font-size: 6.8px; color: var(--pf-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.mundane-list { column-count: 2; column-gap: 10px; }
+.mundane { font-size: 7.8px; break-inside: avoid; padding: 1px 0; border-bottom: 1px dotted #d6c8a6; }
+
 /* ---------- Zustände ---------- */
+.en-name { font-weight: 400; font-size: 7px; color: var(--pf-muted); }
 .cond-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 8px; }
 .cond { break-inside: avoid; border-bottom: 1px dotted #d6c8a6; padding: 2px 0; }
 .cond-head { font-size: 9px; display: flex; align-items: center; gap: 4px; }

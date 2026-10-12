@@ -47,7 +47,7 @@ function readJson(p) {
 }
 
 const require = createRequire(import.meta.url);
-const { summarize, looksEnglish } = require("../src/summarize.js");
+const { summarize, summarizeItem, looksEnglish } = require("../src/summarize.js");
 
 /* ---------- Kompendien ---------- */
 
@@ -68,7 +68,7 @@ const PACKS = [
   ["backgrounds", false],
   ["classes", false],
   ["deities", false],
-  ["equipment-srd", false, 0, "eq:"],
+  ["equipment-srd", "item", 260, "eq:"],
   ["conditionitems", false, 0, "cond:"],
 ];
 
@@ -88,7 +88,7 @@ for (const [pack, withShort, maxLen, prefix] of PACKS) {
     const deName = entry.name && entry.name !== enName ? entry.name : null;
     const english = looksEnglish(entry.description);
     let sum = null;
-    if (withShort && entry.description && !english) sum = summarize(entry.description, maxLen);
+    if (withShort && entry.description && !english) sum = withShort === "item" ? summarizeItem(entry.description, maxLen) : summarize(entry.description, maxLen);
     if (!deName && !sum) continue;
     const rec = { n: deName || undefined };
     if (sum) {

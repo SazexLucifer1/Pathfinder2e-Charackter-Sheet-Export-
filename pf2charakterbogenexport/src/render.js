@@ -483,11 +483,68 @@
 
   /* ---------- Seite 5: Ausrüstung, Stufenplan & Notizen ---------- */
 
+  function itemDescriptions(model) {
+    const seen = new Set();
+    const magic = [];
+    const mundane = [];
+    model.inventory.forEach((it) => {
+      if (seen.has(it.name)) return;
+      seen.add(it.name);
+      const d = it.desc;
+      const isGear = ["weapon", "armor", "shield"].includes(it.type);
+      // Werte normaler Waffen/Rüstungen stehen schon auf Seite 1 – dort nur Magisches erklären
+      if (isGear && !it.magical) return;
+      if (it.magical) {
+        if (d || it.runes.length || it.spell) magic.push(it);
+      } else if (d && (d.s || d.act || d.eff)) mundane.push(it);
+    });
+    magic.sort((x, y) => y.level - x.level || x.name.localeCompare(y.name, "de"));
+    mundane.sort((x, y) => x.name.localeCompare(y.name, "de"));
+
+    const line = (label, text) => (text ? `<div class="ab-line"><b>${label}:</b> ${esc(text)}</div>` : "");
+    const magicCards = magic
+      .map((it) => {
+        const d = it.desc || {};
+        const isGear = ["weapon", "armor", "shield"].includes(it.type);
+        const meta = [it.level ? `Stufe ${it.level}` : "", it.invested ? "investiert" : it.traitsDe.includes(D.trait("invested")) ? "muss investiert werden" : ""]
+          .filter(Boolean)
+          .join(" · ");
+        const traits = it.traitsDe.filter((t) => t !== D.trait("invested")).join(", ");
+        return `<div class="ab-card item-card">
+          <div class="ab-head"><span class="item-star">✦</span><span class="ab-name">${esc(it.name)}</span><span class="ab-meta">${esc(meta)}</span></div>
+          ${traits ? `<div class="item-traits">${esc(traits)}</div>` : ""}
+          ${line("Aktivierung", d.act)}
+          ${line("Häufigkeit", d.freq)}
+          ${line("Auslöser", d.trigger)}
+          ${line("Voraussetzung", d.req)}
+          ${d.s && !(isGear && it.runes.length) ? `<div class="ab-text">${esc(d.s)}</div>` : ""}
+          ${line("Effekt", d.eff)}
+          ${d.sp && d.sp.length ? line("Zauber", d.sp.join(" · ")) : ""}
+          ${it.spell ? `<div class="ab-line"><b>Enthaltener Zauber:</b> ${esc(it.spell.name)} (${esc(it.spell.rank)}. Grad)${it.spell.summary ? " – " + esc(it.spell.summary) : ""}</div>` : ""}
+          ${it.runes.map((r) => `<div class="ab-line"><b>Rune ${esc(r.name)}:</b> ${esc(r.summary)}</div>`).join("")}
+          ${!d.s && !d.act && !d.eff && !it.runes.length && !it.spell ? '<div class="ab-text"><em class="muted">Keine deutsche Beschreibung verfügbar – Details in Foundry nachlesen.</em></div>' : ""}
+        </div>`;
+      })
+      .join("");
+    const mundaneRows = mundane
+      .map((it) => {
+        const d = it.desc;
+        const text = [d.act ? `Aktivierung ${d.act}.` : "", d.s, d.eff].filter(Boolean).join(" ");
+        return `<div class="mundane"><b>${esc(it.name)}:</b> ${esc(text)}</div>`;
+      })
+      .join("");
+    if (!magicCards && !mundaneRows) return "";
+    return `
+      ${magicCards ? `${banner("Magische & besondere Gegenstände – kurz erklärt")}<div class="ab-grid">${magicCards}</div>` : ""}
+      ${mundaneRows ? `${banner("Weitere Ausrüstung – kurz erklärt")}<div class="mundane-list">${mundaneRows}</div>` : ""}`;
+  }
+
   function gearPage(model) {
     const rows = model.inventory
       .map(
         (it) => `<tr class="${it.equipped ? "equipped" : ""}">
-        <td>${esc(it.name)}${it.container ? ` <span class="mini">(in ${esc(it.container)})</span>` : ""}</td>
+        <td>${it.magical ? '<span class="item-star">✦</span> ' : ""}${esc(it.name)}${it.container ? ` <span class="mini">(in ${esc(it.container)})</span>` : ""}</td>
+        <td class="num">${it.level || ""}</td>
         <td class="num">${esc(it.quantity)}</td>
         <td class="num">${esc(it.bulk)}</td>
         <td class="num">${it.held ? "in der Hand" : it.equipped ? "getragen" : ""}${it.invested ? " · investiert" : ""}</td>
@@ -496,29 +553,16 @@
       .join("");
     const cur = model.currency;
     const b = model.bulk;
-    const plan = model.levelPlan
-      .map(
-        (p) => `<tr class="${p.reached ? "reached" : "future"}">
-        <td class="lp-lvl">${p.level}</td>
-        <td class="lp-entries">${p.entries
-          .map(
-            (e) =>
-              `<span class="lp-e ${e.future ? "future-feature" : ""}"><span class="lp-kind">${esc(e.kind)}:</span> ${e.name ? esc(e.name) : '<span class="write-line"></span>'}</span>`
-          )
-          .join("")}</td>
-      </tr>`
-      )
-      .join("");
     return `
     <section class="sheet-page">
-      <h2 class="page-title">Ausrüstung &amp; Entwicklung</h2>
+      <h2 class="page-title">Ausrüstung</h2>
       <div class="gear-grid">
         <div>
-          ${banner("Ausrüstung")}
+          ${banner("Alle Gegenstände", "✦ = magisch/besonders – Erklärung unten")}
           <table class="tbl inv-tbl">
-            <thead><tr><th>Gegenstand</th><th>Anz.</th><th>Trag&shy;last</th><th>Status</th></tr></thead>
-            <tbody>${rows || '<tr><td colspan="4" class="muted">Keine Gegenstände im Export.</td></tr>'}
-            ${Array.from({ length: 4 }, () => '<tr class="blank"><td>&nbsp;</td><td></td><td></td><td></td></tr>').join("")}</tbody>
+            <thead><tr><th>Gegenstand</th><th>Stufe</th><th>Anz.</th><th>Trag&shy;last</th><th>Status</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="5" class="muted">Keine Gegenstände im Export.</td></tr>'}
+            ${Array.from({ length: 3 }, () => '<tr class="blank"><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>').join("")}</tbody>
           </table>
         </div>
         <div>
@@ -536,17 +580,50 @@
             <div class="coin"><span>${esc(cur.sp)}</span>Silber</div>
             <div class="coin"><span>${esc(cur.cp)}</span>Kupfer</div>
           </div>
-          ${banner("Notizen")}
-          <div class="notes">${Array.from({ length: 8 }, () => '<div class="note-line"></div>').join("")}</div>
+          ${tip("invested")}
         </div>
       </div>
-      ${banner("Stufenplan 1–20", "für Stufenaufstiege – leere Felder von Hand ausfüllen")}
-      <table class="tbl plan-tbl"><tbody>${plan}</tbody></table>
+      ${itemDescriptions(model)}
       ${footer(model)}
     </section>`;
   }
 
-  /* ---------- Seite 6: Zustände ---------- */
+  /* ---------- Stufenplan & Notizen ---------- */
+
+  function planPage(model) {
+    const plan = model.levelPlan
+      .map(
+        (p) => `<tr class="${p.reached ? "reached" : "future"}">
+        <td class="lp-lvl">${p.level}</td>
+        <td class="lp-entries">${p.entries
+          .map(
+            (e) =>
+              `<span class="lp-e ${e.future ? "future-feature" : ""}"><span class="lp-kind">${esc(e.kind)}:</span> ${e.name ? esc(e.name) : '<span class="write-line"></span>'}</span>`
+          )
+          .join("")}</td>
+      </tr>`
+      )
+      .join("");
+    return `
+    <section class="sheet-page">
+      <h2 class="page-title">Entwicklung &amp; Notizen</h2>
+      ${banner("Stufenplan 1–20", "für Stufenaufstiege – leere Felder von Hand ausfüllen")}
+      <table class="tbl plan-tbl"><tbody>${plan}</tbody></table>
+      ${banner("Notizen")}
+      <div class="notes">${Array.from({ length: 14 }, () => '<div class="note-line"></div>').join("")}</div>
+      ${footer(model)}
+    </section>`;
+  }
+
+  /* ---------- Zustände ---------- */
+
+  function englishCondition(slug) {
+    if (slug === "off-guard") return "Off-Guard";
+    return slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
 
   function conditionsPage(model) {
     const active = new Map((model.conditions || []).map((c) => [D.slug(c.name), c.value]));
@@ -559,7 +636,7 @@
       const name = c.name;
       const isActive = active.has(D.slug(name)) || active.has(c.slug);
       return `<div class="cond">
-        <div class="cond-head"><span class="chk ${isActive ? "on" : ""}"></span><b>${esc(name)}</b>${c.value ? '<span class="cond-val">Wert <span class="write-box"></span></span>' : ""}</div>
+        <div class="cond-head"><span class="chk ${isActive ? "on" : ""}"></span><b>${esc(name)}</b> <span class="en-name">(${esc(englishCondition(c.slug))})</span>${c.value ? '<span class="cond-val">Wert <span class="write-box"></span></span>' : ""}</div>
         <div class="cond-text">${esc(c.text)}</div>
       </div>`;
     }).join("");
@@ -584,7 +661,7 @@
   }
 
   function render(model) {
-    const pages = [page1, page2, page3, spellsPage, gearPage, conditionsPage].map((fn) => fn(model)).filter(Boolean);
+    const pages = [page1, page2, page3, spellsPage, gearPage, planPage, conditionsPage].map((fn) => fn(model)).filter(Boolean);
     let n = 0;
     const html = pages.join("").replace(/<span>Seite #<\/span>/g, () => `<span>Seite ${++n} / ${pages.length}</span>`);
     return `<div class="pf2-sheet">${html}</div>`;

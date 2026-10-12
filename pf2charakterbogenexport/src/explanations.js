@@ -32,6 +32,10 @@
       title: "Traglast:",
       text: "L = leicht (10 L = 1 Traglast). Trägst du mehr als 5 + Stärke, bist du Belastet (Unbeholfen 1, −10 Fuß Geschwindigkeit).",
     },
+    invested: {
+      title: "Investieren:",
+      text: "Magische Gegenstände mit dem Merkmal „Investiert“ wirken nur, wenn du sie zu Tagesbeginn investierst – höchstens 10 Stück.",
+    },
     spells: {
       title: "Zauber wirken:",
       text:

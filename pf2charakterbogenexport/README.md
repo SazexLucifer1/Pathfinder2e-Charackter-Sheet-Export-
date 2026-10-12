@@ -26,9 +26,14 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
     als Name).
 - **Grundaktionen** (Laufen, Schritt, Schild heben …) als Kurzreferenz.
 - **Zauber** mit Zauber-SG, Zauberangriff, Zauberplätzen zum Abhaken und Kurzbeschreibung.
-- **Ausrüstung, Traglast, Vermögen, Notizen** und ein **Stufenplan 1–20**: bereits gewählte
-  Talente sind eingetragen, künftige Klassenmerkmale vorgemerkt, freie Talentplätze zum Ausfüllen.
-- **Zustände** zum Ankreuzen mit Kurzerklärung.
+- **Ausrüstung**: erst die Liste aller Gegenstände (Stufe, Anzahl, Traglast, getragen/investiert),
+  darunter die **Kurzbeschreibungen** – magische Gegenstände zuerst mit Aktivierung, Häufigkeit,
+  Effekt, Runen und enthaltenen Zaubern (Zauberstäbe, Schriftrollen, Stecken), danach normale
+  Ausrüstung in einer Zeile. Dazu Traglast und Vermögen.
+- **Stufenplan 1–20** und Notizen: bereits gewählte Talente sind eingetragen, künftige
+  Klassenmerkmale vorgemerkt, freie Talentplätze zum Ausfüllen.
+- **Zustände** zum Ankreuzen mit Kurzerklärung und englischem Namen in Klammern
+  (z. B. „Auf dem Falschen Fuß (Off-Guard)“).
 - **Komplett deutsch**: Namen von Talenten, Zaubern, Gegenständen, Merkmalen, Sprachen usw.
   stammen aus der offiziellen deutschen Übersetzung (siehe unten). Maßeinheiten bleiben – wie im
   deutschen Regelwerk – in Fuß.

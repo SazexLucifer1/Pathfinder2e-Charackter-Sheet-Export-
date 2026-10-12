@@ -125,10 +125,12 @@
   /** Kurzfassung {s, trigger, req, freq} oder null. */
   function itemSummary(item) {
     const e = lookupItem(item);
-    if (e && (e.s || e.trigger || e.req)) return e;
+    if (e && (e.s || e.trigger || e.req || e.act || e.eff || e.sp)) return e;
     // Fallback: eigene Beschreibung kürzen, falls sie bereits deutsch ist
     const html = item.system && item.system.description && item.system.description.value;
-    if (html && SUM && !SUM.looksEnglish(html)) return SUM.summarize(html, 220);
+    if (html && SUM && !SUM.looksEnglish(html)) {
+      return prefixFor(item) === "eq:" ? SUM.summarizeItem(html, 260) : SUM.summarize(html, 220);
+    }
     return null;
   }
 
