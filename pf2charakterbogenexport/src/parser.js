@@ -938,6 +938,7 @@
 
       out.push({
         name,
+        en: D.englishName(it),
         slug,
         level: num(get(s, "level.taken", null) ?? get(s, "level.value", 0), 0),
         category,
@@ -1043,6 +1044,7 @@
           const time = String(get(sp, "system.time.value", ""));
           return {
             name: D.itemName(sp),
+            en: D.englishName(sp),
             rank: cantrip ? 0 : num(get(sp, "system.level.value", 1), 1),
             cantrip,
             focus: traits.includes("focus"),

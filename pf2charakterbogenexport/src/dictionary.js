@@ -122,6 +122,31 @@
     return name;
   }
 
+  function titleFromSlug(sl) {
+    const small = new Set(["of", "the", "a", "an", "and", "or", "to", "in", "on", "for", "with", "at", "by"]);
+    return String(sl)
+      .split("-")
+      .filter(Boolean)
+      .map((w, i) => (i > 0 && small.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(" ");
+  }
+
+  /**
+   * Englischer Originalname zum Nachschlagen (Regelwerk, Foundry, Archives of Nethys).
+   * Englische Exporte: der Name aus der Datei. Bereits deutsche Exporte: aus dem slug.
+   */
+  function englishName(item) {
+    const name = item.name || "";
+    const de = itemName(item);
+    if (de !== name) return name;
+    const sl = item.system && item.system.slug;
+    if (sl) {
+      const en = titleFromSlug(sl);
+      if (slug(en) !== slug(de)) return en;
+    }
+    return null;
+  }
+
   /** Kurzfassung {s, trigger, req, freq} oder null. */
   function itemSummary(item) {
     const e = lookupItem(item);
@@ -171,5 +196,5 @@
     return map[s] || s || "";
   }
 
-  global.PF2_DICT = { slug, entry, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
+  global.PF2_DICT = { slug, entry, englishName, titleFromSlug, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -9,6 +9,9 @@
   const sampleBtn = document.getElementById("sample-btn");
   const sampleSelect = document.getElementById("sample-select");
   const printBtn = document.getElementById("print-btn");
+  const refCheck = document.getElementById("ref-check");
+  const refBtn = document.getElementById("ref-btn");
+  let lastText = "";
   const statusMsg = document.getElementById("status-msg");
   const output = document.getElementById("sheet-output");
 
@@ -62,7 +65,8 @@
     }
     try {
       const model = window.PF2_PARSER.parseFoundryActor(raw);
-      const html = window.PF2_RENDER.render(model);
+      lastText = text;
+      const html = window.PF2_RENDER.render(model, { includeReference: refCheck.checked });
       output.innerHTML = html;
       document.title = `${model.meta.name} – Charakterbogen`;
       printBtn.disabled = false;
@@ -86,6 +90,21 @@
   });
 
   printBtn.addEventListener("click", () => window.print());
+
+  // Option umschalten → Bogen mit/ohne Tischreferenz neu erzeugen
+  refCheck.addEventListener("change", () => {
+    if (lastText) generateFromText(lastText);
+  });
+
+  // Nur die Tischreferenz (Grundaktionen & Erkundung) – einmal pro Tisch
+  refBtn.addEventListener("click", () => {
+    output.innerHTML = window.PF2_RENDER.renderReference();
+    lastText = "";
+    printBtn.disabled = false;
+    document.title = "Pathfinder 2 – Tischreferenz";
+    setStatus("Tischreferenz erzeugt – jetzt drucken.", "ok");
+    window.print();
+  });
 
   sampleBtn.addEventListener("click", async () => {
     try {

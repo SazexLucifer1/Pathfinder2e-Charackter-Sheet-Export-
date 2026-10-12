@@ -325,6 +325,7 @@
 .slot { display: inline-block; margin-right: 8px; font-size: 8px; white-space: nowrap; }
 .spell-tbl .sp-rank { font-weight: 800; color: var(--pf-red); text-align: center; width: 30px; background: var(--pf-paper); }
 .spell-tbl .sp-name { font-weight: 700; white-space: nowrap; }
+.spell-tbl .en-name, .sa-tbl .en-name { font-size: 6.3px; }
 .spell-tbl .sp-cost { width: 30px; text-align: center; }
 .spell-tbl .sp-range, .spell-tbl .sp-def { font-size: 7.5px; white-space: nowrap; }
 .spell-tbl .sp-text { font-size: 7.6px; }
@@ -388,3 +389,7 @@
   .sheet-page { margin: 0; box-shadow: none; border: none; width: auto; min-height: 281mm; padding: 3mm 3mm 9mm; }
   .page-foot { left: 3mm; right: 3mm; bottom: 2mm; }
 }
+
+/* Zaubertabelle etwas dichter, damit auch viele Zauber auf eine Seite passen */
+.spell-tbl td { padding: 1.5px 4px; }
+.spell-tbl .sp-text { font-size: 7.3px; line-height: 1.22; }

@@ -96,3 +96,5 @@ select.secondary {
 .app-footer a { color: #d9b96a; }
 
 #sheet-output { margin-top: 20px; }
+
+.opt { font-size: 12px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }

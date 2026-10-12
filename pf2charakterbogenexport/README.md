@@ -24,7 +24,11 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
     *Informationen sammeln*, Auszeit-Fähigkeiten.
   - **Immer aktiv** und **Schon eingerechnet** (Talente, die nur Zahlen verändern, erscheinen nur
     als Name).
-- **Grundaktionen** (Laufen, Schritt, Schild heben …) als Kurzreferenz.
+- **Englische Originalnamen** klein in Klammern hinter Talenten, Klassenmerkmalen, Zaubern,
+  Fertigkeitsaktionen und Zuständen – praktisch zum Nachschlagen in Foundry oder englischen Quellen.
+- **Tischreferenz** als eigenes Blatt (Grundaktionen wie Laufen, Schritt, Interagieren,
+  Erkundungsaktivitäten, Deckung & Flankieren). Sie ist für alle gleich und reicht einmal pro
+  Tisch: Button **„Nur Tischreferenz drucken“** oder per Häkchen an den Bogen anhängen.
 - **Zauber** mit Zauber-SG, Zauberangriff, Zauberplätzen zum Abhaken und Kurzbeschreibung.
 - **Ausrüstung**: erst die Liste aller Gegenstände (Stufe, Anzahl, Traglast, getragen/investiert),
   darunter die **Kurzbeschreibungen** – magische Gegenstände zuerst mit Aktivierung, Häufigkeit,

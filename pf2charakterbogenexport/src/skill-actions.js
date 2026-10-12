@@ -27,6 +27,10 @@
     { slug: "ready", name: "Vorbereiten", cost: 2, text: "Lege eine Aktion samt Auslöser fest; du führst sie als Reaktion aus, wenn der Auslöser eintritt." },
     { slug: "delay", name: "Verzögern", cost: "F", text: "Handle später in der Runde; deine Initiative ändert sich entsprechend." },
     { slug: "escape", name: "Entkommen", cost: 1, text: "Befreie dich aus Ergriffen/Gefesselt: Angriffsbonus, Akrobatik oder Athletik gegen den SG." },
+    { slug: "crawl", name: "Kriechen", cost: 1, text: "Bewege dich liegend 5 Fuß weit." },
+    { slug: "leap", name: "Springen", cost: 1, text: "Springe 10 Fuß weit (bei Geschwindigkeit ab 30 Fuß: 15 Fuß) oder 3 Fuß hoch." },
+    { slug: "point-out", name: "Hinweisen", cost: 1, text: "Zeige Verbündeten, wo eine Kreatur ist, die nur du bemerkt hast." },
+    { slug: "sustain", name: "Aufrechterhalten", cost: 1, text: "Verlängere einen Effekt (z. B. Zauber) mit „Aufrechterhalten“ bis zum Ende deines nächsten Zuges." },
   ];
 
   const SKILL_ACTIONS = [

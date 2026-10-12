@@ -30,6 +30,11 @@
 
   /* ---------- Bausteine ---------- */
 
+  /** Englischer Originalname klein in Klammern */
+  function enTag(en) {
+    return en ? ` <span class="en-name">(${esc(en)})</span>` : "";
+  }
+
   function banner(title, extra) {
     return `<div class="banner"><span>${esc(title)}</span>${extra ? `<span class="banner-extra">${extra}</span>` : ""}</div>`;
   }
@@ -254,14 +259,6 @@
     </section>`;
   }
 
-  function basicActionsBlock() {
-    const basic = ACT.BASIC_ACTIONS.map((b) => {
-      const e = D.entry(b.slug);
-      return `<div class="basic"><div class="basic-head">${costBadge(b.cost)} <b>${esc((e && e.n) || b.name)}</b></div><div class="basic-text">${esc(b.text)}</div></div>`;
-    }).join("");
-    return `${banner("Grundaktionen", "kann jede:r · 3 Aktionen + 1 Reaktion pro Zug")}<div class="basic-grid three">${basic}</div>`;
-  }
-
   function page1(model) {
     return `
     <section class="sheet-page p1">
@@ -273,7 +270,8 @@
         ${skillsColumn(model)}
       </div>
       ${strikesBlock(model)}
-      ${basicActionsBlock()}
+      ${banner("Notizen")}
+      <div class="notes">${Array.from({ length: 6 }, () => '<div class="note-line"></div>').join("")}</div>
       ${footer(model)}
     </section>`;
   }
@@ -283,7 +281,7 @@
   function abilityCard(a, compact) {
     const meta = [a.categoryName, a.level ? `Stufe ${a.level}` : ""].filter(Boolean).join(" · ");
     return `<div class="ab-card ${compact ? "compact" : ""}">
-      <div class="ab-head">${costBadge(a.cost)}<span class="ab-name">${esc(a.name)}</span><span class="ab-meta">${esc(meta)}</span></div>
+      <div class="ab-head">${costBadge(a.cost)}<span class="ab-name">${esc(a.name)}${enTag(a.en)}</span><span class="ab-meta">${esc(meta)}</span></div>
       ${a.frequency ? `<div class="ab-line"><b>Häufigkeit:</b> ${esc(a.frequency)}</div>` : ""}
       ${a.trigger ? `<div class="ab-line"><b>Auslöser:</b> ${esc(a.trigger)}</div>` : ""}
       ${a.requirement ? `<div class="ab-line"><b>Voraussetzung:</b> ${esc(a.requirement)}</div>` : ""}
@@ -340,7 +338,7 @@
       .map(
         ({ a, sk, name }) => `<tr class="${sk.rank ? "trained" : ""}">
           <td class="sa-cost">${costBadge(a.cost)}</td>
-          <td class="sa-name">${esc(name)}</td>
+          <td class="sa-name">${esc(name)}${enTag(D.titleFromSlug(a.slug))}</td>
           <td class="sa-skill">${esc(sk.name)} <b>${fmtMod(sk.mod)}</b></td>
           <td class="sa-vs">${esc(a.vs || "")}</td>
           <td class="sa-text">${esc(a.text)}</td>
@@ -394,16 +392,10 @@
     const outside = list.filter((a) => a.when === "ausserhalb");
     const always = list.filter((a) => a.when === "immer");
     const builtin = list.filter((a) => a.when === "eingerechnet");
-    const explore = ACT.EXPLORATION.map((x) => {
-      const e = D.entry(x.slug);
-      return `<div class="basic"><div class="basic-head">${costBadge("E")} <b>${esc((e && e.n) || x.name)}</b></div><div class="basic-text">${esc(x.text)}</div></div>`;
-    }).join("");
     return `
     <section class="sheet-page">
       <h2 class="page-title">Außerhalb des Kampfes</h2>
-      ${banner("Erkundung – was tust du unterwegs?")}
-      <div class="sec-hint">Wähle beim Reisen eine Erkundungsaktivität. Sie bestimmt oft, womit du die Initiative würfelst, wenn ein Kampf beginnt.</div>
-      <div class="basic-grid three">${explore}</div>
+      <div class="sec-hint">Grundaktionen und Erkundungsaktivitäten (Laufen, Schritt, Absuchen …) stehen auf dem gemeinsamen Tischreferenz-Blatt.</div>
       ${skillActionTable(model, "ausserhalb", "Fertigkeitsaktionen außerhalb des Kampfes")}
       ${abilitySection("Deine Fähigkeiten außerhalb des Kampfes", outside, "Erkundung, Auszeit, Gespräche und Handwerk.")}
       ${abilitySection("Immer aktiv / allgemein", always, "Gilt jederzeit – im Kampf wie außerhalb.", true)}
@@ -442,7 +434,7 @@
               .map(
                 (sp, i) => `<tr>
               ${i === 0 ? `<td class="sp-rank" rowspan="${spells.length}">${rank === 0 ? "Trick" : rank + "."}</td>` : ""}
-              <td class="sp-name">${esc(sp.name)}</td>
+              <td class="sp-name">${esc(sp.name)}${enTag(sp.en)}</td>
               <td class="sp-cost">${costBadge(sp.cost)}</td>
               <td class="sp-range">${esc(sp.range)}</td>
               <td class="sp-def">${esc(sp.defense)}</td>
@@ -660,12 +652,56 @@
     return `<div class="page-foot"><span>${esc(model.meta.name)} · Stufe ${esc(model.meta.level)} ${esc(model.meta.className)}</span><span>Seite #</span></div>`;
   }
 
-  function render(model) {
-    const pages = [page1, page2, page3, spellsPage, gearPage, planPage, conditionsPage].map((fn) => fn(model)).filter(Boolean);
-    let n = 0;
-    const html = pages.join("").replace(/<span>Seite #<\/span>/g, () => `<span>Seite ${++n} / ${pages.length}</span>`);
-    return `<div class="pf2-sheet">${html}</div>`;
+  /* ---------- Tischreferenz (einmal pro Tisch) ---------- */
+
+  function referencePage() {
+    const card = (slug, name, cost, text) => {
+      const e = D.entry(slug);
+      return `<div class="basic"><div class="basic-head">${costBadge(cost)} <b>${esc((e && e.n) || name)}</b>${enTag(D.titleFromSlug(slug))}</div><div class="basic-text">${esc(text)}</div></div>`;
+    };
+    const basic = ACT.BASIC_ACTIONS.map((b) => card(b.slug, b.name, b.cost, b.text)).join("");
+    const explore = ACT.EXPLORATION.map((x) => card(x.slug, x.name, "E", x.text)).join("");
+    return `
+    <section class="sheet-page reference">
+      <h2 class="page-title">Tischreferenz</h2>
+      <div class="turn-box">
+        <div class="turn-icons"><span class="cost big">◆</span><span class="cost big">◆</span><span class="cost big">◆</span><span class="plus">+</span><span class="cost cost-reaction big">⤾</span></div>
+        <div class="turn-text">
+          <b>Dein Zug:</b> 3 Aktionen und 1 Reaktion (die Reaktion darfst du auch im Zug anderer nutzen, sobald ihr Auslöser eintritt). Freie Aktionen (◇) kosten nichts.
+          <b>Mehrfachangriff:</b> 2. Angriff −5, 3. Angriff −10 (Agil: −4/−8).
+          <b>Würfe:</b> W20 + Bonus gegen SG – 10 drüber = kritischer Erfolg, 10 drunter = kritischer Fehlschlag; eine natürliche 20/1 verbessert/verschlechtert das Ergebnis um eine Stufe.
+        </div>
+      </div>
+      ${banner("Grundaktionen", "kann jede:r")}
+      <div class="basic-grid">${basic}</div>
+      ${banner("Erkundung – was tust du unterwegs?")}
+      <div class="sec-hint">Wähle beim Reisen eine Erkundungsaktivität. Sie bestimmt oft, womit du die Initiative würfelst, wenn ein Kampf beginnt.</div>
+      <div class="basic-grid">${explore}</div>
+      ${banner("Deckung & Flankieren")}
+      <div class="basic-grid">
+        <div class="basic"><div class="basic-head"><b>Deckung</b>${enTag("Cover")}</div><div class="basic-text">Leicht: +1 RK · Normal: +2 RK, Reflex und Heimlichkeit · Groß: +4. Ermöglicht Verstecken.</div></div>
+        <div class="basic"><div class="basic-head"><b>Flankieren</b>${enTag("Flanking")}</div><div class="basic-text">Du und ein Verbündeter steht auf gegenüberliegenden Seiten eines Gegners: Er ist für eure Nahkampfangriffe Auf dem falschen Fuß (−2 RK).</div></div>
+      </div>
+      <div class="page-foot"><span>Pathfinder 2 · Tischreferenz – einmal pro Tisch ausdrucken</span><span></span></div>
+    </section>`;
   }
 
-  global.PF2_RENDER = { render };
+  function numberPages(pages) {
+    let n = 0;
+    return pages.join("").replace(/<span>Seite #<\/span>/g, () => `<span>Seite ${++n} / ${pages.length}</span>`);
+  }
+
+  function render(model, options) {
+    const opts = options || {};
+    const pages = [page1, page2, page3, spellsPage, gearPage, planPage, conditionsPage].map((fn) => fn(model)).filter(Boolean);
+    const ref = opts.includeReference ? referencePage() : "";
+    return `<div class="pf2-sheet">${numberPages(pages)}${ref}</div>`;
+  }
+
+  /** Nur das Tischreferenz-Blatt (Grundaktionen & Erkundung) */
+  function renderReference() {
+    return `<div class="pf2-sheet">${referencePage()}</div>`;
+  }
+
+  global.PF2_RENDER = { render, renderReference };
 })(typeof window !== "undefined" ? window : globalThis);
