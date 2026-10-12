@@ -47,7 +47,7 @@ function readJson(p) {
 }
 
 const require = createRequire(import.meta.url);
-const { summarize, summarizeItem, looksEnglish } = require("../src/summarize.js");
+const { summarize, summarizeItem, looksEnglish, setActionNames } = require("../src/summarize.js");
 
 /* ---------- Kompendien ---------- */
 
@@ -71,6 +71,15 @@ const PACKS = [
   ["equipment-srd", "item", 260, "eq:"],
   ["conditionitems", false, 0, "cond:"],
 ];
+
+// Aktionsnamen vorab laden, damit "[[/act tumble-through]]" → "Hindurchturnen" wird
+{
+  const acts = {};
+  for (const [enName, entry] of Object.entries(readJson(comp("actionspf2e")).entries || {})) {
+    if (entry.name) acts[slug(enName)] = entry.name;
+  }
+  setActionNames(acts);
+}
 
 const items = {};
 let shortCount = 0;

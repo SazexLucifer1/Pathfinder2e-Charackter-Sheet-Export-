@@ -18,6 +18,12 @@
     perception: "Wahrnehmungswurf",
   };
 
+  // Deutsche Aktionsnamen für "[[/act tumble-through]]" (vom Build-Skript gesetzt)
+  let ACTION_NAMES = {};
+  function setActionNames(map) {
+    ACTION_NAMES = map || {};
+  }
+
   function cleanInline(html) {
     return String(html || "")
       // Aktionssymbole der Foundry-Schrift
@@ -35,6 +41,7 @@
       .replace(/@Embed\[[^\]]*\](\{[^}]*\})?/g, "")
       .replace(/@Localize\[[^\]]*\]/g, "")
       .replace(/\[\[[^\]]*\]\]\{([^}]*)\}/g, "$1")
+      .replace(/\[\[\/act ([\w-]+)[^\]]*\]\]/g, (_, a) => ACTION_NAMES[a] || a.replace(/-/g, " "))
       .replace(/\[\[\/\w+ ([^\]#]*?)(?: #[^\]]*)?\]\]/g, (_, f) => f.replace(/(\d)d(\d)/g, "$1W$2"))
       .replace(/@(?:actor|item|target|self)\S*/g, "")
       // Maßeinheiten bleiben imperial: "30 Fuß/9 m" → "30 Fuß"
@@ -219,5 +226,5 @@
     return Object.keys(res).length ? res : null;
   }
 
-  return { summarize, summarizeItem, looksEnglish, htmlToText };
+  return { summarize, summarizeItem, looksEnglish, htmlToText, setActionNames };
 });

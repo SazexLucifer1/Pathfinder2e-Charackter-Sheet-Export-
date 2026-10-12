@@ -173,7 +173,7 @@
           <div class="box-title">Wahrnehmung</div>
           <div class="stat-val">${fmtMod(model.perception.mod)}</div>
           ${rankBoxes(model.perception.rank)}
-          <div class="mini">${model.perception.senses.length ? esc(model.perception.senses.join(", ")) : "auch für Initiative"}</div>
+          <div class="mini">${model.perception.senses.length ? esc(model.perception.senses.join(", ")) + "<br>" : ""}Initiative: ${model.initiative.name === "Wahrnehmung" ? fmtMod(model.initiative.mod) : `<b>${esc(model.initiative.name)} ${fmtMod(model.initiative.mod)}</b>`}</div>
         </div>
         <div class="stat">
           <div class="box-title">Geschwindigkeit</div>
@@ -374,7 +374,7 @@
         <div class="turn-icons"><span class="cost big">◆</span><span class="cost big">◆</span><span class="cost big">◆</span><span class="plus">+</span><span class="cost cost-reaction big">⤾</span></div>
         <div class="turn-text">
           <b>Dein Zug:</b> 3 Aktionen und 1 Reaktion (die Reaktion darfst du auch im Zug anderer nutzen, sobald ihr Auslöser eintritt).
-          <b>Initiative:</b> Wahrnehmung ${fmtMod(model.perception.mod)} (oder die Fertigkeit, die zur Situation passt, z. B. Heimlichkeit beim Anschleichen).
+          <b>Initiative:</b> ${esc(model.initiative.name)} ${fmtMod(model.initiative.mod)} (oder die Fertigkeit, die zur Situation passt, z. B. Heimlichkeit beim Anschleichen).
           <b>Mehrfachangriff:</b> 2. Angriff −5, 3. Angriff −10 (Agil: −4/−8) – siehe Angriffe auf Seite 1.
         </div>
       </div>

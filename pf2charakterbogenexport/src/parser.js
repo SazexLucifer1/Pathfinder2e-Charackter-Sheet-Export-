@@ -165,9 +165,10 @@
       if (path === "_id" || path === "id") return item._id || "";
       if (path === "name") return item.name || "";
       let v = get(item, path, null);
-      if (v == null && path.startsWith("flags.system.rulesSelections.")) {
-        const flag = path.slice("flags.system.rulesSelections.".length);
-        v = get(item, `flags.pf2e.rulesSelections.${flag}`, null);
+      const selMatch = path.match(/^flags\.(?:system|pf2e)\.rulesSelections\.(.+)$/);
+      if (v == null && selMatch) {
+        const flag = selMatch[1];
+        v = get(item, `flags.pf2e.rulesSelections.${flag}`, null) ?? get(item, `flags.system.rulesSelections.${flag}`, null);
         if (v == null) {
           const cs = (get(item, "system.rules", []) || []).find((r) => r.key === "ChoiceSet" && r.flag === flag);
           if (cs && cs.selection != null) v = cs.selection;
@@ -402,7 +403,9 @@
       else if (/^system\.proficiencies\.classDCs\.[\w-]+\.rank$/.test(path)) r.classDC = clampRank(apply(r.classDC));
       else if (path === "system.attributes.ancestryhp") numeric.ancestryhp = apply(numeric.ancestryhp ?? num(get(ancestry, "system.hp", 0), 0));
       else if (path === "system.resources.focus.max") numeric.focusMax = apply(numeric.focusMax);
-      else if (path === "flags.system.favoredWeaponRank") numeric.favoredWeaponRank = apply(numeric.favoredWeaponRank);
+      else if (path === "flags.system.favoredWeaponRank" || path === "flags.pf2e.favoredWeaponRank") numeric.favoredWeaponRank = apply(numeric.favoredWeaponRank);
+      else if (/^flags\.(?:system|pf2e)\.sneakAttackDamage\.number$/.test(path)) numeric.sneakDice = apply(numeric.sneakDice || 0);
+      else if (/^flags\.(?:system|pf2e)\.sneakAttackDamage\.faces$/.test(path)) numeric.sneakFaces = apply(numeric.sneakFaces || 0);
       else if (path === "inventory.bulk.maxAddend") numeric.bulkMax = apply(numeric.bulkMax);
       else if (path === "inventory.bulk.encumberedAfterAddend") numeric.bulkEnc = apply(numeric.bulkEnc);
       else if ((m = path.match(/^system\.abilities\.(\w+)\.mod$/)) && m[1] in attrs && !manual) {
@@ -518,6 +521,7 @@
       senses: [],
     };
 
+
     const skills = {};
     SKILLS.forEach((s) => {
       const attr = I18N.SKILLS[s].ability;
@@ -531,6 +535,13 @@
         armorPenalty: extra.length ? checkPenalty : 0,
       };
     });
+
+    // Initiative: normalerweise Wahrnehmung, in Foundry aber umstellbar (z. B. Darbietung)
+    const initStat = get(system, "initiative.statistic", "perception") || "perception";
+    const initiative =
+      initStat !== "perception" && skills[initStat]
+        ? { name: I18N.SKILLS[initStat].name, mod: skills[initStat].mod + modsFor(["initiative"]) }
+        : { name: "Wahrnehmung", mod: perception.mod + modsFor(["initiative"]) };
 
     const lores = byType("lore").map((it) => {
       const rank = clampRank(num(get(it, "system.proficient.value", 0), 0));
@@ -582,6 +593,12 @@
     const vision = get(ancestry, "system.vision", "normal");
     const senseSet = new Map();
     if (vision && vision !== "normal") senseSet.set(vision, null);
+    // Sinne, die Talente über "subfeatures.senses" gewähren (z. B. Augen der Nacht → Dunkelsicht)
+    items.filter((it) => it.type === "feat").forEach((it) => {
+      Object.entries(get(it, "system.subfeatures.senses", {}) || {}).forEach(([k, v]) => {
+        senseSet.set(k, v && v.range && v.range < 1000 ? v.range : null);
+      });
+    });
     rules.forEach(({ rule }) => {
       if (rule.key === "Sense" && testPredicate(rule.predicate, options) && rule.selector) {
         if (rule.selector === "darkvision") senseSet.delete("low-light-vision");
@@ -759,6 +776,11 @@
 
     /* ---- Fähigkeiten (Talente, Klassenmerkmale, Aktionen) ---- */
     const abilities = parseAbilities(items, level);
+    // Aktuelle Würfel des Hinterhältigen Angriffs direkt dazuschreiben
+    if (numeric.sneakDice) {
+      const sa = abilities.find((a) => a.slug === "sneak-attack");
+      if (sa) sa.summary = `${sa.summary ? sa.summary + " " : ""}Aktuell: +${numeric.sneakDice}W${numeric.sneakFaces || 6} Präzisionsschaden gegen Gegner, die Auf dem falschen Fuß sind (mit agiler/Finesse- oder Fernkampfwaffe).`;
+    }
 
     /* ---- Stufenplan 1–20 ---- */
     const levelPlan = buildLevelPlan(items, cls, level);
@@ -834,6 +856,7 @@
       shield: shieldInfo,
       saves,
       perception,
+      initiative,
       classDC,
       speed,
       skills,
