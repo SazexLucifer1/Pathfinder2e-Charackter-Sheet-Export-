@@ -97,59 +97,48 @@
   }
 
   /*
-   * Zustände (Conditions). Beschreibungen sind eigene, knappe
-   * Zusammenfassungen (keine wörtliche Wiedergabe des Regeltexts) und
-   * dienen als Gedächtnisstütze auf dem Bogen – für den vollen Wortlaut
-   * gilt weiterhin das Regelwerk.
-   * value: true => Zustand hat eine Wertstufe (z.B. "Verängstigt 2")
+   * Zustände (Conditions): englischer Schlüssel, Wert-Zustand?, eigene Kurzfassung.
+   * Die deutschen Namen kommen aus dem Wörterbuch (offizielle Übersetzung).
+   * Kurzfassungen sind eigene, knappe Gedächtnisstützen – maßgeblich ist das Regelwerk.
    */
   const CONDITIONS = [
-    { name: "Angeschlagen", value: true, text: "Malus auf Wahrnehmung, Rettungswürfe und Fertigkeitswürfe nach kritischen Treffern (Beginner-Box-Variante)." },
-    { name: "Auf dem falschen Fuß", value: false, text: "Du kannst dich nicht richtig verteidigen: -2 auf die RK gegen die auslösende Quelle." },
-    { name: "Ausgelaugt", value: true, text: "Reduziert deine maximalen TP um das Fünffache des Wertes, bis der Zustand endet." },
-    { name: "Belastet", value: false, text: "Du trägst zu viel Gewicht: -10 Fuß Geschwindigkeit, Unbeholfen 1." },
-    { name: "Benommen", value: true, text: "Malus auf geistige Aktionen; bei hohem Wert können evtl. keine Zauber gewirkt werden." },
-    { name: "Betäubt", value: true, text: "Du kannst keine Aktionen einsetzen; verlierst Aktionen in Höhe des Wertes." },
-    { name: "Bewegungsunfähig", value: false, text: "Du kannst dich nicht bewegen; Bewegungs-Aktionen schlagen automatisch fehl." },
-    { name: "Bewusstlos", value: false, text: "Du bist ohnmächtig, liegend und kannst nicht handeln; -4 auf RK, Reflex und Wahrnehmung." },
-    { name: "Blind", value: false, text: "Du kannst nicht sehen: alle Ziele gelten als unbemerkt, Bewegung nur zur Hälfte." },
-    { name: "Blutung", value: true, text: "Anhaltender Schaden durch Blutverlust in Höhe des Wertes, bis behandelt oder gestillt." },
-    { name: "Eingeschüchtert", value: true, text: "Malus auf Angriffs- und Fertigkeitswürfe in Höhe des Wertes; sinkt meist am Ende deines Zuges." },
-    { name: "Entkräftet", value: true, text: "Reduziert deine Traglast/Belastungsgrenze um den Wert." },
-    { name: "Ergriffen", value: false, text: "Von einer Kreatur oder Wirkung festgehalten: Bewegungsunfähig und Auf dem falschen Fuß." },
-    { name: "Erschöpft", value: false, text: "Du brauchst mehr Ruhe: -1 auf RK, Rettungswürfe, Fertigkeitswürfe, Wahrnehmung und Angriffswürfe." },
-    { name: "Erschüttert", value: false, text: "Emotionale Erschütterung – oft an eine konkrete Bedingung im Auslöser gekoppelt." },
-    { name: "Fasziniert", value: false, text: "Du bist abgelenkt: -2 auf Wahrnehmung und fertigkeitsbasierte Aktionen, keine Konzentrations-Aktionen gegen andere Ziele." },
-    { name: "Festgehalten", value: false, text: "Wie Ergriffen, zusätzlich kannst du keine Manipulieren-Aktionen mit Handbewegung ausführen." },
-    { name: "Geblendet", value: false, text: "Alles ist stark verschwommen: Ziele gelten als verborgen, kein Wahrnehmungsvorteil durch Sehen." },
-    { name: "Gelähmt", value: false, text: "Dein Körper ist erstarrt: Auf dem falschen Fuß und kannst nicht handeln (außer geistigen Aktionen ohne Bewegung)." },
-    { name: "Geschwächt", value: true, text: "Malus auf kraftbasierte Würfe und SG (Nahkampf, Schaden, Athletik) in Höhe des Wertes." },
-    { name: "Immun", value: false, text: "Du wirst von einem bestimmten Effekt, Zustand oder Schadenstyp nicht beeinflusst." },
-    { name: "In Panik", value: false, text: "Du musst dich von der Angstquelle entfernen, sonst Rückzug (Fluchten) als einzig mögliche Bewegung." },
-    { name: "Kampfunfähig", value: false, text: "Du kannst nicht handeln, keine Bewegung; z. B. bei Bewusstlosigkeit ohne Todeskampf." },
-    { name: "Kauernd", value: false, text: "Du duckst dich hinter Deckung: +2 RK gegen Fernkampf, aber -10 Fuß Geschwindigkeit und Auf dem falschen Fuß." },
-    { name: "Körperlos", value: false, text: "Du hast keinen physischen Körper und kannst durch feste Objekte fliegen." },
-    { name: "Kränkelnd", value: true, text: "Malus auf alle Würfe und SG in Höhe des Wertes; verhindert bestimmte Aktionen, bis der Wert sinkt." },
-    { name: "Liegend", value: false, text: "Du liegst am Boden: Auf dem falschen Fuß, -2 auf Angriffswürfe im Nahkampf." },
-    { name: "Sterbend", value: true, text: "Bei 0 TP: Bewusstlos und dem Tod nahe. Bei kritischem Fehlschlag im Rettungswurf +2, sonst je nach Erfolg -1/+1. Bei Sterbend 4 stirbst du." },
-    { name: "Stabilisiert", value: false, text: "Du wurdest bei 0 TP stabilisiert: Zustand Sterbend endet, du bleibst Bewusstlos mit 0 TP." },
-    { name: "Taub", value: false, text: "Du kannst nicht hören: Kritische Fehlschläge bei hörbasierten Wahrnehmungswürfen, keine klanglichen Bestandteile für Zauber." },
-    { name: "Todgeweiht", value: true, text: "Deine maximalen TP sinken dauerhaft; erreicht der Wert 4, stirbst du sofort." },
-    { name: "Unbeholfen", value: true, text: "Malus auf geschicklichkeitsbasierte Würfe und SG (RK, Akrobatik, Angriffe) in Höhe des Wertes." },
-    { name: "Unentdeckt", value: false, text: "Niemand weiß, wo du dich befindest – du profitierst von voller Deckung gegenüber diesen Kreaturen." },
-    { name: "Unbemerkt", value: false, text: "Eine Kreatur weiß nicht, dass du überhaupt da bist." },
-    { name: "Unsichtbar", value: false, text: "Du kannst nicht gesehen werden; giltst als unbemerkt, solange keine andere Wahrnehmung dich entdeckt." },
-    { name: "Verängstigt", value: true, text: "Malus auf alle Würfe und SG in Höhe des Wertes; sinkt meist am Ende jedes Zuges um 1." },
-    { name: "Verborgen", value: false, text: "Du weißt ungefähr, wo sich das Ziel befindet, kannst es aber nicht genau sehen: Zielen mit einer Chance auf Fehlschlag." },
-    { name: "Verfolgt", value: false, text: "Eine Kreatur kann dir durch magische Bindung leichter folgen/dich aufspüren." },
-    { name: "Vergiftet", value: false, text: "Sammelbegriff für Zustände durch Gift; siehe konkreten Effekt der Giftquelle." },
-    { name: "Verlangsamt", value: true, text: "Du verlierst zu Beginn deines Zuges Aktionen in Höhe des Wertes." },
-    { name: "Versteckt", value: false, text: "Du weißt in etwa, wo sich das Ziel befindet, kannst es aber nicht sehen: 50% Fehlschlagchance beim Zielen." },
-    { name: "Versteinert", value: false, text: "Du wirst zu Stein: Bewegungsunfähig, kein Sehen/Hören, giltst als Objekt." },
-    { name: "Verwirrt", value: false, text: "Du handelst zufällig und giltst als Auf dem falschen Fuß; kannst Verbündete nicht bewusst als Ziel wählen." },
-    { name: "Verwundet", value: true, text: "Erhöht bei erneutem Sterben den Sterbend-Wert um diesen Wert." },
-    { name: "Zerbrochen", value: false, text: "Ein Gegenstand oder eine Konstruktkreatur mit 0 TP: eingeschränkt nutzbar, bis repariert." },
-  ];
+    ["blinded", false, "Du siehst nichts: Normales Gelände ist für dich schwierig, auf Sicht beruhende Wahrnehmungswürfe misslingen kritisch, −4 auf Wahrnehmung."],
+    ["broken", false, "Gegenstand mit TP auf/unter dem Bruchwert: unbrauchbar. Beschädigte Rüstung gibt zusätzlich −1/−2/−3 RK (leicht/mittel/schwer)."],
+    ["clumsy", true, "−Wert auf GE-basierte Würfe und SG: RK, Reflex, Fernkampf, Akrobatik, Heimlichkeit, Diebeskunst."],
+    ["concealed", false, "Du bist schwer zu sehen (Nebel, Dunst): Wer dich angreift, braucht zuerst einen Glückswurf SG 5."],
+    ["confused", false, "Auf dem falschen Fuß, du hältst niemanden für verbündet, keine Reaktionen; du greifst ein zufälliges Ziel an. Bei Schaden: Glückswurf SG 11 beendet es."],
+    ["controlled", false, "Jemand anderes bestimmt, was du tust."],
+    ["dazzled", false, "Ist Sicht dein einziger genauer Sinn, ist alles für dich verborgen (Glückswurf SG 5 beim Zielen)."],
+    ["deafened", false, "Du hörst nichts: auf Gehör beruhende Wahrnehmung misslingt kritisch, −2 auf Wahrnehmung; hörbare Aktionen brauchen einen Glückswurf SG 5."],
+    ["doomed", true, "Du stirbst schon bei Sterbend (4 − Wert). Sinkt um 1 nach einer vollen Nachtruhe."],
+    ["drained", true, "−Wert auf KO-basierte Würfe (Zähigkeit); du verlierst Wert × Stufe TP und dein Maximum sinkt. Sinkt um 1 nach Nachtruhe."],
+    ["dying", true, "Bei 0 TP: bewusstlos. Zu Beginn deines Zuges Genesungswurf (Glückswurf SG 10 + Wert). Bei Sterbend 4 stirbst du."],
+    ["encumbered", false, "Zu viel Traglast: Unbeholfen 1 und −10 Fuß auf alle Geschwindigkeiten."],
+    ["enfeebled", true, "−Wert auf ST-basierte Würfe und SG: Nahkampfangriff, Nahkampfschaden, Athletik."],
+    ["fascinated", false, "−2 auf Wahrnehmung und Fertigkeitswürfe; du kannst dich nur auf die Quelle konzentrieren. Endet bei feindlichen Handlungen gegen dich."],
+    ["fatigued", false, "−1 auf RK und Rettungswürfe; beim Reisen keine Erkundungsaktivität. Endet nach voller Nachtruhe."],
+    ["fleeing", false, "Du musst deine Aktionen nutzen, um von der Quelle wegzukommen."],
+    ["frightened", true, "−Wert auf alle Würfe und SG. Sinkt am Ende jedes deiner Züge um 1."],
+    ["grabbed", false, "Auf dem falschen Fuß und bewegungsunfähig; Handhaben-Aktionen brauchen einen Glückswurf SG 5. Befreien: Entkommen."],
+    ["hidden", false, "Der Gegner kennt dein Feld, sieht dich aber nicht: Glückswurf SG 11, um dich zu treffen."],
+    ["immobilized", false, "Du kannst dich nicht von der Stelle bewegen."],
+    ["invisible", false, "Man kann dich nicht sehen – du bist für andere mindestens versteckt."],
+    ["off-guard", false, "−2 auf die RK (z. B. beim Flankieren)."],
+    ["paralyzed", false, "Auf dem falschen Fuß, du kannst nur noch denken (Wissen abrufen und rein geistige Aktionen)."],
+    ["persistent-damage", false, "Erleide den Schaden am Ende deines Zuges, dann Glückswurf SG 15: Bei Erfolg endet er."],
+    ["petrified", false, "Du bist zu Stein geworden: keine Aktionen, keine Wahrnehmung."],
+    ["prone", false, "Du liegst: Auf dem falschen Fuß, −2 auf Angriffe; nur Kriechen oder Aufstehen als Bewegung."],
+    ["quickened", false, "1 zusätzliche Aktion pro Zug (oft nur für bestimmte Aktionen)."],
+    ["restrained", false, "Gefesselt/festgehalten: Auf dem falschen Fuß, bewegungsunfähig; außer Entkommen keine Angriffe oder Handhaben-Aktionen."],
+    ["sickened", true, "−Wert auf alle Würfe und SG; du kannst nichts schlucken. 1 Aktion Würgen: Zähigkeitswurf, um den Wert zu senken."],
+    ["slowed", true, "Du erhältst zu Beginn deines Zuges entsprechend weniger Aktionen."],
+    ["stunned", true, "Du verlierst insgesamt so viele Aktionen wie der Wert, dann endet es. Ohne Wert: keine Aktionen für die Dauer."],
+    ["stupefied", true, "−Wert auf IN-, WE- und CH-basierte Würfe und SG (Willen, Zauber); beim Zaubern Glückswurf SG 5 + Wert, sonst ist der Zauber verloren."],
+    ["unconscious", false, "Bewusstlos: −4 auf RK, Wahrnehmung und Reflex, blind, auf dem falschen Fuß und liegend."],
+    ["undetected", false, "Der Gegner weiß nicht, wo du bist: Er muss ein Feld raten und einen Glückswurf SG 11 schaffen."],
+    ["unnoticed", false, "Der Gegner weiß nicht einmal, dass du da bist."],
+    ["wounded", true, "Wirst du erneut Sterbend, steigt Sterbend zusätzlich um diesen Wert. Endet durch Wunden versorgen oder volle TP + 10 Min. Rast."],
+  ].map(([slug, value, text]) => ({ slug, value, text }));
 
   const UNITS = {
     ft: "Fuß",
@@ -171,4 +160,4 @@
     CONDITIONS,
     UNITS,
   };
-})(window);
+})(typeof window !== "undefined" ? window : globalThis);

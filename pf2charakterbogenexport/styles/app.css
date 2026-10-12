@@ -15,6 +15,7 @@ body {
 .app-header p { margin: 0; font-size: 13px; color: #f2ead9cc; }
 
 .app-shell { max-width: 900px; margin: 0 auto; padding: 20px; }
+@media (max-width: 600px) { .app-shell { padding: 12px; } }
 
 .upload-panel {
   background: #3a2f22;
@@ -72,6 +73,15 @@ button {
 button:hover { background: #9a2b2b; }
 button.secondary { background: #4a3d29; }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
+select.secondary {
+  font-family: inherit;
+  font-size: 13px;
+  background: #4a3d29;
+  color: #fff;
+  border: 2px solid #b8860b;
+  border-radius: 5px;
+  padding: 7px 8px;
+}
 
 .status-msg { font-size: 12px; }
 .status-msg.error { color: #ff8f8f; }

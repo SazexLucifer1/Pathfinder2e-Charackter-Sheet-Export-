@@ -1,67 +1,101 @@
 # Pathfinder 2e – Charakterbogen-Export (Foundry VTT → Papierbogen, Deutsch)
 
-Ein kleines, rein clientseitiges Web-Tool, das einen in **Foundry VTT** (System: `pf2e`)
-angelegten Charakter einliest und daraus einen **druckfertigen, deutschsprachigen
-Papier-Charakterbogen** im Stil der Pathfinder-2-**Einsteigerbox** erzeugt.
+Ein rein clientseitiges Web-Tool: Es liest einen in **Foundry VTT** (System `pf2e`) angelegten
+Charakter aus der exportierten **JSON-Datei** und erzeugt daraus einen **druckfertigen,
+komplett deutschen Charakterbogen im Stil der Pathfinder-2-Einsteigerbox** – für **Stufe 1 bis 20**.
 
-Kein Server, kein Upload, keine Installation nötig – alles läuft lokal im Browser.
+Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
 
-## Eigenschaften
+## Was der Bogen kann
 
-- **Komplett auf Deutsch** übersetzt (Fertigkeiten, Zustände, Kompetenzstufen, Rettungswürfe usw.),
-  basierend auf der offiziellen deutschen PF2-Terminologie.
-- **Maßeinheiten bleiben im englischen (imperialen) System** – Geschwindigkeit wird z. B. als
-  „25 Fuß" angezeigt, nicht in Meter umgerechnet (so wie es auch im deutschen Regelwerk üblich ist).
-- **Für Einsteiger erklärt**: Randnotiz-Kästen erklären Kompetenz, Rüstungsklasse, Trefferpunkte,
-  Rettungswürfe, Aktionen im Kampf, Zustände, Traglast usw. – im Stil der Einsteigerbox.
-- **Stufen 1–20**: Der Bogen zeigt einen Stufenverlauf und hält auf der Talente-Seite genug
-  leere Zeilen bereit, um neue Talente bis Stufe 20 von Hand nachzutragen.
-- **Zustände-Seite**: Alle Pathfinder-2-Zustände mit Ankreuzkästchen und Wertfeld, um den
-  aktuellen Zustand des Charakters während des Spiels zu markieren.
-- **Talente & Fähigkeiten-Seite**: Listet alle importierten Talente/Merkmale mit Stufe, Quelle
-  (Volkstalent, Klassentalent, Fertigkeitstalent, Allgemeines Talent, Klassenmerkmal …) und
-  Beschreibung auf.
-- Zusätzliche Seiten für Fertigkeiten & Kampf, Zauber (falls vorhanden) und Ausrüstung/Inventar.
+- **Optik wie der Einsteigerbox-Bogen**: rote Banner, Attributskästen, RK-Schild, Trefferpunkte,
+  Rettungswürfe, Fertigkeitsliste, Angriffe. Kompetenz als Kästchen **G / E / M / L**
+  (Geübt, Experte, Meister, Legende), damit auch hohe Stufen abgebildet werden.
+- **Werte werden berechnet**: Foundry exportiert nur Rohdaten (keine fertigen Boni). Das Tool
+  rechnet Attribute (inkl. Teilsteigerungen ab +4), RK, TP, Rettungswürfe, Wahrnehmung,
+  Fertigkeiten, Klassen-SG, Angriffe/Schaden (Runen, Waffenspezialisierung, Lieblingswaffe …)
+  und Zauber-SG selbst aus.
+  Situative Boni („+2 gegen Furcht“) werden nicht eingerechnet – sie stehen bei der Fähigkeit.
+- **Fähigkeiten auf das Nötigste reduziert und nach Einsatz sortiert**:
+  - **Im Kampf**: deine Aktionen & Reaktionen (mit Auslöser/Voraussetzung), passive Kampfvorteile
+    und **Fertigkeitsaktionen** wie *Hindurchturnen* (Tumble Through), *Ergreifen*,
+    *Demoralisieren* – jeweils mit deinem Bonus und wogegen gewürfelt wird.
+  - **Außerhalb des Kampfes**: Erkundungsaktivitäten, Fertigkeitsaktionen wie *Wunden versorgen*,
+    *Informationen sammeln*, Auszeit-Fähigkeiten.
+  - **Immer aktiv** und **Schon eingerechnet** (Talente, die nur Zahlen verändern, erscheinen nur
+    als Name).
+- **Grundaktionen** (Laufen, Schritt, Schild heben …) als Kurzreferenz.
+- **Zauber** mit Zauber-SG, Zauberangriff, Zauberplätzen zum Abhaken und Kurzbeschreibung.
+- **Ausrüstung, Traglast, Vermögen, Notizen** und ein **Stufenplan 1–20**: bereits gewählte
+  Talente sind eingetragen, künftige Klassenmerkmale vorgemerkt, freie Talentplätze zum Ausfüllen.
+- **Zustände** zum Ankreuzen mit Kurzerklärung.
+- **Komplett deutsch**: Namen von Talenten, Zaubern, Gegenständen, Merkmalen, Sprachen usw.
+  stammen aus der offiziellen deutschen Übersetzung (siehe unten). Maßeinheiten bleiben – wie im
+  deutschen Regelwerk – in Fuß.
 
 ## Benutzung
 
-1. **Charakter aus Foundry exportieren**: Im Actor-Verzeichnis mit Rechtsklick auf den Charakter
-   → **„Export Data"** → es wird eine `.json`-Datei heruntergeladen.
-2. `index.html` in einem Browser öffnen (Doppelklick genügt, es wird kein Server benötigt).
-3. Die `.json`-Datei per Drag & Drop in das Feld ziehen (oder den Inhalt in das Textfeld einfügen).
-4. Auf **„Bogen erzeugen"** klicken.
-5. Auf **„Drucken / Als PDF speichern"** klicken und im Druckdialog des Browsers als PDF speichern
-   oder direkt ausdrucken.
+1. **In Foundry exportieren**: Im Actor-Verzeichnis mit Rechtsklick auf den Charakter →
+   **„Export Data“** → eine `.json`-Datei wird heruntergeladen.
+2. `index.html` im Browser öffnen (Doppelklick genügt).
+3. Die `.json`-Datei hineinziehen (oder den Inhalt einfügen) → **„Bogen erzeugen“**.
+4. **„Drucken / Als PDF speichern“** → im Druckdialog *Hintergrundgrafiken* aktivieren und
+   „Als PDF speichern“ wählen (oder direkt drucken).
 
-Zum Ausprobieren kann über den Button **„Beispiel-Charakter laden"** ein mitgelieferter
-Beispiel-Charakter geladen werden (`sample/beispiel-charakter.json`). Dieser Button funktioniert
-nur, wenn die Seite über einen lokalen Webserver aufgerufen wird (z. B. `python3 -m http.server`),
-da Browser das Nachladen von Dateien über `file://` aus Sicherheitsgründen blockieren – die
-Kernfunktion (Drag & Drop / Einfügen) ist davon nicht betroffen.
+Die Beispiel-Charaktere (Valeros, Ezren, Kyra) lassen sich nur laden, wenn die Seite über einen
+lokalen Webserver läuft (z. B. `python3 -m http.server` im Ordner und dann
+`http://localhost:8000` öffnen) – Browser blockieren das Nachladen über `file://`.
+Die eigentliche Funktion (eigene Datei laden) geht auch ohne Server.
 
-## Technische Hinweise
+## Grenzen
 
-- Reines HTML/CSS/JavaScript ohne Build-Schritt und ohne externe Abhängigkeiten.
-- Der Parser (`src/parser.js`) liest ein Foundry-`pf2e`-Actor-Export-JSON defensiv aus:
-  Foundry-Exporte unterscheiden sich je nach Systemversion leicht in ihrer Struktur; fehlende
-  Felder führen zu Hinweisen auf dem Bogen statt zu Fehlern.
-- Alle Regel-Erklärtexte sind eigene, kurze Zusammenfassungen zum besseren Verständnis –
-  maßgeblich bleibt immer das offizielle Regelwerk.
+- Die Berechnung bildet die wichtigsten Foundry-Regeln nach. Exotische Regelelemente
+  (z. B. Verwandlungen, Effekte, Homebrew-Skripte) werden nicht ausgewertet. Aktive Effekte
+  (Buffs) aus Foundry werden bewusst ignoriert, der Bogen zeigt die Grundwerte.
+- Für sehr neue oder selbst erstellte Inhalte gibt es eventuell keine deutsche Übersetzung –
+  dann steht dort der Originalname und ein Hinweis.
 
 ## Projektstruktur
 
 ```
-index.html              Haupt-App (Upload-Oberfläche + Bogen-Ausgabe)
-src/i18n.js              Deutsche Begriffsdatenbank (Fertigkeiten, Zustände, Kompetenz, …)
-src/explanations.js      Erklär-Texte für die Randnotiz-Kästen
-src/parser.js            Foundry-Actor-JSON → normalisiertes Charaktermodell
-src/render.js             Charaktermodell → druckfertiges HTML
-src/main.js               UI-Verdrahtung (Datei-Upload, Buttons, Fehlerbehandlung)
-styles/sheet.css          Aussehen des Charakterbogens (Bildschirm + Druck)
-styles/app.css            Aussehen der Upload-Oberfläche
-sample/beispiel-charakter.json   Beispiel-Charakter zum Testen
+index.html                 Oberfläche (Upload + Bogen-Ausgabe)
+src/data/dictionary-de.js  Deutsches Wörterbuch (automatisch erzeugt, s. u.)
+src/summarize.js           Kürzt deutsche Beschreibungen auf 1–2 Sätze
+src/dictionary.js          Nachschlagen deutscher Namen/Kurzfassungen/Merkmale
+src/i18n.js                Grundbegriffe (Attribute, Fertigkeiten, Zustände)
+src/skill-actions.js       Grund-, Fertigkeits- und Erkundungsaktionen mit Kurztexten
+src/explanations.js        Erklär-Kästen
+src/parser.js              Foundry-JSON → berechnetes Charaktermodell
+src/render.js              Charaktermodell → druckfertiges HTML
+src/main.js                UI (Datei laden, Beispiele, Drucken)
+styles/sheet.css           Aussehen des Bogens (Bildschirm + Druck)
+styles/app.css             Aussehen der Oberfläche
+sample/                    Beispiel-Charaktere im echten Foundry-Exportformat
+tools/build-dictionary.mjs Erzeugt src/data/dictionary-de.js
+tools/test-parser.js       Testet Parser + Renderer mit Foundry-JSON-Dateien
 ```
 
-## Haftungsausschluss
+### Wörterbuch neu erzeugen
 
-Inoffizielles Fan-Projekt, nicht mit Paizo Inc. oder Ulisses Spiele verbunden.
+```
+git clone --depth 1 https://github.com/Foundry-VTT-PF2-German/lang-de-pf2e
+git clone --depth 1 https://github.com/foundryvtt/pf2e
+node tools/build-dictionary.mjs lang-de-pf2e pf2e/static/lang/en.json pf2e/packs/pf2e
+```
+
+### Testen
+
+```
+node tools/test-parser.js sample                      # Beispiele
+node tools/test-parser.js pf2e/packs/pf2e/iconics     # alle Iconics des pf2e-Systems
+```
+
+## Quellen & Lizenzen
+
+- Deutsche Namen und Kurzfassungen: Foundry-Modul **„German [Pathfinder 2e]“**
+  ([lang-de-pf2e](https://github.com/Foundry-VTT-PF2-German/lang-de-pf2e), MIT-Lizenz,
+  © Marco Seither), basierend auf den deutschen Texten von Ulisses Spiele.
+- Beispiel-Charaktere: Iconics aus dem [pf2e-System für Foundry VTT](https://github.com/foundryvtt/pf2e)
+  (Beschreibungstexte entfernt).
+- Inoffizielles Fan-Projekt, nicht mit Paizo Inc. oder Ulisses Spiele verbunden. Pathfinder ist
+  eine Marke von Paizo Inc. Dieses Werk nutzt Material gemäß der Paizo Community Use Policy.

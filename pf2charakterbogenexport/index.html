@@ -10,7 +10,7 @@
 <body>
   <header class="app-header">
     <h1>Pathfinder&nbsp;2 Charakterbogen-Export</h1>
-    <p>Foundry-VTT-Charakter importieren &amp; als Papier-Charakterbogen (Einsteigerbox-Stil) drucken – komplett auf Deutsch, Maßeinheiten bleiben im englischen (imperialen) System.</p>
+    <p>Foundry-VTT-Charakter (Stufe 1–20) importieren &amp; als Papier-Charakterbogen im Einsteigerbox-Stil drucken – komplett auf Deutsch, Fähigkeiten kurz erklärt und nach „im Kampf“ / „außerhalb des Kampfes“ sortiert.</p>
   </header>
 
   <main class="app-shell">
@@ -21,6 +21,7 @@
           <li>Foundry VTT öffnen, im Actor-Verzeichnis mit der <strong>rechten Maustaste</strong> auf den Charakter klicken.</li>
           <li><strong>„Export Data“</strong> auswählen – es wird eine <code>.json</code>-Datei heruntergeladen.</li>
           <li>Diese Datei unten hochladen (oder den Inhalt einfügen) und auf „Bogen erzeugen“ klicken.</li>
+          <li>„Drucken / Als PDF speichern“ – im Druckdialog <strong>Hintergrundgrafiken</strong> einschalten und Ränder auf „Standard“ lassen.</li>
         </ol>
         <p>Alle Verarbeitung passiert lokal in deinem Browser – es wird nichts hochgeladen oder irgendwohin gesendet.</p>
       </div>
@@ -36,7 +37,12 @@
 
       <div class="toolbar">
         <button id="generate-btn">Bogen erzeugen</button>
-        <button id="sample-btn" class="secondary">Beispiel-Charakter laden</button>
+        <select id="sample-select" class="secondary" title="Beispiel-Charakter">
+          <option value="sample/valeros-kaempfer-stufe-7.json">Beispiel: Valeros (Kämpfer, Stufe 7)</option>
+          <option value="sample/ezren-magier-stufe-5.json">Beispiel: Ezren (Magier, Stufe 5)</option>
+          <option value="sample/kyra-klerikerin-stufe-1.json">Beispiel: Kyra (Klerikerin, Stufe 1)</option>
+        </select>
+        <button id="sample-btn" class="secondary">Beispiel laden</button>
         <button id="print-btn" class="secondary" disabled>Drucken / Als PDF speichern</button>
         <span id="status-msg" class="status-msg"></span>
       </div>
@@ -50,8 +56,12 @@
     kurze Zusammenfassungen zum leichteren Verständnis – maßgeblich bleibt das offizielle Regelwerk.
   </footer>
 
+  <script src="src/data/dictionary-de.js"></script>
+  <script src="src/summarize.js"></script>
   <script src="src/i18n.js"></script>
+  <script src="src/dictionary.js"></script>
   <script src="src/explanations.js"></script>
+  <script src="src/skill-actions.js"></script>
   <script src="src/parser.js"></script>
   <script src="src/render.js"></script>
   <script src="src/main.js"></script>

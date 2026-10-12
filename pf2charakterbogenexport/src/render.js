@@ -1,21 +1,26 @@
 /*
- * Baut aus dem normalisierten Charaktermodell (PF2_PARSER) die
- * mehrseitige, druckfertige HTML-Ansicht des Charakterbogens im
- * Stil der Pathfinder-2-Einsteigerbox.
+ * Baut aus dem berechneten Charaktermodell (PF2_PARSER) den mehrseitigen,
+ * druckfertigen Charakterbogen im Stil der Pathfinder-2-Einsteigerbox.
+ *
+ * Seiten:
+ *   1  Übersicht (Attribute, RK, TP, Rettungswürfe, Fertigkeiten, Angriffe)
+ *   2  Im Kampf (Dein Zug, Grundaktionen, Aktionen/Reaktionen, Fertigkeitsaktionen)
+ *   3  Außerhalb des Kampfes (Erkundung, Auszeit, passive Fähigkeiten)
+ *   4  Zauber (nur wenn vorhanden)
+ *   5  Ausrüstung, Stufenplan 1–20 & Notizen
+ *   6  Zustände (Nachschlagen & Ankreuzen)
  */
 (function (global) {
   "use strict";
 
   const I18N = global.PF2_I18N;
   const EXP = global.PF2_EXPLANATIONS;
+  const ACT = global.PF2_ACTIONS;
+  const D = global.PF2_DICT;
 
   function esc(s) {
     if (s == null) return "";
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
   function fmtMod(n) {
@@ -23,374 +28,567 @@
     return n >= 0 ? `+${n}` : `${n}`;
   }
 
-  function calcSkillMod(level, ability, rank, abilities, explicitMod) {
-    if (explicitMod != null) return explicitMod;
-    const rankInfo = I18N.PROFICIENCY_RANKS[rank] || I18N.PROFICIENCY_RANKS[0];
-    const abilityMod = abilities[ability] || 0;
-    return rankInfo.bonus(level) + abilityMod;
+  /* ---------- Bausteine ---------- */
+
+  function banner(title, extra) {
+    return `<div class="banner"><span>${esc(title)}</span>${extra ? `<span class="banner-extra">${extra}</span>` : ""}</div>`;
   }
 
-  function explainBox(key, extraClass) {
+  function tip(key) {
     const e = EXP[key];
     if (!e) return "";
-    return `
-      <div class="explain-box ${extraClass || ""}">
-        <div class="explain-title">${esc(e.title)}</div>
-        <div class="explain-text">${esc(e.text)}</div>
-      </div>`;
+    return `<div class="tip"><strong>${esc(e.title)}</strong> ${esc(e.text)}</div>`;
   }
 
-  function proficiencyDots(rank) {
-    let dots = "";
-    for (let i = 1; i <= 4; i++) {
-      dots += `<span class="dot ${rank >= i ? "filled" : ""}"></span>`;
-    }
-    return `<span class="prof-dots" title="${esc(I18N.proficiencyName(rank))}">${dots}</span>`;
+  /** Aktionssymbol als kleines Abzeichen: ◆ ◆◆ ◆◆◆ ⤾ ◇ */
+  function costBadge(cost) {
+    if (cost == null || cost === "") return `<span class="cost cost-passive" title="passiv">—</span>`;
+    if (cost === "R") return `<span class="cost cost-reaction" title="Reaktion">⤾</span>`;
+    if (cost === "F") return `<span class="cost cost-free" title="Freie Aktion">◇</span>`;
+    if (cost === "E") return `<span class="cost cost-text" title="Erkundungsaktivität">Erk.</span>`;
+    if (cost === "A") return `<span class="cost cost-text" title="Auszeit">Ausz.</span>`;
+    if (cost === "M") return `<span class="cost cost-text" title="dauert Minuten">Min.</span>`;
+    if (typeof cost === "number") return `<span class="cost" title="${cost} Aktion${cost > 1 ? "en" : ""}">${"◆".repeat(cost)}</span>`;
+    return `<span class="cost cost-text">${esc(cost)}</span>`;
   }
 
-  function abilityBlock(model) {
-    return Object.values(I18N.ABILITIES)
-      .map((a) => {
-        const mod = model.abilities[a.key] || 0;
-        return `
-        <div class="ability-box">
-          <div class="ability-name">${esc(a.name)}</div>
-          <div class="ability-short">${esc(a.short)}</div>
-          <div class="ability-mod">${fmtMod(mod)}</div>
-        </div>`;
-      })
-      .join("");
+  /** Kompetenz als Kästchen U G E M L (wie die Einsteigerbox-Kästchen, erweitert bis Legende) */
+  function rankBoxes(rank) {
+    const letters = ["G", "E", "M", "L"];
+    return `<span class="rank-boxes" title="${esc(I18N.proficiencyName(rank))}">${letters
+      .map((l, i) => `<span class="rb ${rank >= i + 1 ? "on" : ""}">${l}</span>`)
+      .join("")}</span>`;
   }
+
+  /* ---------- Seite 1: Übersicht ---------- */
+
+  const ATTR_HINT = {
+    str: "Nahkampf-Schaden, Athletik, Traglast",
+    dex: "RK, Reflex, Fernkampf, Akrobatik, Heimlichkeit",
+    con: "Trefferpunkte, Zähigkeit",
+    int: "Wissen, Sprachen, Fertigkeiten",
+    wis: "Wahrnehmung, Willen, Heilkunde",
+    cha: "Soziales, manche Zauber",
+  };
 
   function headerBlock(model) {
     const m = model.meta;
+    const field = (label, value, cls) =>
+      `<div class="hf ${cls || ""}"><div class="hf-value">${esc(value) || "&nbsp;"}</div><div class="hf-label">${esc(label)}</div></div>`;
     return `
-    <div class="sheet-header">
-      <div class="title-block">
-        <h1>Charakterbogen</h1>
-        <div class="subtitle">Pathfinder 2. Edition — im Stil der Einsteigerbox</div>
+    <header class="sheet-head">
+      <div class="logo">
+        <div class="logo-main">Pathfinder</div>
+        <div class="logo-sub">Charakterbogen · 2. Edition</div>
       </div>
-      <div class="field-grid">
-        <label>Name<input type="text" value="${esc(m.name)}"></label>
-        <label>Spieler:in<input type="text" value="${esc(m.player)}"></label>
-        <label>Stufe<input type="number" min="1" max="20" value="${esc(m.level)}"></label>
-        <label>Volk<input type="text" value="${esc(m.ancestry)}"></label>
-        <label>Erbe<input type="text" value="${esc(m.heritage)}"></label>
-        <label>Klasse<input type="text" value="${esc(m.className)}"></label>
-        <label>Hintergrund<input type="text" value="${esc(m.background)}"></label>
-        <label>Gesinnung<input type="text" value="${esc(m.alignment)}"></label>
-        <label>Gottheit<input type="text" value="${esc(m.deity)}"></label>
-        <label>Größe<input type="text" value="${esc(m.size)}"></label>
-        <label>Alter<input type="text" value="${esc(m.age)}"></label>
-        <label>Geschlecht<input type="text" value="${esc(m.gender)}"></label>
+      <div class="head-fields">
+        ${field("Charaktername", m.name, "wide")}
+        ${field("Spieler:in", "", "")}
+        <div class="level-badge"><div class="lvl">${esc(m.level)}</div><div class="hf-label">Stufe</div></div>
+        ${field("Volk & Erbe", [m.ancestry, m.heritage].filter(Boolean).join(" · "), "wide")}
+        ${field("Hintergrund", m.background)}
+        ${field("Klasse", m.className)}
+        ${field("Gottheit", m.deity)}
+        ${field("Größe", m.size)}
+        ${field("Sprachen", (m.languages || []).join(", "), "wide2")}
       </div>
-      <div class="languages"><strong>Sprachen:</strong> ${esc((m.languages || []).join(", ")) || "—"}</div>
-      <div class="level-track">
-        <strong>Stufenverlauf:</strong>
-        ${Array.from({ length: 20 }, (_, i) => i + 1)
-          .map((lvl) => `<span class="level-pip ${lvl <= m.level ? "reached" : ""}">${lvl}</span>`)
-          .join("")}
-        <span class="hint">(Bogen unterstützt Einträge bis Stufe 20 — siehe Talente-Seite)</span>
-      </div>
+    </header>
+    <div class="level-track">
+      <span class="lt-label">Stufe</span>
+      ${Array.from({ length: 20 }, (_, i) => i + 1)
+        .map((l) => `<span class="lt-pip ${l <= m.level ? "on" : ""} ${l === m.level ? "now" : ""}">${l}</span>`)
+        .join("")}
+      <span class="lt-xp">EP: <span class="write-line short">${m.xp || ""}</span> / 1000</span>
     </div>`;
   }
 
-  function statBoxes(model) {
-    const level = model.meta.level;
+  function attributeColumn(model) {
     return `
-    <div class="stat-row">
-      <div class="stat-box big">
-        <div class="stat-label">RK</div>
-        <div class="stat-value">${esc(model.ac)}</div>
-        ${explainBox("ac")}
-      </div>
-      <div class="stat-box big">
-        <div class="stat-label">Trefferpunkte</div>
-        <div class="hp-fields">
-          <input type="number" class="hp-current" value="${esc(model.hp.value)}"> /
-          <span class="hp-max">${esc(model.hp.max)}</span>
-        </div>
-        <div class="hp-temp-row">Temp. TP: <input type="number" class="hp-temp" value="${esc(model.hp.temp || 0)}"></div>
-        ${explainBox("hp")}
-      </div>
-      <div class="stat-box big">
-        <div class="stat-label">Geschwindigkeit</div>
-        <div class="stat-value">${esc(model.speed.value)} Fuß</div>
-        ${
-          model.speed.others.length
-            ? `<div class="speed-others">${model.speed.others.map((s) => `${esc(s.type)}: ${esc(s.value)} Fuß`).join(", ")}</div>`
-            : ""
-        }
-      </div>
-      <div class="stat-box big">
-        <div class="stat-label">Heldenpunkte</div>
-        <div class="stat-value">${Array.from({ length: Math.max(model.meta.heroPointsMax, 3) }, (_, i) =>
-          `<span class="hero-pip ${i < model.meta.heroPoints ? "filled" : ""}"></span>`
-        ).join("")}</div>
-        ${explainBox("heroPoints")}
-      </div>
-    </div>
-    <div class="stat-row">
-      ${Object.values(I18N.SAVES)
-        .map((s) => {
-          const node = model.saves[s.key];
-          const mod = calcSkillMod(level, s.ability, node.rank, model.abilities, node.mod);
+    <section class="col col-attr">
+      ${banner("Attribute")}
+      ${Object.values(I18N.ABILITIES)
+        .map((a) => {
+          const mod = model.abilities[a.key] || 0;
+          const key = model.meta.keyAttr === a.key;
           return `
-        <div class="stat-box">
-          <div class="stat-label">${esc(s.name)}</div>
-          <div class="stat-value">${fmtMod(mod)}</div>
-          ${proficiencyDots(node.rank)} <span class="rank-name">${esc(I18N.proficiencyName(node.rank))}</span>
+        <div class="attr-box ${key ? "key" : ""}">
+          <div class="attr-name">${esc(a.name)}${key ? ' <span class="key-mark" title="Schlüsselattribut deiner Klasse">★</span>' : ""}</div>
+          <div class="attr-mod">${fmtMod(mod)}</div>
+          <div class="attr-hint">${esc(ATTR_HINT[a.key])}</div>
         </div>`;
         })
         .join("")}
-      <div class="stat-box">
-        <div class="stat-label">${esc(I18N.PERCEPTION.name)}</div>
-        <div class="stat-value">${fmtMod(calcSkillMod(level, I18N.PERCEPTION.ability, model.perception.rank, model.abilities, model.perception.mod))}</div>
-        ${proficiencyDots(model.perception.rank)} <span class="rank-name">${esc(I18N.proficiencyName(model.perception.rank))}</span>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">Klassen-SG</div>
-        <div class="stat-value">${model.classDC.mod != null ? fmtMod(model.classDC.mod) : "–"}</div>
-        ${proficiencyDots(model.classDC.rank)} <span class="rank-name">${esc(I18N.proficiencyName(model.classDC.rank))}</span>
-      </div>
-    </div>
-    ${explainBox("saves")}${explainBox("perception")}${explainBox("classDC")}`;
-  }
-
-  function skillsTable(model) {
-    const level = model.meta.level;
-    const rows = Object.entries(I18N.SKILLS)
-      .map(([key, s]) => {
-        const node = model.skills[key] || { rank: 0, mod: null };
-        const mod = calcSkillMod(level, s.ability, node.rank, model.abilities, node.mod);
-        return `
-        <tr>
-          <td class="skill-name">${esc(s.name)} <span class="skill-ability">(${esc(I18N.ABILITIES[s.ability].short)})</span></td>
-          <td class="skill-mod">${fmtMod(mod)}</td>
-          <td>${proficiencyDots(node.rank)}</td>
-          <td class="rank-name">${esc(I18N.proficiencyName(node.rank))}</td>
-        </tr>`;
-      })
-      .join("");
-
-    const loreRows = (model.lores.length ? model.lores : [{ name: "", rank: 0, mod: null }, { name: "", rank: 0, mod: null }])
-      .map((l) => {
-        const mod = l.mod != null ? l.mod : I18N.PROFICIENCY_RANKS[l.rank].bonus(level) + (model.abilities.int || 0);
-        return `
-        <tr>
-          <td class="skill-name">Kenntnis: <input type="text" value="${esc(l.name)}" class="lore-input"> <span class="skill-ability">(IN)</span></td>
-          <td class="skill-mod">${l.name ? fmtMod(mod) : ""}</td>
-          <td>${proficiencyDots(l.rank)}</td>
-          <td class="rank-name">${l.name ? esc(I18N.proficiencyName(l.rank)) : ""}</td>
-        </tr>`;
-      })
-      .join("");
-
-    return `
-    <table class="skills-table">
-      <thead><tr><th>Fertigkeit (Attribut)</th><th>Bonus</th><th>Kompetenz</th><th></th></tr></thead>
-      <tbody>${rows}${loreRows}</tbody>
-    </table>
-    ${explainBox("skills")}`;
-  }
-
-  function attacksTable(model) {
-    if (!model.attacks.length) {
-      return `<p class="empty-hint">Keine Waffen im Export gefunden – hier von Hand eintragen.</p>
-      <table class="attacks-table"><thead><tr><th>Waffe</th><th>Bonus</th><th>Schaden</th><th>Merkmale</th></tr></thead>
-      <tbody>${Array.from({ length: 4 }, () => `<tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>`).join("")}</tbody></table>`;
-    }
-    return `
-    <table class="attacks-table">
-      <thead><tr><th>Waffe</th><th>Bonus</th><th>Schaden</th><th>Merkmale</th></tr></thead>
-      <tbody>
-        ${model.attacks
-          .map(
-            (a) => `<tr>
-          <td>${esc(a.name)}</td>
-          <td>${a.bonus != null ? fmtMod(a.bonus) : "–"}</td>
-          <td>${esc(a.damage)}</td>
-          <td>${esc(a.traits.join(", "))}</td>
-        </tr>`
-          )
-          .join("")}
-      </tbody>
-    </table>`;
-  }
-
-  function conditionsPage(model) {
-    const activeMap = new Map((model.conditions || []).map((c) => [c.name, c.value]));
-    const cards = I18N.CONDITIONS.map((c) => {
-      const isActive = activeMap.has(c.name);
-      const activeValue = activeMap.get(c.name);
-      return `
-      <div class="condition-card">
-        <label class="condition-check">
-          <input type="checkbox" ${isActive ? "checked" : ""}>
-          <span class="cond-name">${esc(c.name)}</span>
-          ${c.value ? `<span class="cond-value">Wert: <input type="text" class="cond-value-input" maxlength="2" value="${activeValue != null ? esc(activeValue) : ""}"></span>` : ""}
-        </label>
-        <div class="cond-text">${esc(c.text)}</div>
-      </div>`;
-    }).join("");
-
-    return `
-    <section class="sheet-page">
-      <h2>Zustände</h2>
-      ${explainBox("conditions", "wide")}
-      <div class="condition-grid">${cards}</div>
+      ${tip("abilityScores")}
     </section>`;
   }
 
-  function featsPage(model) {
-    const maxLevel = Math.max(model.meta.level, 1);
-    const rows = model.feats
+  function defenseColumn(model) {
+    const ac = model.ac;
+    const sh = model.shield;
+    const saves = Object.values(I18N.SAVES)
+      .map((s) => {
+        const n = model.saves[s.key];
+        return `<div class="save-box">
+          <div class="save-name">${esc(s.name)}</div>
+          <div class="save-mod">${fmtMod(n.mod)}</div>
+          ${rankBoxes(n.rank)}
+        </div>`;
+      })
+      .join("");
+    const dying = [1, 2, 3, 4].map((i) => `<span class="chk" title="Sterbend ${i}"></span>`).join("");
+    const wounded = [1, 2, 3].map(() => `<span class="chk"></span>`).join("");
+    return `
+    <section class="col col-def">
+      <div class="ac-hp-row">
+        <div class="ac-shield" title="Rüstungsklasse">
+          <svg viewBox="0 0 100 116" aria-hidden="true"><path d="M50 3 L95 18 C95 62 78 94 50 113 C22 94 5 62 5 18 Z"/></svg>
+          <div class="ac-label">RK</div>
+          <div class="ac-value">${esc(ac.value)}</div>
+        </div>
+        <div class="hp-box">
+          <div class="box-title">Trefferpunkte</div>
+          <div class="hp-grid">
+            <div><div class="hp-max">${esc(model.hp.max)}</div><div class="mini">Maximum</div></div>
+            <div><div class="hp-write"></div><div class="mini">Aktuell</div></div>
+            <div><div class="hp-write small"></div><div class="mini">Temporär</div></div>
+          </div>
+          <div class="dying-row"><span>Sterbend</span>${dying}<span>Verwundet</span>${wounded}</div>
+        </div>
+      </div>
+      <div class="ac-detail">${esc(ac.armor)}${ac.dexCap != null ? ` · GE-Max. +${esc(ac.dexCap)}` : ""} · ${rankBoxes(ac.rank)}</div>
+      ${
+        sh
+          ? `<div class="shield-box"><strong>${esc(sh.name)}</strong> · erhoben: +${esc(sh.bonus)} RK · Härte ${esc(sh.hardness)} · TP ${esc(sh.hpMax)} (Bruch ${Math.floor(sh.hpMax / 2)}) <span class="shield-hp">aktuell: <span class="write-line short"></span></span></div>`
+          : ""
+      }
+      ${banner("Rettungswürfe")}
+      <div class="saves-row">${saves}</div>
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="box-title">Wahrnehmung</div>
+          <div class="stat-val">${fmtMod(model.perception.mod)}</div>
+          ${rankBoxes(model.perception.rank)}
+          <div class="mini">${model.perception.senses.length ? esc(model.perception.senses.join(", ")) : "auch für Initiative"}</div>
+        </div>
+        <div class="stat">
+          <div class="box-title">Geschwindigkeit</div>
+          <div class="stat-val">${esc(model.speed.value)} <small>Fuß</small></div>
+          <div class="mini">${model.speed.others.map((o) => `${esc(D.term(o.type) || o.type)} ${esc(o.value)} Fuß`).join(", ") || "pro Aktion Laufen"}</div>
+        </div>
+        <div class="stat">
+          <div class="box-title">Klassen-SG</div>
+          <div class="stat-val">${model.classDC.value != null ? esc(model.classDC.value) : "–"}</div>
+          ${rankBoxes(model.classDC.rank)}
+        </div>
+        <div class="stat">
+          <div class="box-title">Heldenpunkte</div>
+          <div class="hero">${[0, 1, 2].map((i) => `<span class="hero-pip ${i < model.meta.heroPoints ? "on" : ""}"></span>`).join("")}</div>
+          <div class="mini">Neu würfeln oder dem Tod entgehen</div>
+        </div>
+      </div>
+      ${iwrBlock(model)}
+      ${tip("saves")}
+    </section>`;
+  }
+
+  function iwrBlock(model) {
+    const { resistances, weaknesses, immunities } = model.iwr;
+    if (!resistances.length && !weaknesses.length && !immunities.length) return "";
+    return `<div class="iwr">
+      ${resistances.length ? `<div><strong>Resistenzen:</strong> ${esc(resistances.join(", "))}</div>` : ""}
+      ${weaknesses.length ? `<div><strong>Schwächen:</strong> ${esc(weaknesses.join(", "))}</div>` : ""}
+      ${immunities.length ? `<div><strong>Immunitäten:</strong> ${esc(immunities.join(", "))}</div>` : ""}
+    </div>`;
+  }
+
+  function skillsColumn(model) {
+    const rows = Object.entries(I18N.SKILLS)
+      .map(([key, s]) => {
+        const n = model.skills[key];
+        return `<div class="skill-row ${n.rank ? "trained" : ""}">
+          <span class="sk-mod">${fmtMod(n.mod)}</span>
+          <span class="sk-name">${esc(s.name)} <span class="sk-attr">${esc(I18N.ABILITIES[s.ability].short)}</span>${n.armorPenalty ? ` <span class="sk-pen" title="Rüstungsmalus eingerechnet">R${n.armorPenalty}</span>` : ""}</span>
+          ${rankBoxes(n.rank)}
+        </div>`;
+      })
+      .join("");
+    const lores = (model.lores.length ? model.lores : [{ name: "", rank: 0, mod: null }])
       .map(
-        (f) => `
-      <tr>
-        <td class="feat-level">${f.level || "–"}</td>
-        <td class="feat-source">${esc(I18N.featCategoryName(f.category))}</td>
-        <td class="feat-name">${esc(f.name)}</td>
-        <td class="feat-action">${esc(I18N.actionSymbol(f.actionType, f.actionCount))}</td>
-        <td class="feat-desc">${esc(f.description) || "<em>Keine Beschreibung im Export vorhanden.</em>"}</td>
+        (l) => `<div class="skill-row ${l.rank ? "trained" : ""}">
+          <span class="sk-mod">${l.name ? fmtMod(l.mod) : ""}</span>
+          <span class="sk-name">${esc(l.name) || "Kenntnis: ______________"} <span class="sk-attr">IN</span></span>
+          ${rankBoxes(l.rank)}
+        </div>`
+      )
+      .join("");
+    return `
+    <section class="col col-skills">
+      ${banner("Fertigkeiten")}
+      <div class="skill-list">${rows}${lores}</div>
+      <div class="legend">Kästchen: <b>G</b>eübt · <b>E</b>xperte · <b>M</b>eister · <b>L</b>egende. Fett = mindestens geübt.</div>
+      ${tip("skills")}
+    </section>`;
+  }
+
+  function strikesBlock(model) {
+    const rows = model.strikes
+      .map(
+        (s) => `<tr>
+        <td class="st-name">${esc(s.name)}<span class="st-kind">${s.ranged ? `Fernkampf${s.range ? ` · ${s.range} Fuß` : ""}` : "Nahkampf"}</span></td>
+        <td class="st-bonus">${fmtMod(s.map[0])}</td>
+        <td class="st-map">${fmtMod(s.map[1])}</td>
+        <td class="st-map">${fmtMod(s.map[2])}</td>
+        <td class="st-dmg">${esc(s.damage)}</td>
+        <td class="st-traits">${esc(s.traits.join(", "))}</td>
       </tr>`
       )
       .join("");
-
-    const blankRowsCount = Math.max(6, 20 - model.feats.length);
-    const blankRows = Array.from({ length: blankRowsCount }, () => `
-      <tr class="blank-row">
-        <td><input type="text" class="lvl-input"></td>
-        <td><input type="text"></td>
-        <td><input type="text"></td>
-        <td><input type="text" class="tiny"></td>
-        <td><input type="text"></td>
-      </tr>`).join("");
-
+    const blanks = Array.from({ length: Math.max(0, 2 - model.strikes.length) }, () => `<tr class="blank"><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>`).join("");
     return `
-    <section class="sheet-page">
-      <h2>Talente &amp; Fähigkeiten</h2>
-      ${explainBox("feats", "wide")}
-      <table class="feats-table">
-        <thead>
-          <tr><th>Stufe</th><th>Quelle</th><th>Name</th><th>Aktion</th><th>Beschreibung</th></tr>
-        </thead>
-        <tbody>
-          ${rows || `<tr><td colspan="5" class="empty-hint">Keine Talente/Merkmale im Export gefunden.</td></tr>`}
-          ${blankRows}
-        </tbody>
+    <section class="strikes">
+      ${banner("Angriffe", "◆ je Angriff · 2./3. Angriff im selben Zug mit Malus")}
+      <table class="tbl strikes-tbl">
+        <thead><tr><th>Waffe</th><th>1. Angriff</th><th>2.</th><th>3.</th><th>Schaden</th><th>Merkmale</th></tr></thead>
+        <tbody>${rows}${blanks}</tbody>
       </table>
-      <p class="hint">Leere Zeilen sind für neue Talente bis Stufe 20 vorgesehen — beim nächsten Stufenaufstieg einfach von Hand ergänzen (Stufe, Quelle, Name, Aktionssymbol, kurze Beschreibung).</p>
     </section>`;
   }
+
+  function basicActionsBlock() {
+    const basic = ACT.BASIC_ACTIONS.map((b) => {
+      const e = D.entry(b.slug);
+      return `<div class="basic"><div class="basic-head">${costBadge(b.cost)} <b>${esc((e && e.n) || b.name)}</b></div><div class="basic-text">${esc(b.text)}</div></div>`;
+    }).join("");
+    return `${banner("Grundaktionen", "kann jede:r · 3 Aktionen + 1 Reaktion pro Zug")}<div class="basic-grid three">${basic}</div>`;
+  }
+
+  function page1(model) {
+    return `
+    <section class="sheet-page p1">
+      ${headerBlock(model)}
+      ${warningsBlock(model)}
+      <div class="p1-grid">
+        ${attributeColumn(model)}
+        ${defenseColumn(model)}
+        ${skillsColumn(model)}
+      </div>
+      ${strikesBlock(model)}
+      ${basicActionsBlock()}
+      ${footer(model)}
+    </section>`;
+  }
+
+  /* ---------- Fähigkeitskarten ---------- */
+
+  function abilityCard(a, compact) {
+    const meta = [a.categoryName, a.level ? `Stufe ${a.level}` : ""].filter(Boolean).join(" · ");
+    return `<div class="ab-card ${compact ? "compact" : ""}">
+      <div class="ab-head">${costBadge(a.cost)}<span class="ab-name">${esc(a.name)}</span><span class="ab-meta">${esc(meta)}</span></div>
+      ${a.frequency ? `<div class="ab-line"><b>Häufigkeit:</b> ${esc(a.frequency)}</div>` : ""}
+      ${a.trigger ? `<div class="ab-line"><b>Auslöser:</b> ${esc(a.trigger)}</div>` : ""}
+      ${a.requirement ? `<div class="ab-line"><b>Voraussetzung:</b> ${esc(a.requirement)}</div>` : ""}
+      <div class="ab-text">${a.summary ? esc(a.summary) : '<em class="muted">Keine deutsche Kurzfassung verfügbar – Details in Foundry nachlesen.</em>'}</div>
+    </div>`;
+  }
+
+  function abilitySection(title, list, hint, compact) {
+    if (!list.length) return "";
+    return `${banner(title)}${hint ? `<div class="sec-hint">${esc(hint)}</div>` : ""}<div class="ab-grid">${list.map((a) => abilityCard(a, compact)).join("")}</div>`;
+  }
+
+  /* ---------- Fertigkeitsaktionen ---------- */
+
+  function skillBonusFor(model, skill) {
+    if (skill === "perception") return { name: "Wahrnehmung", mod: model.perception.mod, rank: model.perception.rank };
+    if (skill === "knowledge" || skill === "magic") {
+      const pool = skill === "magic" ? ACT.MAGIC_SKILLS : ACT.KNOWLEDGE_SKILLS;
+      let best = null;
+      pool.forEach((k) => {
+        const n = model.skills[k];
+        if (!best || n.mod > best.mod) best = { name: I18N.SKILLS[k].name, mod: n.mod, rank: n.rank };
+      });
+      model.lores.forEach((l) => {
+        if (skill === "knowledge" && (!best || l.mod > best.mod)) best = { name: l.name, mod: l.mod, rank: l.rank };
+      });
+      return best;
+    }
+    if (skill === "any") {
+      let best = null;
+      Object.keys(I18N.SKILLS).forEach((k) => {
+        const n = model.skills[k];
+        if (n.rank && (!best || n.mod > best.mod)) best = { name: I18N.SKILLS[k].name, mod: n.mod, rank: n.rank };
+      });
+      return best || { name: "–", mod: null, rank: 0 };
+    }
+    const n = model.skills[skill];
+    return { name: I18N.SKILLS[skill].name, mod: n.mod, rank: n.rank };
+  }
+
+  function skillActionTable(model, when, title) {
+    const usable = ACT.SKILL_ACTIONS.filter((a) => a.when === when)
+      .map((a) => {
+        const e = D.entry(a.slug);
+        return { a, sk: skillBonusFor(model, a.skill), name: (e && e.n) || a.slug };
+      })
+      .filter(({ a, sk }) => sk && (!a.trained || sk.rank >= 1));
+    // Nur das Nötigste: wichtige Aktionen + alles, worin du geübt bist
+    const shown = usable.filter(({ a, sk }) => ACT.CORE.has(a.slug) || sk.rank >= 1);
+    const rest = usable.filter((x) => !shown.includes(x));
+    if (!shown.length && !rest.length) return "";
+    const rows = shown
+      .sort((x, y) => (y.sk.rank ? 1 : 0) - (x.sk.rank ? 1 : 0) || y.sk.mod - x.sk.mod || x.name.localeCompare(y.name, "de"))
+      .map(
+        ({ a, sk, name }) => `<tr class="${sk.rank ? "trained" : ""}">
+          <td class="sa-cost">${costBadge(a.cost)}</td>
+          <td class="sa-name">${esc(name)}</td>
+          <td class="sa-skill">${esc(sk.name)} <b>${fmtMod(sk.mod)}</b></td>
+          <td class="sa-vs">${esc(a.vs || "")}</td>
+          <td class="sa-text">${esc(a.text)}</td>
+        </tr>`
+      )
+      .join("");
+    return `${banner(title)}
+      <table class="tbl sa-tbl">
+        <thead><tr><th></th><th>Aktion</th><th>Fertigkeit</th><th>gegen</th><th>Was passiert?</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${
+        rest.length
+          ? `<div class="sec-hint">Außerdem (ungeübt) möglich: ${rest
+              .map(({ name, sk }) => `${esc(name)} (${esc(sk.name)} ${fmtMod(sk.mod)})`)
+              .join(" · ")}</div>`
+          : ""
+      }`;
+  }
+
+  /* ---------- Seite 2: Im Kampf ---------- */
+
+  function page2(model) {
+    const list = model.abilitiesList;
+    const actions = list.filter((a) => a.when === "kampf");
+    const passive = list.filter((a) => a.when === "kampf-passiv");
+    const order = { 1: 1, 2: 2, 3: 3, F: 4, R: 5 };
+    actions.sort((a, b) => (order[a.cost] || 9) - (order[b.cost] || 9) || a.name.localeCompare(b.name, "de"));
+    return `
+    <section class="sheet-page">
+      <h2 class="page-title">Im Kampf</h2>
+      <div class="turn-box">
+        <div class="turn-icons"><span class="cost big">◆</span><span class="cost big">◆</span><span class="cost big">◆</span><span class="plus">+</span><span class="cost cost-reaction big">⤾</span></div>
+        <div class="turn-text">
+          <b>Dein Zug:</b> 3 Aktionen und 1 Reaktion (die Reaktion darfst du auch im Zug anderer nutzen, sobald ihr Auslöser eintritt).
+          <b>Initiative:</b> Wahrnehmung ${fmtMod(model.perception.mod)} (oder die Fertigkeit, die zur Situation passt, z. B. Heimlichkeit beim Anschleichen).
+          <b>Mehrfachangriff:</b> 2. Angriff −5, 3. Angriff −10 (Agil: −4/−8) – siehe Angriffe auf Seite 1.
+        </div>
+      </div>
+      ${abilitySection("Deine Aktionen & Reaktionen", actions, "Nur das Nötigste – genaue Regeln in Foundry oder im Regelwerk.")}
+      ${skillActionTable(model, "kampf", "Fertigkeitsaktionen im Kampf")}
+      ${abilitySection("Immer an im Kampf (passiv)", passive, "", true)}
+      ${footer(model)}
+    </section>`;
+  }
+
+  /* ---------- Seite 3: Außerhalb des Kampfes ---------- */
+
+  function page3(model) {
+    const list = model.abilitiesList;
+    const outside = list.filter((a) => a.when === "ausserhalb");
+    const always = list.filter((a) => a.when === "immer");
+    const builtin = list.filter((a) => a.when === "eingerechnet");
+    const explore = ACT.EXPLORATION.map((x) => {
+      const e = D.entry(x.slug);
+      return `<div class="basic"><div class="basic-head">${costBadge("E")} <b>${esc((e && e.n) || x.name)}</b></div><div class="basic-text">${esc(x.text)}</div></div>`;
+    }).join("");
+    return `
+    <section class="sheet-page">
+      <h2 class="page-title">Außerhalb des Kampfes</h2>
+      ${banner("Erkundung – was tust du unterwegs?")}
+      <div class="sec-hint">Wähle beim Reisen eine Erkundungsaktivität. Sie bestimmt oft, womit du die Initiative würfelst, wenn ein Kampf beginnt.</div>
+      <div class="basic-grid three">${explore}</div>
+      ${skillActionTable(model, "ausserhalb", "Fertigkeitsaktionen außerhalb des Kampfes")}
+      ${abilitySection("Deine Fähigkeiten außerhalb des Kampfes", outside, "Erkundung, Auszeit, Gespräche und Handwerk.")}
+      ${abilitySection("Immer aktiv / allgemein", always, "Gilt jederzeit – im Kampf wie außerhalb.", true)}
+      ${
+        builtin.length
+          ? `${banner("Schon auf dem Bogen eingerechnet")}
+        <div class="builtin">${builtin.map((a) => `<span>${esc(a.name)}</span>`).join("")}</div>
+        <div class="sec-hint">Diese Talente/Merkmale verändern nur Zahlen (Kompetenz, TP, Geschwindigkeit …) – die Werte auf Seite 1 enthalten sie bereits.</div>`
+          : ""
+      }
+      ${footer(model)}
+    </section>`;
+  }
+
+  /* ---------- Seite 4: Zauber ---------- */
 
   function spellsPage(model) {
     const sc = model.spellcasting;
-    if (!sc.entries.length && !sc.spells.length) return "";
-    const rows = sc.spells
-      .map(
-        (s) => `<tr>
-        <td>${s.level === 0 ? "Trick" : s.level}</td>
-        <td>${esc(s.name)}</td>
-        <td>${esc(s.traditions.join(", "))}</td>
-        <td>${esc(s.description).slice(0, 200)}${s.description.length > 200 ? "…" : ""}</td>
-      </tr>`
-      )
+    if (!sc.entries.length) return "";
+    const entries = sc.entries
+      .map((e) => {
+        const slotBoxes = e.slots
+          .filter((s) => s.rank > 0)
+          .map((s) => `<span class="slot"><b>${s.rank}.</b> ${Array.from({ length: s.max }, () => '<span class="chk"></span>').join("")}</span>`)
+          .join("");
+        const byRank = new Map();
+        e.spells.forEach((sp) => {
+          const k = sp.cantrip ? 0 : sp.rank;
+          if (!byRank.has(k)) byRank.set(k, []);
+          byRank.get(k).push(sp);
+        });
+        const rows = Array.from(byRank.entries())
+          .sort((a, b) => a[0] - b[0])
+          .map(([rank, spells]) =>
+            spells
+              .map(
+                (sp, i) => `<tr>
+              ${i === 0 ? `<td class="sp-rank" rowspan="${spells.length}">${rank === 0 ? "Trick" : rank + "."}</td>` : ""}
+              <td class="sp-name">${esc(sp.name)}</td>
+              <td class="sp-cost">${costBadge(sp.cost)}</td>
+              <td class="sp-range">${esc(sp.range)}</td>
+              <td class="sp-def">${esc(sp.defense)}</td>
+              <td class="sp-text">${sp.summary ? esc(sp.summary) : '<em class="muted">–</em>'}</td>
+            </tr>`
+              )
+              .join("")
+          )
+          .join("");
+        return `
+        <div class="spell-entry">
+          ${banner(`${e.name} · ${e.tradition} · ${e.kind}`)}
+          <div class="spell-stats">
+            <div class="stat small"><div class="box-title">Zauber-SG</div><div class="stat-val">${esc(e.dc)}</div></div>
+            <div class="stat small"><div class="box-title">Zauberangriff</div><div class="stat-val">${fmtMod(e.attack)}</div></div>
+            <div class="stat small"><div class="box-title">Kompetenz</div>${rankBoxes(e.rank)}</div>
+            ${slotBoxes ? `<div class="slots"><div class="box-title">Zauberplätze pro Tag (abhaken)</div>${slotBoxes}</div>` : ""}
+          </div>
+          <table class="tbl spell-tbl">
+            <thead><tr><th>Grad</th><th>Zauber</th><th></th><th>Reichweite</th><th>Verteidigung</th><th>Kurz erklärt</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+      })
       .join("");
+    const focus = sc.focus.max
+      ? `<div class="focus-row"><b>Fokuspunkte:</b> ${Array.from({ length: sc.focus.max }, (_, i) => `<span class="hero-pip ${i < sc.focus.value ? "on" : ""}"></span>`).join("")} <span class="mini">(Fokus erneuern: 10 Minuten → 1 Punkt zurück)</span></div>`
+      : "";
     return `
     <section class="sheet-page">
-      <h2>Zauber</h2>
-      <div class="spell-entries">
-        ${sc.entries
-          .map(
-            (e) => `<div class="spell-entry-box">
-          <strong>${esc(e.name)}</strong> (${esc(e.tradition)}) —
-          Zauber-SG: ${e.dc != null ? esc(e.dc) : "–"},
-          Angriffsbonus: ${e.attack != null ? fmtMod(e.attack) : "–"}
-          ${e.focusPoints != null ? `, Fokuspunkte: ${esc(e.focusPoints)}` : ""}
-        </div>`
-          )
-          .join("")}
-      </div>
-      <table class="spells-table">
-        <thead><tr><th>Grad</th><th>Name</th><th>Tradition</th><th>Beschreibung</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
+      <h2 class="page-title">Zauber</h2>
+      ${tip("spells")}
+      ${focus}
+      ${entries}
+      ${footer(model)}
     </section>`;
   }
 
-  function inventoryPage(model) {
+  /* ---------- Seite 5: Ausrüstung, Stufenplan & Notizen ---------- */
+
+  function gearPage(model) {
     const rows = model.inventory
       .map(
-        (it) => `<tr>
-        <td>${esc(it.name)}</td>
-        <td>${esc(it.quantity)}</td>
-        <td>${esc(it.bulk === "" || it.bulk == null ? "—" : it.bulk)}</td>
-        <td>${it.equipped ? "Ja" : "Nein"}</td>
+        (it) => `<tr class="${it.equipped ? "equipped" : ""}">
+        <td>${esc(it.name)}${it.container ? ` <span class="mini">(in ${esc(it.container)})</span>` : ""}</td>
+        <td class="num">${esc(it.quantity)}</td>
+        <td class="num">${esc(it.bulk)}</td>
+        <td class="num">${it.held ? "in der Hand" : it.equipped ? "getragen" : ""}${it.invested ? " · investiert" : ""}</td>
       </tr>`
       )
       .join("");
     const cur = model.currency;
+    const b = model.bulk;
+    const plan = model.levelPlan
+      .map(
+        (p) => `<tr class="${p.reached ? "reached" : "future"}">
+        <td class="lp-lvl">${p.level}</td>
+        <td class="lp-entries">${p.entries
+          .map(
+            (e) =>
+              `<span class="lp-e ${e.future ? "future-feature" : ""}"><span class="lp-kind">${esc(e.kind)}:</span> ${e.name ? esc(e.name) : '<span class="write-line"></span>'}</span>`
+          )
+          .join("")}</td>
+      </tr>`
+      )
+      .join("");
     return `
     <section class="sheet-page">
-      <h2>Ausrüstung &amp; Inventar</h2>
-      ${explainBox("bulk")}
-      <table class="inventory-table">
-        <thead><tr><th>Gegenstand</th><th>Anzahl</th><th>Traglast</th><th>Angelegt</th></tr></thead>
-        <tbody>${rows || `<tr><td colspan="4" class="empty-hint">Keine Gegenstände im Export gefunden.</td></tr>`}</tbody>
-      </table>
-      <div class="currency-row">
-        <strong>Vermögen:</strong>
-        Platin: <input type="text" value="${esc(cur.pp)}" class="tiny">
-        Gold: <input type="text" value="${esc(cur.gp)}" class="tiny">
-        Silber: <input type="text" value="${esc(cur.sp)}" class="tiny">
-        Kupfer: <input type="text" value="${esc(cur.cp)}" class="tiny">
+      <h2 class="page-title">Ausrüstung &amp; Entwicklung</h2>
+      <div class="gear-grid">
+        <div>
+          ${banner("Ausrüstung")}
+          <table class="tbl inv-tbl">
+            <thead><tr><th>Gegenstand</th><th>Anz.</th><th>Trag&shy;last</th><th>Status</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="4" class="muted">Keine Gegenstände im Export.</td></tr>'}
+            ${Array.from({ length: 4 }, () => '<tr class="blank"><td>&nbsp;</td><td></td><td></td><td></td></tr>').join("")}</tbody>
+          </table>
+        </div>
+        <div>
+          ${banner("Traglast")}
+          <div class="bulk-box">
+            <div><b>Getragen:</b> ${esc(b.value)}${b.light ? ` + ${esc(b.light)} L` : ""}</div>
+            <div><b>Belastet ab:</b> mehr als ${esc(b.encumbered)}</div>
+            <div><b>Maximum:</b> ${esc(b.max)}</div>
+          </div>
+          ${tip("bulk")}
+          ${banner("Vermögen")}
+          <div class="coins">
+            <div class="coin"><span>${esc(cur.pp)}</span>Platin</div>
+            <div class="coin"><span>${esc(cur.gp)}</span>Gold</div>
+            <div class="coin"><span>${esc(cur.sp)}</span>Silber</div>
+            <div class="coin"><span>${esc(cur.cp)}</span>Kupfer</div>
+          </div>
+          ${banner("Notizen")}
+          <div class="notes">${Array.from({ length: 8 }, () => '<div class="note-line"></div>').join("")}</div>
+        </div>
       </div>
+      ${banner("Stufenplan 1–20", "für Stufenaufstiege – leere Felder von Hand ausfüllen")}
+      <table class="tbl plan-tbl"><tbody>${plan}</tbody></table>
+      ${footer(model)}
     </section>`;
   }
+
+  /* ---------- Seite 6: Zustände ---------- */
+
+  function conditionsPage(model) {
+    const active = new Map((model.conditions || []).map((c) => [D.slug(c.name), c.value]));
+    const cards = I18N.CONDITIONS.map((c) => {
+      const e = D.entry("cond:" + c.slug) || D.entry(c.slug) || {};
+      return Object.assign({}, c, { name: e.n || c.slug });
+    })
+      .sort((a, b) => a.name.localeCompare(b.name, "de"))
+      .map((c) => {
+      const name = c.name;
+      const isActive = active.has(D.slug(name)) || active.has(c.slug);
+      return `<div class="cond">
+        <div class="cond-head"><span class="chk ${isActive ? "on" : ""}"></span><b>${esc(name)}</b>${c.value ? '<span class="cond-val">Wert <span class="write-box"></span></span>' : ""}</div>
+        <div class="cond-text">${esc(c.text)}</div>
+      </div>`;
+    }).join("");
+    return `
+    <section class="sheet-page">
+      <h2 class="page-title">Zustände</h2>
+      ${tip("conditions")}
+      <div class="cond-grid">${cards}</div>
+      ${footer(model)}
+    </section>`;
+  }
+
+  /* ---------- Sonstiges ---------- */
 
   function warningsBlock(model) {
     if (!model.warnings || !model.warnings.length) return "";
-    return `
-    <div class="warnings-box">
-      <strong>Hinweise zum Import:</strong>
-      <ul>${model.warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>
-    </div>`;
+    return `<div class="warnings no-print-optional"><strong>Hinweise zum Import:</strong><ul>${model.warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></div>`;
+  }
+
+  function footer(model) {
+    return `<div class="page-foot"><span>${esc(model.meta.name)} · Stufe ${esc(model.meta.level)} ${esc(model.meta.className)}</span><span>Seite #</span></div>`;
   }
 
   function render(model) {
-    const page1 = `
-    <section class="sheet-page">
-      ${headerBlock(model)}
-      ${warningsBlock(model)}
-      <div class="two-col">
-        <div class="col-main">
-          <div class="abilities-row">${abilityBlock(model)}</div>
-          ${explainBox("abilityScores")}
-          ${statBoxes(model)}
-        </div>
-        <div class="col-side">
-          ${explainBox("proficiency")}
-        </div>
-      </div>
-    </section>`;
-
-    const page2 = `
-    <section class="sheet-page">
-      <h2>Fertigkeiten</h2>
-      ${skillsTable(model)}
-      <h2>Kampf</h2>
-      ${explainBox("actions")}
-      ${attacksTable(model)}
-    </section>`;
-
-    const page3 = conditionsPage(model);
-    const page4 = featsPage(model);
-    const page5 = spellsPage(model);
-    const page6 = inventoryPage(model);
-
-    return `<div class="pf2-sheet">${page1}${page2}${page3}${page4}${page5}${page6}</div>`;
+    const pages = [page1, page2, page3, spellsPage, gearPage, conditionsPage].map((fn) => fn(model)).filter(Boolean);
+    let n = 0;
+    const html = pages.join("").replace(/<span>Seite #<\/span>/g, () => `<span>Seite ${++n} / ${pages.length}</span>`);
+    return `<div class="pf2-sheet">${html}</div>`;
   }
 
   global.PF2_RENDER = { render };
-})(window);
+})(typeof window !== "undefined" ? window : globalThis);
