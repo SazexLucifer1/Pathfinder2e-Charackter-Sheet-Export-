@@ -147,10 +147,21 @@
     return null;
   }
 
+  // Klasse des aktuellen Charakters (für Klassenvarianten in Beschreibungen)
+  let currentClass = "";
+  function setClass(name) {
+    currentClass = String(name || "").toLowerCase();
+  }
+  function withVariant(e, item) {
+    if (!e.v || !currentClass) return e;
+    const hit = e.v.find(([label]) => label.toLowerCase().split(/\s*(?:,|und|and)\s*/).some((c) => c && currentClass.startsWith(c.trim())));
+    return hit ? Object.assign({}, e, { s: hit[1] }) : e;
+  }
+
   /** Kurzfassung {s, trigger, req, freq} oder null. */
   function itemSummary(item) {
     const e = lookupItem(item);
-    if (e && (e.s || e.trigger || e.req || e.act || e.eff || e.sp)) return e;
+    if (e && (e.s || e.trigger || e.req || e.act || e.eff || e.sp)) return withVariant(e, item);
     // Fallback: eigene Beschreibung kürzen, falls sie bereits deutsch ist
     const html = item.system && item.system.description && item.system.description.value;
     if (html && SUM && !SUM.looksEnglish(html)) {
@@ -196,5 +207,5 @@
     return map[s] || s || "";
   }
 
-  global.PF2_DICT = { slug, entry, englishName, titleFromSlug, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
+  global.PF2_DICT = { slug, entry, englishName, titleFromSlug, setClass, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
 })(typeof window !== "undefined" ? window : globalThis);

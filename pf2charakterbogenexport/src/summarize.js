@@ -112,7 +112,7 @@
     const bodyParts = [];
     const variantParts = []; // Absätze mit Klassen-Überschrift ("<strong>Magier</strong> …")
     for (const block of blocks) {
-      const labelMatch = block.match(/^\s*(?:<p>)?\s*<strong>([^<]+)<\/strong>(.*)$/is);
+      const labelMatch = block.match(/^\s*(?:<p>)?\s*(?:<em>)?\s*<strong>([^<]+)<\/strong>(.*)$/is);
       if (labelMatch) {
         const label = labelMatch[1].trim().toLowerCase().replace(/[:\s]+$/, "");
         const kind = LABELS[label];
@@ -126,7 +126,8 @@
         // Kurze Überschrift (z. B. Klassenname) → Variante, nur nutzen, wenn sonst nichts da ist
         if (label.length < 40) {
           const vt = htmlToText(labelMatch[2]);
-          if (vt) variantParts.push(vt);
+          // Englische Varianten (noch nicht übersetzt) weglassen
+          if (vt && !looksEnglish(labelMatch[2])) variantParts.push({ label: labelMatch[1].trim().replace(/[:\s]+$/, ""), text: vt });
           continue;
         }
       }
@@ -134,8 +135,12 @@
       if (txt) bodyParts.push(txt);
       if (bodyParts.join(" ").length > maxLen * 3) break;
     }
-    const body = bodyParts.join(" ") || variantParts[0] || "";
+    const body = bodyParts.join(" ") || (variantParts[0] && variantParts[0].text) || "";
     if (body) res.s = shorten(splitSentences(body), maxLen);
+    // Klassenvarianten ("Streiter: …", "Mystiker: …") – zur Laufzeit passend zur Klasse gewählt
+    if (variantParts.length > 1) {
+      res.v = variantParts.map((v) => [v.label, shorten(splitSentences(v.text), maxLen)]);
+    }
     return Object.keys(res).length ? res : null;
   }
 

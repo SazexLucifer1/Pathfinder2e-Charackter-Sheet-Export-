@@ -234,6 +234,7 @@
     if (!ancestry) warnings.push("Kein Volk im Export gefunden.");
 
     const level = Math.max(1, Math.min(20, num(get(system, "details.level.value", 1), 1)));
+    D.setClass(cls ? D.itemName(cls) : "");
 
     /* ---- Attribute ---- */
     const attrs = { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 };
@@ -434,6 +435,7 @@
         predicate: rule.predicate,
         slug: rule.slug || null,
         item,
+        damageType: rule.damageType || null,
         attribute: rule.ability || rule.attribute || null,
       });
     });
@@ -445,11 +447,12 @@
     });
 
     /** Summe aller passenden, nicht-situativen Modifikatoren für die Selektoren. */
-    function modsFor(selectorList, opts, extra) {
+    function modsFor(selectorList, opts, extra, filter) {
       const optSet = opts || options;
       const list = [];
       flatMods.forEach((m) => {
         if (!m.selectors.some((s) => selectorList.includes(s))) return;
+        if (filter && !filter(m)) return;
         if (!testPredicate(m.predicate, optSet)) return;
         const v = evalFormula(m.value, { level, itemLevel: num(get(m.item, "system.level.value", level), level), attrs });
         if (v == null || v === 0) return;
@@ -532,8 +535,9 @@
     const lores = byType("lore").map((it) => {
       const rank = clampRank(num(get(it, "system.proficient.value", 0), 0));
       const loreSlug = get(it, "system.slug", null) || D.slug(it.name);
+      const loreName = D.itemName(it);
       return {
-        name: D.itemName(it),
+        name: /^Kenntnis/i.test(loreName) ? loreName : `Kenntnis (${loreName})`,
         rank,
         mod: statMod(rank, "int", [loreSlug, `${loreSlug}-lore`, "lore-skill-check", "skill-check", "check"]),
       };
@@ -662,9 +666,18 @@
       const specMods = [];
       if (weaponSpec && rank >= 2) specMods.push({ type: "untyped", value: weaponSpec * (rank === 2 ? 2 : rank === 3 ? 3 : 4) });
       const damageSelectors = ["damage", "strike-damage", "weapon-damage", ranged ? "ranged-strike-damage" : "melee-strike-damage", `${id}-damage`, `${s.group}-weapon-group-damage`];
-      dmgMod += modsFor(damageSelectors.concat(["unarmed-damage"].filter(() => (s.category || "") === "unarmed")), opts, specMods);
-      const damageType = D.damageType(dmg.damageType || "");
-      const damage = `${die ? dice + die : ""}${dmgMod ? (dmgMod > 0 ? "+" : "") + dmgMod : ""} ${damageType}`.trim();
+      const allDmgSelectors = damageSelectors.concat(["unarmed-damage"].filter(() => (s.category || "") === "unarmed"));
+      const baseType = dmg.damageType || "";
+      const sameType = (m) => !m.damageType || m.damageType === baseType;
+      dmgMod += modsFor(allDmgSelectors, opts, specMods, sameType);
+      const damageType = D.damageType(baseType);
+      let damage = `${die ? dice + die : ""}${dmgMod ? (dmgMod > 0 ? "+" : "") + dmgMod : ""} ${damageType}`.trim();
+      // Zusatzschaden anderer Schadensart (z. B. +1 Feuer) getrennt anzeigen
+      const otherTypes = Array.from(new Set(flatMods.filter((m) => m.damageType && m.damageType !== baseType).map((m) => m.damageType)));
+      otherTypes.forEach((t) => {
+        const v = modsFor(allDmgSelectors, opts, null, (m) => m.damageType === t);
+        if (v) damage += ` ${v > 0 ? "+" : ""}${v} ${D.damageType(t)}`;
+      });
 
       const agile = traits.includes("agile");
       return {
@@ -910,6 +923,9 @@
       seen.add(key);
       // Grundaktionen wie "Cast a Spell" ohne Mehrwert ausblenden
       if (it.type === "action" && ["cast-a-spell", "strike", "stride", "interact"].includes(slug)) return;
+      // Grund- und Fertigkeitsaktionen stehen schon in eigenen Tabellen
+      const ACTS = global.PF2_ACTIONS;
+      if (it.type === "action" && ACTS && ACTS.SKILL_ACTIONS.concat(ACTS.BASIC_ACTIONS).some((a) => a.slug === slug)) return;
 
       const traits = traitsOf(it);
       let actionType = get(s, "actionType.value", "passive") || "passive";
@@ -1076,7 +1092,9 @@
       };
     });
 
-    const focusMax = Math.min(3, Math.max(num(get(ctx.system, "resources.focus.max", 0), 0), ctx.focusMax || 0, outEntries.some((e) => e.kindKey === "focus") ? 1 : 0));
+    // Fokuspunkte: so viele wie Fokuszauber (max. 3), mindestens aber der gespeicherte Wert
+    const focusSpells = outEntries.filter((e) => e.kindKey === "focus").reduce((n, e) => n + e.spells.filter((sp) => !sp.cantrip).length, 0);
+    const focusMax = Math.min(3, Math.max(num(get(ctx.system, "resources.focus.max", 0), 0), ctx.focusMax || 0, focusSpells, num(get(ctx.system, "resources.focus.value", 0), 0)));
     return {
       entries: outEntries.filter((e) => e.spells.length || e.slots.length),
       focus: { value: num(get(ctx.system, "resources.focus.value", 0), 0), max: focusMax },
@@ -1190,6 +1208,9 @@
         level: num(get(s, "level.value", 0), 0),
         ...itemDetails(it),
       });
+      // Schriftrollen/Zauberstäbe: enthaltenen Zauber im Namen zeigen ("Schriftrolle (4. Grad) – Spiegelwand")
+      const last = list[list.length - 1];
+      if (last.spell && !last.name.includes(last.spell.name)) last.name += ` – ${last.spell.name}`;
     });
 
     // Behälter-Ignorieren grob berücksichtigen (z. B. Rucksack ignoriert 2 Traglast)
