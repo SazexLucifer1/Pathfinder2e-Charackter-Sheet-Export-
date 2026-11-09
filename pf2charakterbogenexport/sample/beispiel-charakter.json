@@ -3,209 +3,592 @@
   "type": "character",
   "system": {
     "abilities": {
-      "str": { "mod": 1 },
-      "dex": { "mod": 2 },
-      "con": { "mod": 2 },
-      "int": { "mod": 0 },
-      "wis": { "mod": 4 },
-      "cha": { "mod": 2 }
+      "str": {
+        "mod": 1
+      },
+      "dex": {
+        "mod": 2
+      },
+      "con": {
+        "mod": 2
+      },
+      "int": {
+        "mod": 0
+      },
+      "wis": {
+        "mod": 4
+      },
+      "cha": {
+        "mod": 2
+      }
     },
     "attributes": {
-      "hp": { "value": 52, "max": 58, "temp": 0 },
-      "ac": { "value": 21 },
-      "perception": { "rank": 3, "mod": 11 },
-      "classDC": { "rank": 2, "value": 19 },
-      "speed": { "value": 25, "otherSpeeds": [] },
+      "hp": {
+        "value": 52,
+        "max": 58,
+        "temp": 0
+      },
+      "ac": {
+        "value": 22
+      },
+      "perception": {
+        "rank": 2,
+        "mod": 13
+      },
+      "classDC": {
+        "rank": 1,
+        "value": 21
+      },
+      "speed": {
+        "value": 25,
+        "otherSpeeds": []
+      },
       "resistances": [],
       "weaknesses": [],
-      "immunities": []
+      "immunities": [],
+      "dying": {
+        "value": 0,
+        "max": 4
+      },
+      "wounded": {
+        "value": 0,
+        "max": 3
+      }
     },
     "saves": {
-      "fortitude": { "rank": 2, "mod": 10 },
-      "reflex": { "rank": 1, "mod": 7 },
-      "will": { "rank": 3, "mod": 12 }
+      "fortitude": {
+        "rank": 1,
+        "mod": 9
+      },
+      "reflex": {
+        "rank": 1,
+        "mod": 9
+      },
+      "will": {
+        "rank": 2,
+        "mod": 13
+      }
     },
     "skills": {
-      "acrobatics": { "rank": 0 },
-      "arcana": { "rank": 0 },
-      "athletics": { "rank": 1, "mod": 7 },
-      "crafting": { "rank": 0 },
-      "deception": { "rank": 0 },
-      "diplomacy": { "rank": 2, "mod": 11 },
-      "intimidation": { "rank": 0 },
-      "medicine": { "rank": 3, "mod": 13 },
-      "nature": { "rank": 0 },
-      "occultism": { "rank": 0 },
-      "performance": { "rank": 0 },
-      "religion": { "rank": 3, "mod": 13 },
-      "society": { "rank": 1, "mod": 6 },
-      "stealth": { "rank": 0 },
-      "survival": { "rank": 1, "mod": 9 },
-      "thievery": { "rank": 0 }
+      "acrobatics": {
+        "rank": 0,
+        "mod": 0
+      },
+      "arcana": {
+        "rank": 0,
+        "mod": 0
+      },
+      "athletics": {
+        "rank": 1,
+        "mod": 6
+      },
+      "crafting": {
+        "rank": 0,
+        "mod": 0
+      },
+      "deception": {
+        "rank": 0,
+        "mod": 2
+      },
+      "diplomacy": {
+        "rank": 2,
+        "mod": 11
+      },
+      "intimidation": {
+        "rank": 0,
+        "mod": 2
+      },
+      "medicine": {
+        "rank": 2,
+        "mod": 13
+      },
+      "nature": {
+        "rank": 0,
+        "mod": 4
+      },
+      "occultism": {
+        "rank": 0,
+        "mod": 0
+      },
+      "performance": {
+        "rank": 0,
+        "mod": 2
+      },
+      "religion": {
+        "rank": 2,
+        "mod": 13
+      },
+      "society": {
+        "rank": 1,
+        "mod": 7
+      },
+      "stealth": {
+        "rank": 0,
+        "mod": 0
+      },
+      "survival": {
+        "rank": 1,
+        "mod": 11
+      },
+      "thievery": {
+        "rank": 0,
+        "mod": 0
+      }
     },
     "details": {
-      "level": { "value": 5 },
-      "alignment": { "value": "NG" },
-      "age": { "value": "27" },
-      "gender": { "value": "weiblich" }
+      "level": {
+        "value": 5
+      },
+      "alignment": {
+        "value": "NG"
+      },
+      "age": {
+        "value": "27"
+      },
+      "gender": {
+        "value": "weiblich"
+      },
+      "xp": {
+        "value": 450,
+        "max": 1000
+      }
     },
     "traits": {
-      "size": { "value": "med" },
-      "value": ["humanoid", "human"],
-      "languages": { "value": ["Common", "Celestial", "Dwarven"] }
+      "size": {
+        "value": "med"
+      },
+      "value": [
+        "humanoid",
+        "human"
+      ],
+      "languages": {
+        "value": [
+          "Common",
+          "Celestial",
+          "Dwarven"
+        ]
+      }
     },
-    "resources": { "heroPoints": { "value": 2, "max": 3 } }
+    "resources": {
+      "heroPoints": {
+        "value": 2,
+        "max": 3
+      }
+    },
+    "proficiencies": {
+      "attacks": {
+        "simple": {
+          "rank": 1
+        },
+        "martial": {
+          "rank": 0
+        },
+        "advanced": {
+          "rank": 0
+        },
+        "unarmed": {
+          "rank": 1
+        }
+      },
+      "defenses": {
+        "unarmored": {
+          "rank": 1
+        },
+        "light": {
+          "rank": 1
+        },
+        "medium": {
+          "rank": 1
+        },
+        "heavy": {
+          "rank": 0
+        }
+      }
+    }
   },
   "items": [
-    { "name": "Mensch", "type": "ancestry", "system": { "level": { "value": 1 } } },
-    { "name": "Vielseitiges Erbe", "type": "heritage", "system": { "level": { "value": 1 } } },
-    { "name": "Akolythin", "type": "background", "system": { "level": { "value": 1 } } },
-    { "name": "Kleriker", "type": "class", "system": { "level": { "value": 1 } } },
-    { "name": "Sarenrae", "type": "deity", "system": {} },
-
+    {
+      "name": "Mensch",
+      "type": "ancestry",
+      "system": {
+        "level": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "Vielseitiges Erbe",
+      "type": "heritage",
+      "system": {
+        "level": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "Akolythin",
+      "type": "background",
+      "system": {
+        "level": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "Kleriker",
+      "type": "class",
+      "system": {
+        "level": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "name": "Sarenrae",
+      "type": "deity",
+      "system": {}
+    },
     {
       "name": "Sturmgeborene",
       "type": "feat",
       "system": {
-        "level": { "value": 1 },
+        "level": {
+          "value": 1
+        },
         "category": "ancestry",
-        "actionType": { "value": "passive" },
-        "traits": { "value": ["human"] },
-        "description": { "value": "<p>Du bist an raues Wetter gewöhnt und ignorierst leichte Wetter-Effekte.</p>" }
+        "actionType": {
+          "value": "passive"
+        },
+        "traits": {
+          "value": [
+            "human"
+          ]
+        },
+        "description": {
+          "value": "<p>Du bist an raues Wetter gewöhnt und ignorierst leichte Wetter-Effekte.</p>"
+        }
       }
     },
     {
       "name": "Reaktive Heilung",
       "type": "feat",
       "system": {
-        "level": { "value": 1 },
+        "level": {
+          "value": 1
+        },
         "category": "class",
-        "actionType": { "value": "reaction" },
-        "traits": { "value": ["cleric"] },
-        "description": { "value": "<p>Wenn ein Verbündeter in deiner Nähe kritische Schaden erleidet, kannst du sofort einen Heilungszauber auf ihn wirken.</p>" }
+        "actionType": {
+          "value": "reaction"
+        },
+        "traits": {
+          "value": [
+            "cleric"
+          ]
+        },
+        "description": {
+          "value": "<p>Wenn ein Verbündeter in deiner Nähe kritische Schaden erleidet, kannst du sofort einen Heilungszauber auf ihn wirken.</p>"
+        }
       }
     },
     {
       "name": "Gruppenmedizin",
       "type": "feat",
       "system": {
-        "level": { "value": 2 },
+        "level": {
+          "value": 2
+        },
         "category": "skill",
-        "actionType": { "value": "action" },
-        "actions": { "value": 1 },
-        "traits": { "value": ["healing", "manipulate"] },
-        "description": { "value": "<p>Du behandelst mehrere Verbündete gleichzeitig mit Erste Hilfe und teilst dir das Ergebnis eines einzigen Wurfs.</p>" }
+        "actionType": {
+          "value": "action"
+        },
+        "actions": {
+          "value": 1
+        },
+        "traits": {
+          "value": [
+            "healing",
+            "manipulate"
+          ]
+        },
+        "description": {
+          "value": "<p>Du behandelst mehrere Verbündete gleichzeitig mit Erste Hilfe und teilst dir das Ergebnis eines einzigen Wurfs.</p>"
+        }
       }
     },
     {
       "name": "Zäh wie Leder",
       "type": "feat",
       "system": {
-        "level": { "value": 3 },
+        "level": {
+          "value": 3
+        },
         "category": "general",
-        "actionType": { "value": "passive" },
-        "traits": { "value": [] },
-        "description": { "value": "<p>Du erhältst zusätzliche maximale Trefferpunkte und einen Bonus auf Zähigkeitsrettungswürfe gegen Gift und Krankheit.</p>" }
+        "actionType": {
+          "value": "passive"
+        },
+        "traits": {
+          "value": []
+        },
+        "description": {
+          "value": "<p>Du erhältst zusätzliche maximale Trefferpunkte und einen Bonus auf Zähigkeitsrettungswürfe gegen Gift und Krankheit.</p>"
+        }
       }
     },
     {
       "name": "Göttliches Zeichen",
       "type": "feat",
       "system": {
-        "level": { "value": 4 },
+        "level": {
+          "value": 4
+        },
         "category": "class",
-        "actionType": { "value": "free" },
-        "traits": { "value": ["cleric", "divine"] },
-        "description": { "value": "<p>Du kannst ein Zeichen deiner Gottheit wirken, um Verbündete kurzzeitig zu inspirieren.</p>" }
+        "actionType": {
+          "value": "free"
+        },
+        "traits": {
+          "value": [
+            "cleric",
+            "divine"
+          ]
+        },
+        "description": {
+          "value": "<p>Du kannst ein Zeichen deiner Gottheit wirken, um Verbündete kurzzeitig zu inspirieren.</p>"
+        }
       }
     },
     {
       "name": "Fertigkeitssteigerung: Medizin",
       "type": "feat",
       "system": {
-        "level": { "value": 5 },
+        "level": {
+          "value": 5
+        },
         "category": "skill",
-        "actionType": { "value": "passive" },
-        "traits": { "value": [] },
-        "description": { "value": "<p>Deine Kompetenz in Heilkunde steigt auf Experte.</p>" }
+        "actionType": {
+          "value": "passive"
+        },
+        "traits": {
+          "value": []
+        },
+        "description": {
+          "value": "<p>Deine Kompetenz in Heilkunde steigt auf Experte.</p>"
+        }
       }
     },
-
     {
       "name": "Kettenhemd",
       "type": "armor",
       "system": {
-        "quantity": { "value": 1 },
-        "bulk": { "value": 2 },
-        "equipped": { "value": true }
+        "quantity": {
+          "value": 1
+        },
+        "bulk": {
+          "value": 2
+        },
+        "equipped": {
+          "value": true,
+          "inSlot": true
+        },
+        "category": "medium",
+        "acBonus": 4,
+        "dexCap": 1
       }
     },
     {
       "name": "Stab",
       "type": "weapon",
       "system": {
-        "quantity": { "value": 1 },
-        "bulk": { "value": 1 },
-        "equipped": { "value": true },
-        "bonus": { "value": 9 },
-        "damage": { "dice": 1, "die": "d4", "damageType": "B", "bonusDamage": { "value": 1 } },
-        "traits": { "value": ["two-hand-d8"] }
+        "quantity": {
+          "value": 1
+        },
+        "bulk": {
+          "value": 1
+        },
+        "equipped": {
+          "value": true
+        },
+        "bonus": {
+          "value": 0
+        },
+        "damage": {
+          "dice": 1,
+          "die": "d4",
+          "damageType": "bludgeoning"
+        },
+        "traits": {
+          "value": [
+            "monk",
+            "two-hand-d8"
+          ]
+        },
+        "category": "simple",
+        "runes": {
+          "potency": 1,
+          "striking": 0,
+          "property": []
+        }
+      }
+    },
+    {
+      "name": "Schleuder",
+      "type": "weapon",
+      "system": {
+        "quantity": {
+          "value": 1
+        },
+        "bulk": {
+          "value": 0.1
+        },
+        "equipped": {
+          "value": true
+        },
+        "category": "simple",
+        "range": 50,
+        "bonus": {
+          "value": 0
+        },
+        "damage": {
+          "dice": 1,
+          "die": "d6",
+          "damageType": "bludgeoning"
+        },
+        "traits": {
+          "value": [
+            "propulsive",
+            "reload-1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Holzschild",
+      "type": "shield",
+      "system": {
+        "quantity": {
+          "value": 1
+        },
+        "bulk": {
+          "value": 1
+        },
+        "equipped": {
+          "value": true
+        },
+        "acBonus": 2,
+        "hardness": 3,
+        "hp": {
+          "value": 12,
+          "max": 12,
+          "brokenThreshold": 6
+        }
       }
     },
     {
       "name": "Heiltrank (geringer)",
       "type": "consumable",
-      "system": { "quantity": { "value": 3 }, "bulk": { "value": 0.1 }, "equipped": { "value": false } }
+      "system": {
+        "quantity": {
+          "value": 3
+        },
+        "bulk": {
+          "value": 0.1
+        },
+        "equipped": {
+          "value": false
+        }
+      }
     },
     {
       "name": "Abenteurerausrüstung",
       "type": "equipment",
-      "system": { "quantity": { "value": 1 }, "bulk": { "value": 1 }, "equipped": { "value": true } }
+      "system": {
+        "quantity": {
+          "value": 1
+        },
+        "bulk": {
+          "value": 1
+        },
+        "equipped": {
+          "value": true
+        }
+      }
     },
     {
       "name": "Goldstücke",
       "type": "treasure",
-      "system": { "quantity": { "value": 45 }, "stackGroup": "coins" }
+      "system": {
+        "quantity": {
+          "value": 45
+        },
+        "stackGroup": "coins"
+      }
     },
-
     {
       "name": "Göttliche Zauber",
       "type": "spellcastingEntry",
       "system": {
-        "tradition": { "value": "divine" },
-        "spelldc": { "dc": 19, "value": 11 },
-        "focus": { "points": 1 }
+        "tradition": {
+          "value": "divine"
+        },
+        "spelldc": {
+          "dc": 19,
+          "value": 11
+        },
+        "focus": {
+          "points": 1
+        }
       }
     },
     {
       "name": "Wunden heilen",
       "type": "spell",
       "system": {
-        "level": { "value": 3 },
-        "traditions": { "value": ["divine"] },
-        "description": { "value": "<p>Du berührst eine Kreatur und heilst ihre Wunden um 6W8 Trefferpunkte.</p>" }
+        "level": {
+          "value": 3
+        },
+        "traditions": {
+          "value": [
+            "divine"
+          ]
+        },
+        "description": {
+          "value": "<p>Du berührst eine Kreatur und heilst ihre Wunden um 6W8 Trefferpunkte.</p>"
+        }
       }
     },
     {
       "name": "Licht",
       "type": "spell",
       "system": {
-        "level": { "value": 0 },
-        "traditions": { "value": ["divine"] },
-        "description": { "value": "<p>Du lässt einen Gegenstand oder ein Geschoss hell leuchten.</p>" }
+        "level": {
+          "value": 0
+        },
+        "traditions": {
+          "value": [
+            "divine"
+          ]
+        },
+        "description": {
+          "value": "<p>Du lässt einen Gegenstand oder ein Geschoss hell leuchten.</p>"
+        }
       }
     },
-
     {
       "name": "Kriegsgeschichte",
       "type": "lore",
-      "system": { "mod": 8, "proficient": 1 }
+      "system": {
+        "mod": 7,
+        "proficient": 1
+      }
     },
-
     {
       "name": "Verängstigt",
       "type": "condition",
-      "system": { "active": true, "value": { "value": 1 } }
+      "system": {
+        "active": true,
+        "value": {
+          "value": 1
+        }
+      }
     }
   ]
 }

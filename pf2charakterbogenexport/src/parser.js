@@ -154,7 +154,15 @@
     return feats.concat(features).sort((a, b) => a.level - b.level || a.name.localeCompare(b.name, "de"));
   }
 
-  function parseAttacks(items) {
+  function profRank(system, group, key) {
+    // Neuere Systeme: system.proficiencies.attacks.simple.rank
+    // Ältere Systeme: system.martial.simple.rank
+    const node = get(system, `proficiencies.${group}.${key}`, null) || get(system, `martial.${key}`, null);
+    if (!node) return null;
+    return proficiencyRankOf(node);
+  }
+
+  function parseAttacks(items, system) {
     return (items || [])
       .filter((it) => it.type === "weapon")
       .map((it) => {
@@ -167,14 +175,67 @@
         let dmgStr = die ? `${dice}${die}` : "";
         if (bonusDmg) dmgStr += (dmgStr ? "+" : "") + bonusDmg;
         if (dmgType) dmgStr += dmgStr ? ` ${dmgType}` : dmgType;
+        const traits = get(s, "traits.value", []) || [];
+        const range = get(s, "range", null);
+        const category = get(s, "category", null);
+        // Nahkampfwaffen mit Wurf-Merkmal (z. B. Dolch "thrown-10") bleiben Nahkampfwaffen.
+        const hasRange =
+          range != null && range !== "" && (typeof range === "object" ? range.increment != null || range.max != null : num(range, 0) > 0);
+        const ranged = hasRange && !traits.some((t) => /^thrown-\d+/.test(t));
+        const potency = num(get(s, "runes.potency", get(s, "potencyRune.value", 0)), 0);
         return {
           name: it.name || "Waffe",
           bonus: get(s, "bonus.value", null),
           damage: dmgStr || "—",
-          traits: get(s, "traits.value", []) || [],
+          dice,
+          die,
+          damageType: dmgType,
+          bonusDamage: bonusDmg,
+          traits,
+          ranged: !!ranged,
+          category,
+          rank: category ? profRank(system, "attacks", category) : null,
+          potency,
           equipped: !!get(s, "equipped.value", get(s, "equipped", false)),
         };
       });
+  }
+
+  function parseArmor(items, system) {
+    const armors = (items || []).filter((it) => it.type === "armor" && get(it, "system.category", "") !== "shield");
+    const worn =
+      armors.find((it) => get(it, "system.equipped.inSlot", false) || get(it, "system.equipped.value", false) === true) || null;
+    if (!worn) {
+      return { name: "", category: "unarmored", acBonus: null, dexCap: null, rank: profRank(system, "defenses", "unarmored") };
+    }
+    const s = get(worn, "system", {});
+    const category = get(s, "category", get(s, "armor.category", "light"));
+    const potency = num(get(s, "runes.potency", get(s, "potencyRune.value", 0)), 0);
+    const acBonus = get(s, "acBonus", get(s, "armor.value", null));
+    const dexCap = get(s, "dexCap", get(s, "dex.value", null));
+    return {
+      name: worn.name || "",
+      category,
+      acBonus: acBonus != null ? num(acBonus, 0) + potency : null,
+      dexCap: dexCap != null ? num(dexCap, null) : null,
+      rank: profRank(system, "defenses", category),
+    };
+  }
+
+  function parseShield(items) {
+    const sh = (items || []).find(
+      (it) => it.type === "shield" || (it.type === "armor" && get(it, "system.category", "") === "shield")
+    );
+    if (!sh) return {};
+    const s = get(sh, "system", {});
+    return {
+      name: sh.name || "",
+      acBonus: get(s, "acBonus", get(s, "armor.value", null)),
+      hardness: get(s, "hardness", null),
+      hp: get(s, "hp.value", null),
+      maxHp: get(s, "hp.max", null),
+      bt: get(s, "hp.brokenThreshold", null),
+    };
   }
 
   function parseInventory(items) {
@@ -289,6 +350,7 @@
         name: raw.name || "Unbenannter Charakter",
         player: get(raw, "prototypeToken.name", "") ,
         level: num(get(system, "details.level.value", 1), 1),
+        xp: get(system, "details.xp.value", null),
         ancestry: ancestryItem ? ancestryItem.name : get(system, "details.ancestry.name", ""),
         heritage: heritageItem ? heritageItem.name : "",
         background: backgroundItem ? backgroundItem.name : "",
@@ -320,7 +382,23 @@
       skills,
       lores,
       feats: parseFeats(items, warnings),
-      attacks: parseAttacks(items),
+      attacks: parseAttacks(items, system),
+      armor: parseArmor(items, system),
+      shield: parseShield(items),
+      weaponProficiencies: {
+        simple: profRank(system, "attacks", "simple"),
+        martial: profRank(system, "attacks", "martial"),
+        advanced: profRank(system, "attacks", "advanced"),
+        unarmed: profRank(system, "attacks", "unarmed"),
+      },
+      defenseProficiencies: {
+        unarmored: profRank(system, "defenses", "unarmored"),
+        light: profRank(system, "defenses", "light"),
+        medium: profRank(system, "defenses", "medium"),
+        heavy: profRank(system, "defenses", "heavy"),
+      },
+      dying: num(get(system, "attributes.dying.value", 0), 0),
+      wounded: num(get(system, "attributes.wounded.value", 0), 0),
       inventory: parseInventory(items),
       spellcasting: parseSpells(items),
       currency: parseCurrency(items),

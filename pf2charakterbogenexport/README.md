@@ -8,6 +8,13 @@ Kein Server, kein Upload, keine Installation nötig – alles läuft lokal im Br
 
 ## Eigenschaften
 
+- **Seite 1 = klassischer Charakterbogen**: Aufbau wie der bekannte Einsteigerbox-Bogen
+  (Würfel-, Aktions- und Kompetenzleiste links; Attributsmodifikatoren, Trefferpunkte,
+  Bewegungsrate, Wahrnehmung, Fertigkeiten; Rüstungsklasse, Rettungswürfe, Waffen & Angriffe
+  mit Mehrfachangriffsmalus, Waffenkompetenzen). Alle Werte werden mit ihrer Aufschlüsselung
+  (Attribut + Kompetenz + Gegenstand) eingetragen; die Kompetenzkästchen **G/E/M/L**
+  (Geübt, Experte, Meister, Legendär) und die Formel „Kompetenz = 2/4/6/8 + Stufe" machen den
+  Bogen bis Stufe 20 von Hand fortschreibbar.
 - **Komplett auf Deutsch** übersetzt (Fertigkeiten, Zustände, Kompetenzstufen, Rettungswürfe usw.),
   basierend auf der offiziellen deutschen PF2-Terminologie.
 - **Maßeinheiten bleiben im englischen (imperialen) System** – Geschwindigkeit wird z. B. als
@@ -55,9 +62,11 @@ index.html              Haupt-App (Upload-Oberfläche + Bogen-Ausgabe)
 src/i18n.js              Deutsche Begriffsdatenbank (Fertigkeiten, Zustände, Kompetenz, …)
 src/explanations.js      Erklär-Texte für die Randnotiz-Kästen
 src/parser.js            Foundry-Actor-JSON → normalisiertes Charaktermodell
-src/render.js             Charaktermodell → druckfertiges HTML
+src/front.js              Seite 1: klassischer Charakterbogen
+src/render.js             Charaktermodell → druckfertiges HTML (alle Seiten)
 src/main.js               UI-Verdrahtung (Datei-Upload, Buttons, Fehlerbehandlung)
-styles/sheet.css          Aussehen des Charakterbogens (Bildschirm + Druck)
+styles/front.css          Aussehen von Seite 1 (klassischer Bogen)
+styles/sheet.css          Aussehen der Folgeseiten (Bildschirm + Druck)
 styles/app.css            Aussehen der Upload-Oberfläche
 sample/beispiel-charakter.json   Beispiel-Charakter zum Testen
 ```

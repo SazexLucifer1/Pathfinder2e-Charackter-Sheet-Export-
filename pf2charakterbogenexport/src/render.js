@@ -359,21 +359,8 @@
   }
 
   function render(model) {
-    const page1 = `
-    <section class="sheet-page">
-      ${headerBlock(model)}
-      ${warningsBlock(model)}
-      <div class="two-col">
-        <div class="col-main">
-          <div class="abilities-row">${abilityBlock(model)}</div>
-          ${explainBox("abilityScores")}
-          ${statBoxes(model)}
-        </div>
-        <div class="col-side">
-          ${explainBox("proficiency")}
-        </div>
-      </div>
-    </section>`;
+    // Seite 1: klassischer Charakterbogen (siehe src/front.js)
+    const page1 = global.PF2_FRONT.render(model);
 
     const page2 = `
     <section class="sheet-page">
@@ -389,7 +376,7 @@
     const page5 = spellsPage(model);
     const page6 = inventoryPage(model);
 
-    return `<div class="pf2-sheet">${page1}${page2}${page3}${page4}${page5}${page6}</div>`;
+    return `<div class="pf2-sheet">${warningsBlock(model)}${page1}${page2}${page3}${page4}${page5}${page6}</div>`;
   }
 
   global.PF2_RENDER = { render };
