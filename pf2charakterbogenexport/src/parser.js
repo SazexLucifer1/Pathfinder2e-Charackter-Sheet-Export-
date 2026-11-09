@@ -239,9 +239,10 @@
   }
 
   function parseInventory(items) {
-    const types = ["armor", "equipment", "consumable", "treasure", "backpack", "weapon"];
+    const types = ["armor", "shield", "equipment", "consumable", "treasure", "backpack", "weapon"];
     return (items || [])
-      .filter((it) => types.includes(it.type))
+      // Münzen stehen separat unter „Vermögen“.
+      .filter((it) => types.includes(it.type) && get(it, "system.stackGroup", "") !== "coins")
       .map((it) => {
         const s = get(it, "system", {});
         return {

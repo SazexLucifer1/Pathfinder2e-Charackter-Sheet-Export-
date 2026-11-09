@@ -1,6 +1,6 @@
 /* Vorderseite: klassischer Charakterbogen (schwarz/weiß/orange) */
 
-.cs-front {
+.cs-front, .cs-page {
   --cs-orange: #e0661b;
   --cs-black: #111;
   --cs-gray: #8a8a8a;
@@ -17,7 +17,7 @@
   display: flex;
   flex-direction: column;
 }
-.cs-front * { box-sizing: border-box; }
+.cs-front *, .cs-page * { box-sizing: border-box; }
 
 /* ---------- Kopf ---------- */
 .cs-top { display: flex; justify-content: space-between; align-items: flex-end; height: 7.5mm; margin-bottom: 1mm; flex: none; }
@@ -268,7 +268,59 @@
   .cs-front { padding: 0 !important; min-height: 0; height: 270mm; overflow: hidden; margin: 0 !important; }
   .cs-body { height: auto; }
   .pf2-sheet > .warnings-box { display: none; }
-  .cs-front * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cs-front *, .cs-page * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cs-page { padding: 0 !important; min-height: 268mm; height: auto; margin: 0 !important; }
 }
 .pf2-sheet > .warnings-box { width: 210mm; margin: 0 auto 10px; box-sizing: border-box; }
 .cs-abils .cs-bar { font-size: 6.6pt; letter-spacing: 0.03em; white-space: nowrap; }
+
+/* ================= Folgeseiten im selben Design ================= */
+.cs-page { gap: 2.5mm; }
+.cs-page .cs-top { margin-bottom: 0; }
+.cs-pagename { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 0.5mm solid var(--cs-black); padding-bottom: 0.8mm; flex: none; }
+.cs-pagename span { font-weight: 700; font-size: 11pt; }
+.cs-pagename em { font-style: normal; font-weight: 700; font-size: 7.5pt; color: var(--cs-gray); text-transform: uppercase; }
+.cs-fill { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.cs-bar small { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 6.5pt; margin-left: 1mm; }
+.cs-check.on { background: var(--cs-black); }
+
+/* Zustände */
+.cs-cond-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(23, 1fr); column-gap: 3mm; padding: 1mm 1.5mm; }
+.cs-cond { display: flex; align-items: flex-start; gap: 1.2mm; padding: 0.6mm 0; border-bottom: var(--cs-line) solid #ccc; }
+.cs-cond .cs-check { flex: none; width: 3mm; height: 3mm; margin-top: 0.3mm; }
+.cs-cond-body { flex: 1; min-width: 0; }
+.cs-cond-head { display: flex; align-items: center; gap: 1.5mm; }
+.cs-cond-head strong { font-size: 7.5pt; text-transform: uppercase; }
+.cs-cond-val { width: 6mm; height: 3.6mm; border: 0.4mm solid var(--cs-orange); border-radius: 0.8mm; font-size: 7pt; font-weight: 700; text-align: center; line-height: 3mm; margin-left: auto; }
+.cs-cond-text { font-size: 6pt; color: #333; line-height: 1.2; margin-top: 0.2mm; }
+.cs-cond.on strong { color: var(--cs-orange); }
+
+/* Tabellen */
+.cs-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.cs-page .cs-table th { background: #ededed; color: var(--cs-black); font-family: Arial, Helvetica, sans-serif; letter-spacing: 0.03em; font-size: 6pt; text-transform: uppercase; text-align: left; padding: 0.6mm 1.2mm; border-bottom: var(--cs-line) solid var(--cs-black); }
+.cs-page .cs-table td { font-size: 7pt; color: var(--cs-black); padding: 0.8mm 1.2mm; border-bottom: var(--cs-line) solid #bbb; vertical-align: top; height: 6.5mm; }
+.cs-table td + td, .cs-table th + th { border-left: var(--cs-line) solid #bbb; }
+.cs-table td.c, .cs-table th.c { text-align: center; }
+.cs-table td.b { font-weight: 700; }
+.cs-table td.act { font-size: 8pt; }
+.cs-table td.desc { font-size: 6.2pt; line-height: 1.22; color: #222; }
+.cs-table tr { break-inside: avoid; }
+
+/* Werte-Kästchen (Zauber, Vermögen, Traglast) */
+.cs-stat-row { display: flex; gap: 3mm; padding: 1.5mm 2mm; align-items: flex-end; }
+.cs-stat { display: flex; flex-direction: column; align-items: center; gap: 0.5mm; }
+.cs-stat em { font-style: normal; font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
+.cs-stat-box { min-width: 13mm; height: 7mm; border: 0.5mm solid var(--cs-orange); border-radius: 1mm; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10pt; padding: 0 1.5mm; }
+.cs-stat-box.wide { min-width: 30mm; font-size: 8.5pt; }
+.cs-stat-pips { display: flex; gap: 1.5mm; height: 7mm; align-items: center; }
+.cs-pip { width: 4.5mm; height: 4.5mm; border: 0.5mm solid var(--cs-orange); border-radius: 50%; }
+.cs-pip.on { background: var(--cs-orange); }
+.cs-slots { border-collapse: collapse; margin: 0 2mm 2mm; width: calc(100% - 4mm); table-layout: fixed; }
+.cs-slots th, .cs-slots td { border: var(--cs-line) solid var(--cs-black); font-size: 6.5pt; text-align: center; height: 5.5mm; }
+.cs-slots tr:first-child th { background: var(--cs-black); color: #fff; }
+.cs-slots th:first-child { width: 17mm; text-transform: uppercase; font-size: 5.8pt; background: #ededed; color: var(--cs-black); }
+.cs-slots tr:first-child th:first-child { background: var(--cs-black); color: #fff; }
+
+/* Ausrüstung */
+.cs-inv-top { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; flex: none; }
+.cs-notes-panel { min-height: 20mm; }

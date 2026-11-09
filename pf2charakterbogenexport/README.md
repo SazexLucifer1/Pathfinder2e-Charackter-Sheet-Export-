@@ -19,16 +19,16 @@ Kein Server, kein Upload, keine Installation nötig – alles läuft lokal im Br
   basierend auf der offiziellen deutschen PF2-Terminologie.
 - **Maßeinheiten bleiben im englischen (imperialen) System** – Geschwindigkeit wird z. B. als
   „25 Fuß" angezeigt, nicht in Meter umgerechnet (so wie es auch im deutschen Regelwerk üblich ist).
-- **Für Einsteiger erklärt**: Randnotiz-Kästen erklären Kompetenz, Rüstungsklasse, Trefferpunkte,
-  Rettungswürfe, Aktionen im Kampf, Zustände, Traglast usw. – im Stil der Einsteigerbox.
-- **Stufen 1–20**: Der Bogen zeigt einen Stufenverlauf und hält auf der Talente-Seite genug
-  leere Zeilen bereit, um neue Talente bis Stufe 20 von Hand nachzutragen.
+- **Stufen 1–20**: Alle Werte sind aufgeschlüsselt und mit G/E/M/L-Kästchen versehen; Talente-,
+  Zauber- und Ausrüstungsseite haben leere Zeilen zum Nachtragen bei jedem Stufenaufstieg.
 - **Zustände-Seite**: Alle Pathfinder-2-Zustände mit Ankreuzkästchen und Wertfeld, um den
   aktuellen Zustand des Charakters während des Spiels zu markieren.
 - **Talente & Fähigkeiten-Seite**: Listet alle importierten Talente/Merkmale mit Stufe, Quelle
   (Volkstalent, Klassentalent, Fertigkeitstalent, Allgemeines Talent, Klassenmerkmal …) und
   Beschreibung auf.
-- Zusätzliche Seiten für Fertigkeiten & Kampf, Zauber (falls vorhanden) und Ausrüstung/Inventar.
+- **Einheitliches Design** auf allen Seiten: Charakterbogen, Zustände, Talente & Fähigkeiten,
+  Zauber (nur bei Zauberwirkern, mit Zauberplätzen für Rang 1–10) und Ausrüstung (Vermögen,
+  Traglast, Gegenstände, Notizen).
 
 ## Benutzung
 
@@ -52,21 +52,20 @@ Kernfunktion (Drag & Drop / Einfügen) ist davon nicht betroffen.
 - Der Parser (`src/parser.js`) liest ein Foundry-`pf2e`-Actor-Export-JSON defensiv aus:
   Foundry-Exporte unterscheiden sich je nach Systemversion leicht in ihrer Struktur; fehlende
   Felder führen zu Hinweisen auf dem Bogen statt zu Fehlern.
-- Alle Regel-Erklärtexte sind eigene, kurze Zusammenfassungen zum besseren Verständnis –
-  maßgeblich bleibt immer das offizielle Regelwerk.
+- Die Kurztexte zu den Zuständen sind eigene Zusammenfassungen – maßgeblich bleibt immer das
+  offizielle Regelwerk.
 
 ## Projektstruktur
 
 ```
 index.html              Haupt-App (Upload-Oberfläche + Bogen-Ausgabe)
 src/i18n.js              Deutsche Begriffsdatenbank (Fertigkeiten, Zustände, Kompetenz, …)
-src/explanations.js      Erklär-Texte für die Randnotiz-Kästen
 src/parser.js            Foundry-Actor-JSON → normalisiertes Charaktermodell
 src/front.js              Seite 1: klassischer Charakterbogen
 src/render.js             Charaktermodell → druckfertiges HTML (alle Seiten)
 src/main.js               UI-Verdrahtung (Datei-Upload, Buttons, Fehlerbehandlung)
-styles/front.css          Aussehen von Seite 1 (klassischer Bogen)
-styles/sheet.css          Aussehen der Folgeseiten (Bildschirm + Druck)
+styles/front.css          Aussehen aller Bogen-Seiten
+styles/sheet.css          Seitengerüst (Bildschirm + Druck)
 styles/app.css            Aussehen der Upload-Oberfläche
 sample/beispiel-charakter.json   Beispiel-Charakter zum Testen
 ```
