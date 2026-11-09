@@ -14,11 +14,13 @@
   color: var(--cs-black);
   font-size: 7.5pt;
   line-height: 1.15;
+  display: flex;
+  flex-direction: column;
 }
 .cs-front * { box-sizing: border-box; }
 
 /* ---------- Kopf ---------- */
-.cs-top { display: flex; justify-content: space-between; align-items: flex-end; height: 8mm; margin-bottom: 1mm; }
+.cs-top { display: flex; justify-content: space-between; align-items: flex-end; height: 7.5mm; margin-bottom: 1mm; flex: none; }
 .cs-brand {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 900; font-size: 14pt; letter-spacing: 0.06em;
@@ -42,15 +44,16 @@
   grid-template-columns: 2fr 1fr 1fr 1fr;
   grid-template-rows: auto auto;
   border: var(--cs-line) solid var(--cs-black);
-  margin-bottom: 3mm;
+  margin-bottom: 2.5mm;
+  flex: none;
 }
 .cs-id > div { border-left: var(--cs-line) solid var(--cs-black); display: flex; flex-direction: column; }
 .cs-id > div:nth-child(5),
 .cs-id > div:nth-child(6),
 .cs-id > div:nth-child(7) { border-top: var(--cs-line) solid var(--cs-black); }
 .cs-id-name { grid-row: 1 / span 2; border-left: none !important; }
-.cs-id-val { min-height: 6.5mm; padding: 0.8mm 2mm; font-size: 9.5pt; font-weight: 700; display: flex; align-items: center; gap: 2mm; }
-.cs-id-val.big { font-size: 13pt; min-height: 8mm; }
+.cs-id-val { min-height: 6mm; padding: 0.6mm 2mm; font-size: 9.5pt; font-weight: 700; display: flex; align-items: center; gap: 2mm; }
+.cs-id-val.big { font-size: 13pt; min-height: 7mm; }
 .cs-id-player { margin-top: auto; border-top: var(--cs-line) solid var(--cs-black); padding: 0.6mm 2mm; display: flex; flex-direction: column; align-items: center; }
 .cs-id-player span { font-size: 9pt; min-height: 3.5mm; }
 .cs-id-player em { font-style: normal; font-weight: 700; color: var(--cs-gray); font-size: 8pt; text-transform: uppercase; }
@@ -62,7 +65,9 @@
   display: grid;
   grid-template-columns: 26mm minmax(0, 1fr) minmax(0, 1fr);
   gap: 3mm;
-  height: 228mm;
+  height: auto;
+  flex: 1;
+  min-height: 0;
 }
 .cs-colA, .cs-colB { display: flex; flex-direction: column; gap: 2.5mm; min-height: 0; }
 .cs-panel { border: var(--cs-line) solid var(--cs-black); }
@@ -206,7 +211,7 @@
 
 /* ---------- Rettungswürfe ---------- */
 .cs-saves-grid { display: grid; grid-template-columns: minmax(0, 1fr) 12mm; gap: 1.5mm; padding: 0.8mm 1.2mm 1.2mm; }
-.cs-save { display: flex; align-items: center; gap: 0.6mm; padding: 1mm 0 0.4mm; border-bottom: var(--cs-line) solid #bbb; }
+.cs-save { display: flex; align-items: center; gap: 0.6mm; padding: 0.6mm 0 0; border-bottom: var(--cs-line) solid #bbb; }
 .cs-save .cs-teml { margin-left: auto; margin-bottom: 1.6mm; }
 .cs-save:last-child { border-bottom: none; }
 .cs-save strong { width: 15mm; text-transform: uppercase; font-size: 7pt; }
@@ -260,8 +265,8 @@
 
 /* ---------- Druck ---------- */
 @media print {
-  .cs-front { padding: 0 !important; min-height: 0; height: 280mm; overflow: hidden; }
-  .cs-body { height: 232mm; }
+  .cs-front { padding: 0 !important; min-height: 0; height: 270mm; overflow: hidden; margin: 0 !important; }
+  .cs-body { height: auto; }
   .pf2-sheet > .warnings-box { display: none; }
   .cs-front * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
