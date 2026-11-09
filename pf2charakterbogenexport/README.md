@@ -55,6 +55,20 @@ Kernfunktion (Drag & Drop / Einfügen) ist davon nicht betroffen.
 - Die Kurztexte zu den Zuständen sind eigene Zusammenfassungen – maßgeblich bleibt immer das
   offizielle Regelwerk.
 
+## Layout-Prüfung
+
+`tools/layout-check.js` erzeugt aus einer Foundry-JSON das PDF sowie je Seite einen Screenshot
+und prüft das Druck-Layout automatisch auf überlappende oder zu eng stehende Texte, Texte, die aus
+ihren Kästen oder Formen (Herz, Schild, Lupe …) ragen, Rahmen außerhalb ihres Bereichs sowie
+abgeschnittene Inhalte. Benötigt Node.js und Playwright (`npm i -D playwright`).
+
+```bash
+node tools/layout-check.js                      # Beispiel-Charakter
+node tools/layout-check.js mein-charakter.json  # eigener Export
+```
+
+Ergebnis landet in `layout-check/` (PDF + `seite-N.png`); bei Problemen endet das Skript mit Exit-Code 1.
+
 ## Projektstruktur
 
 ```
@@ -68,6 +82,7 @@ styles/front.css          Aussehen aller Bogen-Seiten
 styles/sheet.css          Seitengerüst (Bildschirm + Druck)
 styles/app.css            Aussehen der Upload-Oberfläche
 sample/beispiel-charakter.json   Beispiel-Charakter zum Testen
+tools/layout-check.js     Automatische Layout-Prüfung mit Screenshots
 ```
 
 ## Haftungsausschluss

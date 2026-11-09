@@ -43,6 +43,21 @@
     <div class="cs-pagename"><span>${esc(model.meta.name)}</span><em>Stufe ${esc(model.meta.level)} · ${esc(model.meta.className)}</em></div>`;
   }
 
+  /**
+   * Leere Zeilen, die eine Tabelle bis zum Seitenende fortsetzen. Sie nutzen
+   * dieselbe Spaltendefinition (colgroup) wie die Tabelle darüber und liegen
+   * daher exakt deckungsgleich; was nicht mehr auf die Seite passt, wird
+   * abgeschnitten.
+   */
+  function lines(colgroup, cols) {
+    const row = `<tr>${"<td></td>".repeat(cols)}</tr>`;
+    return `<div class="cs-lines"><table class="cs-table cs-table-blank">${colgroup}<tbody>${row.repeat(45)}</tbody></table></div>`;
+  }
+
+  const FEAT_COLS = `<colgroup><col style="width:9mm"><col style="width:27mm"><col style="width:38mm"><col style="width:11mm"><col></colgroup>`;
+  const SPELL_COLS = `<colgroup><col style="width:12mm"><col style="width:42mm"><col style="width:22mm"><col></colgroup>`;
+  const ITEM_COLS = `<colgroup><col style="width:16mm"><col style="width:16mm"><col style="width:18mm"><col></colgroup>`;
+
   function page(title, model, body, extraCls) {
     return `<section class="sheet-page cs-page ${extraCls || ""}">${pageHead(title, model)}${body}</section>`;
   }
@@ -88,20 +103,17 @@
       </tr>`
       )
       .join("");
-    const blank = Array.from(
-      { length: Math.max(6, 24 - model.feats.length) },
-      () => `<tr class="blank"><td></td><td></td><td></td><td></td><td></td></tr>`
-    ).join("");
     return page(
       "Talente & Fähigkeiten",
       model,
       `<div class="cs-panel cs-fill">
         <div class="cs-bar">Talente &amp; Klassenmerkmale</div>
         <table class="cs-table">
-          <colgroup><col style="width:9mm"><col style="width:27mm"><col style="width:38mm"><col style="width:11mm"><col></colgroup>
+          ${FEAT_COLS}
           <thead><tr><th>Stufe</th><th>Art</th><th>Name</th><th>Aktion</th><th>Kurzbeschreibung</th></tr></thead>
-          <tbody>${rows}${blank}</tbody>
+          <tbody>${rows || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
         </table>
+        ${lines(FEAT_COLS, 5)}
       </div>`
     );
   }
@@ -141,7 +153,6 @@
       </tr>`
       )
       .join("");
-    const blank = Array.from({ length: Math.max(6, 20 - sc.spells.length) }, () => `<tr class="blank"><td></td><td></td><td></td><td></td></tr>`).join("");
     return page(
       "Zauber",
       model,
@@ -149,10 +160,11 @@
       <div class="cs-panel cs-fill">
         <div class="cs-bar">Zauber</div>
         <table class="cs-table">
-          <colgroup><col style="width:12mm"><col style="width:42mm"><col style="width:22mm"><col></colgroup>
+          ${SPELL_COLS}
           <thead><tr><th>Rang</th><th>Name</th><th>Tradition</th><th>Kurzbeschreibung</th></tr></thead>
-          <tbody>${rows}${blank}</tbody>
+          <tbody>${rows}</tbody>
         </table>
+        ${lines(SPELL_COLS, 4)}
       </div>`
     );
   }
@@ -181,14 +193,13 @@
     const rows = items
       .map(
         (it) => `<tr>
-        <td class="b">${esc(it.name)}</td>
         <td class="c">${esc(it.quantity)}</td>
         <td class="c">${esc(bulkText(it.bulk))}</td>
         <td class="c">${it.equipped ? "✔" : ""}</td>
+        <td class="b">${esc(it.name)}</td>
       </tr>`
       )
       .join("");
-    const blank = Array.from({ length: Math.max(6, 22 - items.length) }, () => `<tr class="blank"><td></td><td></td><td></td><td></td></tr>`).join("");
     const cur = model.currency;
     const coin = (v, l) => `<div class="cs-stat"><span class="cs-stat-box">${esc(v || "")}</span><em>${l}</em></div>`;
     return page(
@@ -206,15 +217,16 @@
           </div>
         </div>
       </div>
-      <div class="cs-panel">
+      <div class="cs-panel cs-fill">
         <div class="cs-bar">Gegenstände</div>
         <table class="cs-table">
-          <colgroup><col><col style="width:16mm"><col style="width:16mm"><col style="width:18mm"></colgroup>
-          <thead><tr><th>Gegenstand</th><th>Anzahl</th><th>Traglast</th><th>Angelegt</th></tr></thead>
-          <tbody>${rows}${blank}</tbody>
+          ${ITEM_COLS}
+          <thead><tr><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Angelegt</th><th>Gegenstand</th></tr></thead>
+          <tbody>${rows}</tbody>
         </table>
+        ${lines(ITEM_COLS, 4)}
       </div>
-      <div class="cs-panel cs-fill cs-notes-panel"><div class="cs-bar">Notizen</div></div>`
+      <div class="cs-panel cs-notes-panel"><div class="cs-bar">Notizen</div>${lines("<colgroup><col></colgroup>", 1)}</div>`
     );
   }
 

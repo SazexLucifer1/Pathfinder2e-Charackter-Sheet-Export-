@@ -101,17 +101,17 @@
 .cs-shape svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .cs-shape .val { position: relative; font-weight: 700; font-size: 10.5pt; }
 .cs-shape-box { width: 10.5mm; height: 6.5mm; }
-.cs-shape-heart { width: 19mm; height: 14mm; }
-.cs-shape-heart .val { margin-top: -1mm; }
+.cs-shape-heart { width: 18mm; height: 14.5mm; }
+.cs-shape-heart .val { margin-top: -0.8mm; font-size: 12pt; }
 .cs-shape-shield { width: 13mm; height: 10mm; }
 .cs-shape-shield .val { margin-top: -1mm; font-size: 11pt; }
 .cs-shape-arrow { width: 24mm; height: 9mm; }
 .cs-shape-arrow .val { margin-right: 6mm; }
-.cs-shape-lens { width: 13mm; height: 13mm; }
-.cs-shape-lens .val { margin: -2.5mm 0 0 -2.5mm; }
-.cs-shape-melee { width: 21mm; height: 9mm; }
+.cs-shape-lens { width: 14mm; height: 14mm; }
+.cs-shape-lens .val { position: absolute; left: 6%; top: 6%; width: 72%; height: 72%; display: flex; align-items: center; justify-content: center; font-size: 9.5pt; }
+.cs-shape-melee { width: 21mm; height: 8.4mm; }
 .cs-shape-melee .val { margin-right: 3mm; font-size: 11pt; }
-.cs-shape-ranged { width: 21mm; height: 9mm; }
+.cs-shape-ranged { width: 21mm; height: 8.4mm; }
 .cs-shape-ranged .val { margin-top: 2.5mm; font-size: 11pt; }
 
 .cs-blank { display: inline-flex; flex-direction: column; align-items: center; position: relative; margin-bottom: 2mm; }
@@ -119,7 +119,7 @@
   min-width: 7mm; min-height: 3.6mm; text-align: center; font-size: 8pt; font-weight: 700;
   border-bottom: var(--cs-line) solid #444; padding: 0 0.5mm;
 }
-.cs-blank .l { position: absolute; top: 100%; left: -2mm; right: -2mm; text-align: center; font-size: 5pt; color: var(--cs-gray); font-weight: 700; letter-spacing: 0.02em; margin-top: 0.1mm; white-space: nowrap; }
+.cs-blank .l { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 5pt; color: var(--cs-gray); font-weight: 700; letter-spacing: 0.02em; margin-top: 0.1mm; white-space: nowrap; }
 .cs-blank.fixed .v { font-size: 9pt; }
 .cs-eq, .cs-op { font-weight: 700; font-size: 8pt; margin: 0 0.6mm 2mm; }
 
@@ -153,12 +153,11 @@
 
 .cs-vitals { display: flex; flex-direction: column; gap: 2mm; }
 .cs-hp-top { display: grid; grid-template-columns: auto 1fr 1fr; align-items: end; gap: 0.5mm; padding: 1mm 1mm 0; }
-.cs-hp-cur { position: relative; }
-.cs-hp-curlabel { position: absolute; top: 2.4mm; left: 0; right: 0; text-align: center; font-size: 5pt; font-weight: 700; color: var(--cs-orange); }
-.cs-hp-cur .val { margin-top: 2mm; }
+.cs-hp-cur { display: flex; flex-direction: column; align-items: center; }
+.cs-hp-cur .l { margin-top: 0.4mm; font-size: 5.5pt; font-weight: 700; color: var(--cs-orange); text-transform: uppercase; }
 .cs-hp-max, .cs-hp-temp { display: flex; flex-direction: column; align-items: center; }
 .cs-hp-temp { border-left: var(--cs-line) solid var(--cs-black); height: 100%; justify-content: flex-end; }
-.cs-hp-max .v, .cs-hp-temp .v { font-weight: 700; font-size: 10pt; min-height: 4.5mm; }
+.cs-hp-max .v, .cs-hp-temp .v { font-weight: 700; font-size: 11pt; min-height: 5mm; }
 .cs-hp-max .l, .cs-hp-temp .l { font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
 .cs-hp-cond { padding: 0.8mm 1.2mm 1.2mm; display: flex; flex-direction: column; gap: 0.6mm; }
 .cs-hp-cond > div { display: flex; align-items: center; justify-content: space-between; }
@@ -173,35 +172,43 @@
 .cs-speed-other { font-size: 6pt; padding: 0 1.5mm 1mm; }
 
 .cs-perc-row { display: flex; align-items: center; padding: 1mm 1mm 0.5mm; gap: 0.2mm; }
-.cs-perc-row .cs-shape-lens { width: 12mm; height: 12mm; }
-.cs-perc-row .cs-blank .v { min-width: 6mm; }
+.cs-perc-row .cs-blank .v { min-width: 5.5mm; }
+.cs-perc-row .cs-shape-lens { width: 13mm; height: 13mm; }
+.cs-perc-row .cs-eq, .cs-perc-row .cs-op { margin-left: 0.4mm; margin-right: 0.4mm; }
 .cs-perc-row .cs-teml { margin-left: auto; margin-bottom: 2mm; }
 .cs-perc-item { font-size: 5.8pt; padding: 0 1.5mm 0.8mm; color: #444; }
 
 /* ---------- Fertigkeiten ---------- */
 .cs-skills { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .cs-skill { flex: 1; display: flex; align-items: center; padding: 0 1.2mm; gap: 0.8mm; }
-.cs-skill-name { width: 21mm; letter-spacing: -0.01em; text-align: right; font-weight: 700; font-size: 7pt; display: flex; flex-direction: column; align-items: flex-end; }
-.cs-lore { border-bottom: var(--cs-line) solid #444; min-width: 15mm; min-height: 3mm; font-size: 6.3pt; text-align: center; }
+.cs-skill-name { width: 21.5mm; flex: none; letter-spacing: -0.015em; text-align: right; font-weight: 700; font-size: 6.5pt; display: flex; flex-direction: column; align-items: flex-end; }
+.cs-lore { border-bottom: var(--cs-line) solid #444; width: 100%; min-height: 3mm; font-size: 6.3pt; text-align: right; line-height: 1.1; }
+.cs-lore.long { font-size: 5.4pt; }
+.cs-lore.xlong { font-size: 4.8pt; }
+.cs-lore-suffix { margin-top: 0.5mm; line-height: 1; }
 .cs-lore-suffix { font-size: 5.5pt; color: var(--cs-gray); }
 .cs-skill-calc {
-  flex: 1; display: flex; align-items: center; border: var(--cs-line) solid var(--cs-black); border-left: none;
+  flex: 1; min-width: 0; display: flex; align-items: center; border: var(--cs-line) solid var(--cs-black); border-left: none;
   height: 6mm; margin-left: -1.2mm; padding: 0 1mm 0 1.6mm; gap: 0.2mm;
 }
-.cs-skill-calc .cs-blank .v { min-width: 6mm; min-height: 3.1mm; font-size: 7.5pt; }
-.cs-skill-calc .cs-blank .l { font-size: 4.5pt; }
-.cs-skill-calc .cs-op, .cs-skill-calc .cs-eq { margin: 0 0.4mm 1.6mm; }
+.cs-skill-calc .cs-blank .v { min-width: 5.4mm; min-height: 3.1mm; font-size: 7.5pt; }
+.cs-skill-calc .cs-blank .l { font-size: 4.3pt; letter-spacing: 0; }
+.cs-skill-calc .cs-op, .cs-skill-calc .cs-eq { margin: 0 0.45mm 1.6mm; }
+.cs-blank.wide .v { min-width: 7.6mm; }
+.cs-skill .cs-shape-box { width: 9.6mm; }
 .cs-skill-calc .cs-blank { margin-bottom: 1.6mm; }
 .cs-skill-calc .cs-teml { margin-bottom: 0.2mm; }
 
 /* ---------- Spalte B: RK ---------- */
 .cs-ac-grid { display: grid; grid-template-columns: minmax(0, 1fr) 12mm; gap: 1.5mm; padding: 1mm 1.2mm 0; }
 .cs-ac-row { display: flex; align-items: center; gap: 0.6mm; margin-bottom: 0.8mm; }
-.cs-ac-label { width: 10mm; font-size: 7pt; text-transform: uppercase; font-size: 7.5pt; text-align: center; }
+.cs-ac-label { width: 12.5mm; flex: none; text-transform: uppercase; font-size: 7pt; text-align: center; }
 .cs-ac-calc { display: flex; flex-direction: column; gap: 0.4mm; }
 .cs-ac-calc > div { display: flex; align-items: center; }
 .cs-ac-calc .cs-blank .v { min-width: 7mm; }
-.cs-ac-calc .cs-blank { margin-bottom: 1.8mm; }
+.cs-ac-calc .cs-blank { margin-bottom: 2.5mm; }
+.cs-ac-calc .cs-op { margin-bottom: 2.5mm; }
+.cs-ac-row > .cs-eq { margin: 0 1mm; }
 .cs-ac-items { font-size: 6pt; color: #444; padding-left: 1mm; }
 .cs-ac-prof { display: flex; align-items: center; gap: 1.5mm; padding: 0.6mm 1.2mm 1mm; }
 .cs-ac-prof > strong { font-size: 5.8pt; text-transform: uppercase; width: 15mm; text-align: center; line-height: 1.1; }
@@ -220,12 +227,12 @@
 .cs-weapons { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .cs-wpn {
   flex: 1; display: grid; position: relative;
-  grid-template-columns: 22mm minmax(0, 1fr) 5mm;
+  grid-template-columns: 22mm minmax(0, 1fr) 17mm 5mm;
   grid-template-rows: auto 1fr auto;
   grid-template-areas:
-    "shape map side"
-    "shape calc side"
-    "name dmg side";
+    "shape map map side"
+    "shape calc calc side"
+    "name name dmg side";
   column-gap: 1.5mm; padding: 0.6mm 0 0 1mm;
   border-bottom: var(--cs-line) solid var(--cs-black);
 }
@@ -246,9 +253,10 @@
 .cs-wpn-name { grid-area: name; }
 .cs-wpn-dmg { grid-area: dmg; }
 .cs-wpn-name .cs-blank, .cs-wpn-dmg .cs-blank { width: 100%; margin-bottom: 2mm; }
-.cs-wpn-name .cs-blank .v, .cs-wpn-dmg .cs-blank .v { width: 100%; font-size: 7.5pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-wpn-name .cs-blank .v, .cs-wpn-dmg .cs-blank .v { width: 100%; font-size: 7.5pt; white-space: nowrap; }
+.cs-wpn-name .cs-blank.long .v { font-size: 5.8pt; white-space: normal; line-height: 1; }
+.cs-wpn-name .cs-blank.xlong .v { font-size: 5pt; white-space: normal; line-height: 1; letter-spacing: -0.01em; }
 .cs-wpn-name .cs-blank .l, .cs-wpn-dmg .cs-blank .l { font-size: 5.3pt; }
-.cs-wpn-name { margin-right: -1mm; }
 .cs-wpn-side { grid-area: side; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5mm; border-left: var(--cs-line) solid var(--cs-black); padding-top: 0.2mm; }
 .cs-wpn-side .cs-teml { margin: 0; }
 .cs-dtype { display: inline-grid; grid-template-columns: 2.5mm; border: var(--cs-line) solid var(--cs-black); }
@@ -265,11 +273,11 @@
 
 /* ---------- Druck ---------- */
 @media print {
-  .cs-front { padding: 0 !important; min-height: 0; height: 270mm; overflow: hidden; margin: 0 !important; }
+  .cs-front { padding: 0 0.4mm 0.4mm !important; min-height: 0; height: 270mm; overflow: hidden; margin: 0 !important; }
   .cs-body { height: auto; }
   .pf2-sheet > .warnings-box { display: none; }
   .cs-front *, .cs-page * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .cs-page { padding: 0 !important; min-height: 268mm; height: auto; margin: 0 !important; }
+  .cs-page { padding: 0 0.4mm 0.4mm !important; min-height: 268mm; height: auto; margin: 0 !important; }
 }
 .pf2-sheet > .warnings-box { width: 210mm; margin: 0 auto 10px; box-sizing: border-box; }
 .cs-abils .cs-bar { font-size: 6.6pt; letter-spacing: 0.03em; white-space: nowrap; }
@@ -324,3 +332,13 @@
 /* Ausrüstung */
 .cs-inv-top { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; flex: none; }
 .cs-notes-panel { min-height: 20mm; }
+
+/* Linierte Restfläche: setzt die Tabellenzeilen bis zum Seitenende fort */
+.cs-lines { flex: 1 1 0; height: 0; min-height: 0; overflow: hidden; }
+.cs-page .cs-table-blank td { height: 7mm; padding: 0; }
+.cs-page .cs-table-blank tr:first-child td { border-top: none; }
+.cs-fill > .cs-table { flex: none; }
+.cs-notes-panel { flex: none; height: 38mm; min-height: 0; display: flex; flex-direction: column; }
+.cs-lore.xlong + .cs-lore-suffix { display: none; }
+/* Rahmen bei Seitenumbruch auf jeder Seite schließen */
+.cs-panel { -webkit-box-decoration-break: clone; box-decoration-break: clone; }

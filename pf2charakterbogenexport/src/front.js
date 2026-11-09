@@ -47,6 +47,15 @@
     return `<span class="cs-teml ${mode || "grid"}">${cells}</span>`;
   }
 
+  /**
+   * Schriftgröße für lange Einträge: statt abzuschneiden wird die Schrift
+   * kleiner und darf umbrechen ("long" = 2 Zeilen, "xlong" = 3 Zeilen).
+   */
+  function lengthClass(text, longFrom, xlongFrom) {
+    const n = String(text || "").length;
+    return n > xlongFrom ? "xlong" : n > longFrom ? "long" : "";
+  }
+
   /** Unterstrichenes Feld mit kleinem Etikett darunter. */
   function blank(value, label, cls) {
     return `<span class="cs-blank ${cls || ""}"><span class="v">${esc(value)}</span><span class="l">${esc(label)}</span></span>`;
@@ -168,7 +177,7 @@
       <div class="cs-panel cs-hp">
         <div class="cs-bar">Trefferpunkte</div>
         <div class="cs-hp-top">
-          <div class="cs-hp-cur">${shaped("heart", model.hp.value)}<span class="cs-hp-curlabel">AKTUELL</span></div>
+          <div class="cs-hp-cur">${shaped("heart", model.hp.value)}<span class="l">Aktuell</span></div>
           <div class="cs-hp-max"><span class="v">${esc(model.hp.max)}</span><span class="l">Max</span></div>
           <div class="cs-hp-temp"><span class="v">${esc(model.hp.temp || "")}</span><span class="l">Temp</span></div>
         </div>
@@ -210,13 +219,13 @@
     const short = I18N.ABILITIES[attrKey].short;
     return `
       <div class="cs-skill">
-        <div class="cs-skill-name">${nameIsInput ? `<span class="cs-lore">${esc(name)}</span><span class="cs-lore-suffix">Kenntnis</span>` : esc(name)}</div>
+        <div class="cs-skill-name">${nameIsInput ? `<span class="cs-lore ${lengthClass(name, 16, 30)}">${esc(name)}</span><span class="cs-lore-suffix">Kenntnis</span>` : esc(name)}</div>
         ${shaped("box", nameIsInput && !name ? "" : sign(total))}
         <div class="cs-skill-calc">
           <span class="cs-eq">=</span>${blank(nameIsInput && !name ? "" : sign(attr), short)}
           <span class="cs-op">+</span>${blank(nameIsInput && !name ? "" : plain(prof), "KOMP.")}${teml(rank, "grid")}
-          <span class="cs-op">+</span>${blank(rest > 0 ? plain(rest) : "", "GEGENST.")}
-          ${armor ? `<span class="cs-op">−</span>${blank(rest < 0 ? plain(-rest) : "", "RÜST.")}` : ""}
+          <span class="cs-op">+</span>${blank(rest > 0 ? plain(rest) : "", "GEGENST.", "wide")}
+          ${armor ? `<span class="cs-op">−</span>${blank(rest < 0 ? plain(-rest) : "", "RÜST.", "wide")}` : ""}
         </div>
       </div>`;
   }
@@ -365,7 +374,7 @@
         <span class="cs-map-note">*Mehrfach&shy;angriffsmalus</span>
       </div>
       <div class="cs-wpn-calc"><span class="cs-eq">=</span>${blank(attr, ranged ? "GE" : "ST")}<span class="cs-op">+</span>${blank(prof, "KOMP.")}<span class="cs-op">+</span>${blank(item, "GEGENST.")}</div>
-      <div class="cs-wpn-name">${blank(has ? w.name : "", ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE")}</div>
+      <div class="cs-wpn-name">${blank(has ? w.name : "", ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE", has ? lengthClass(w.name, 30, 60) : "")}</div>
       <div class="cs-wpn-dmg">${blank(dmg, "SCHADEN")}</div>
       <div class="cs-wpn-side">${teml(rank, "col")}<span class="cs-dtype">${typeCells}</span></div>
     </div>`;
