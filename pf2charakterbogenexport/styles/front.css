@@ -239,7 +239,7 @@
 .cs-wpn:last-child { border-bottom: none; }
 .cs-wpn-shape { grid-area: shape; position: relative; display: flex; align-items: flex-start; }
 .cs-wpn-tag {
-  position: absolute; left: 0.6mm; bottom: 0.4mm; background: var(--cs-orange); color: #fff; font-weight: 700;
+  position: absolute; left: 0.6mm; top: 9.3mm; z-index: 1; background: var(--cs-orange); color: #fff; font-weight: 700;
   font-size: 5.3pt; text-transform: uppercase; padding: 0.2mm 0.8mm; border-radius: 0.6mm;
 }
 .cs-wpn-map { grid-area: map; display: flex; align-items: center; gap: 0.3mm 0.8mm; flex-wrap: wrap; white-space: nowrap; }
