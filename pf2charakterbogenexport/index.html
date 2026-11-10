@@ -35,6 +35,23 @@
       <p>…oder JSON-Inhalt direkt einfügen:</p>
       <textarea id="json-paste" placeholder="{ &quot;name&quot;: &quot;...&quot;, &quot;type&quot;: &quot;character&quot;, ... }"></textarea>
 
+      <h2>3. Art des Bogens</h2>
+      <fieldset class="mode-choice">
+        <label>
+          <input type="radio" name="sheet-mode" value="spielbereit" checked>
+          <span><strong>Spielbereit</strong> – alles ausgefüllt. Leer bleibt nur, was sich während einer
+          Spielrunde ändert: aktuelle TP, temporäre TP, Heldenpunkte, Sterbend/Verwundet, Zustände und
+          aktuelle Fokuspunkte.</span>
+        </label>
+        <label>
+          <input type="radio" name="sheet-mode" value="aufstieg">
+          <span><strong>Für Stufenaufstieg</strong> – zusätzlich bleibt alles leer, was sich beim
+          Stufenaufstieg ändert: Stufe, EP, maximale TP, Attributsmodifikatoren, Kompetenzen, RK,
+          Rettungswürfe, Wahrnehmung, Fertigkeiten, Angriffswerte, Zauber-SG/-angriff und Traglast-Grenzen.
+          Namen, Ausrüstung, Waffenwürfel und Talente bleiben stehen.</span>
+        </label>
+      </fieldset>
+
       <div class="toolbar">
         <button id="generate-btn">Bogen erzeugen</button>
         <button id="sample-btn" class="secondary">Beispiel-Charakter laden</button>

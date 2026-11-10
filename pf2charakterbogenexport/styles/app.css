@@ -28,6 +28,7 @@ body {
 .upload-panel .steps ol { padding-left: 20px; }
 
 .drop-zone {
+  display: block;
   border: 2px dashed #b8860b;
   border-radius: 6px;
   padding: 24px;
@@ -86,3 +87,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .app-footer a { color: #d9b96a; }
 
 #sheet-output { margin-top: 20px; }
+
+.mode-choice { border: 1px solid #ccc; border-radius: 6px; padding: 8px 12px; margin: 0 0 12px; display: grid; gap: 8px; }
+.mode-choice label { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 1.35; cursor: pointer; }
+.mode-choice input { margin-top: 3px; }

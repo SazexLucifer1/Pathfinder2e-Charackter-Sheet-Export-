@@ -36,8 +36,16 @@ Kein Server, kein Upload, keine Installation nötig – alles läuft lokal im Br
    → **„Export Data"** → es wird eine `.json`-Datei heruntergeladen.
 2. `index.html` in einem Browser öffnen (Doppelklick genügt, es wird kein Server benötigt).
 3. Die `.json`-Datei per Drag & Drop in das Feld ziehen (oder den Inhalt in das Textfeld einfügen).
-4. Auf **„Bogen erzeugen"** klicken.
-5. Auf **„Drucken / Als PDF speichern"** klicken und im Druckdialog des Browsers als PDF speichern
+4. **Art des Bogens** wählen:
+   - **Spielbereit** – alles ausgefüllt; leer bleibt nur, was sich während einer Spielrunde ändert
+     (aktuelle TP, temporäre TP, Heldenpunkte, Sterbend/Verwundet, Zustände, aktuelle Fokuspunkte).
+   - **Für Stufenaufstieg** – zusätzlich bleibt alles leer, was sich beim Stufenaufstieg ändert
+     (Stufe, EP, maximale TP, Attributsmodifikatoren, Kompetenzen G/E/M/L und Kompetenzboni, RK,
+     Rettungswürfe, Wahrnehmung, Fertigkeiten, Angriffswerte inkl. Mehrfachangriffsmalus,
+     Zauber-SG/-angriff, Traglast-Grenzen). Namen, Ausrüstung, Waffenwürfel, Gegenstandsboni und
+     Talente bleiben stehen – ideal, um die Werte mit Bleistift zu führen.
+5. Auf **„Bogen erzeugen"** klicken (ein Wechsel der Bogen-Art baut den Bogen sofort neu auf).
+6. Auf **„Drucken / Als PDF speichern"** klicken und im Druckdialog des Browsers als PDF speichern
    oder direkt ausdrucken.
 
 Zum Ausprobieren kann über den Button **„Beispiel-Charakter laden"** ein mitgelieferter
@@ -67,7 +75,8 @@ node tools/layout-check.js                      # Beispiel-Charakter
 node tools/layout-check.js mein-charakter.json  # eigener Export
 ```
 
-Ergebnis landet in `layout-check/` (PDF + `seite-N.png`); bei Problemen endet das Skript mit Exit-Code 1.
+Geprüft werden beide Bogen-Arten; das Ergebnis landet in `layout-check/spielbereit/` und
+`layout-check/aufstieg/` (PDF + `seite-N.png`); bei Problemen endet das Skript mit Exit-Code 1.
 
 ## Projektstruktur
 

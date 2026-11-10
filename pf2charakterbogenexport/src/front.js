@@ -37,6 +37,19 @@
     return rank > 0 ? level + 2 * rank : 0;
   }
 
+  /*
+   * Bogen-Art (wird von render() gesetzt):
+   *   blank.session – Werte, die sich während einer Spielrunde ändern, leer lassen
+   *   blank.level   – zusätzlich alles leer lassen, was sich beim Stufenaufstieg ändert
+   */
+  let blank = { session: false, level: false };
+  /** Wert nur ausgeben, wenn er nicht zur Spielrunde gehört. */
+  const S = (v) => (blank.session ? "" : v);
+  /** Wert nur ausgeben, wenn er sich beim Stufenaufstieg nicht ändert. */
+  const L = (v) => (blank.level ? "" : v);
+  /** Kompetenzstufe (G/E/M/L) – beim Stufenaufstieg-Bogen leer. */
+  const R = (rank) => (blank.level ? null : rank);
+
   const RANK_LETTERS = ["G", "E", "M", "L"];
 
   /** Kompetenz-Kästchen G/E/M/L; erreichte Stufen sind ausgefüllt. */
@@ -57,7 +70,7 @@
   }
 
   /** Unterstrichenes Feld mit kleinem Etikett darunter. */
-  function blank(value, label, cls) {
+  function field(value, label, cls) {
     return `<span class="cs-blank ${cls || ""}"><span class="v">${esc(value)}</span><span class="l">${esc(label)}</span></span>`;
   }
 
@@ -108,7 +121,7 @@
   function header(model) {
     const m = model.meta;
     const heroMax = Math.max(m.heroPointsMax || 3, 3);
-    const hero = Array.from({ length: heroMax }, (_, i) => `<span class="cs-hero ${i < m.heroPoints ? "on" : ""}"></span>`).join("");
+    const hero = Array.from({ length: heroMax }, (_, i) => `<span class="cs-hero ${!blank.session && i < m.heroPoints ? "on" : ""}"></span>`).join("");
     const ancestry = [m.ancestry, m.heritage].filter(Boolean).join(" / ");
     return `
     <div class="cs-top">
@@ -121,8 +134,8 @@
         <div class="cs-id-val big">${esc(m.name)}</div>
         <div class="cs-id-player"><span>${esc(m.player && m.player !== m.name ? m.player : "")}</span><em>Spielername</em></div>
       </div>
-      <div><div class="cs-bar">Stufe</div><div class="cs-id-val">${esc(m.level)}</div></div>
-      <div><div class="cs-bar">EP</div><div class="cs-id-val">${esc(m.xp != null ? m.xp : "")}</div></div>
+      <div><div class="cs-bar">Stufe</div><div class="cs-id-val">${esc(L(m.level))}</div></div>
+      <div><div class="cs-bar">EP</div><div class="cs-id-val">${esc(L(m.xp != null ? m.xp : ""))}</div></div>
       <div><div class="cs-bar">Heldenpunkte</div><div class="cs-id-val">${hero}</div></div>
       <div><div class="cs-bar">Volk / Erbe</div><div class="cs-id-val">${esc(ancestry)}</div></div>
       <div><div class="cs-bar">Hintergrund</div><div class="cs-id-val">${esc(m.background)}</div></div>
@@ -155,7 +168,7 @@
         (a) => `
         <div class="cs-abil">
           <div class="cs-abil-name"><strong>${esc(a.name)}</strong><label><span class="cs-check"></span>Teilsteigerung</label></div>
-          <div class="cs-abil-box">${esc(sign(model.abilities[a.key] || 0))}</div>
+          <div class="cs-abil-box">${esc(L(sign(model.abilities[a.key] || 0)))}</div>
           <div class="cs-abil-short">${esc(a.short)}</div>
         </div>`
       )
@@ -165,7 +178,7 @@
 
   function vitals(model) {
     const level = model.meta.level;
-    const dying = model.dying || 0;
+    const dying = blank.session ? 0 : model.dying || 0;
     const dyingCells = [1, 2, 3, 4].map((i) => `<span class="${i <= dying ? "on" : ""}">${i}</span>`).join("");
     const per = model.perception;
     const wis = model.abilities.wis || 0;
@@ -177,13 +190,13 @@
       <div class="cs-panel cs-hp">
         <div class="cs-bar">Trefferpunkte</div>
         <div class="cs-hp-top">
-          <div class="cs-hp-cur">${shaped("heart", model.hp.value)}<span class="l">Aktuell</span></div>
-          <div class="cs-hp-max"><span class="v">${esc(model.hp.max)}</span><span class="l">Max</span></div>
-          <div class="cs-hp-temp"><span class="v">${esc(model.hp.temp || "")}</span><span class="l">Temp</span></div>
+          <div class="cs-hp-cur">${shaped("heart", S(model.hp.value))}<span class="l">Aktuell</span></div>
+          <div class="cs-hp-max"><span class="v">${esc(L(model.hp.max))}</span><span class="l">Max</span></div>
+          <div class="cs-hp-temp"><span class="v">${esc(S(model.hp.temp || ""))}</span><span class="l">Temp</span></div>
         </div>
         <div class="cs-hp-cond">
           <div><strong>Sterbend</strong><span class="cs-dying">${dyingCells}</span></div>
-          <div><strong>Verwundet</strong><span class="cs-wounded">${esc(model.wounded || "")}</span></div>
+          <div><strong>Verwundet</strong><span class="cs-wounded">${esc(S(model.wounded || ""))}</span></div>
         </div>
       </div>
       <div class="cs-panel cs-speed">
@@ -198,11 +211,11 @@
       <div class="cs-panel cs-perc">
         <div class="cs-bar">Wahrnehmung</div>
         <div class="cs-perc-row">
-          ${shaped("lens", sign(perTotal))}
-          <span class="cs-eq">=</span>${blank(sign(wis), "WE")}<span class="cs-op">+</span>${blank(plain(perProf), "KOMP.")}
-          ${teml(per.rank, "grid")}
+          ${shaped("lens", L(sign(perTotal)))}
+          <span class="cs-eq">=</span>${field(L(sign(wis)), "WE")}<span class="cs-op">+</span>${field(L(plain(perProf)), "KOMP.")}
+          ${teml(R(per.rank), "grid")}
         </div>
-        ${perItem ? `<div class="cs-perc-item">Gegenstand/Sonstiges: ${esc(sign(perItem))}</div>` : ""}
+        ${perItem && !blank.level ? `<div class="cs-perc-item">Gegenstand/Sonstiges: ${esc(sign(perItem))}</div>` : ""}
       </div>
     </div>`;
   }
@@ -220,12 +233,12 @@
     return `
       <div class="cs-skill">
         <div class="cs-skill-name">${nameIsInput ? `<span class="cs-lore ${lengthClass(name, 16, 30)}">${esc(name)}</span><span class="cs-lore-suffix">Kenntnis</span>` : esc(name)}</div>
-        ${shaped("box", nameIsInput && !name ? "" : sign(total))}
+        ${shaped("box", nameIsInput && !name ? "" : L(sign(total)))}
         <div class="cs-skill-calc">
-          <span class="cs-eq">=</span>${blank(nameIsInput && !name ? "" : sign(attr), short)}
-          <span class="cs-op">+</span>${blank(nameIsInput && !name ? "" : plain(prof), "KOMP.")}${teml(rank, "grid")}
-          <span class="cs-op">+</span>${blank(rest > 0 ? plain(rest) : "", "GEGENST.", "wide")}
-          ${armor ? `<span class="cs-op">−</span>${blank(rest < 0 ? plain(-rest) : "", "RÜST.", "wide")}` : ""}
+          <span class="cs-eq">=</span>${field(nameIsInput && !name ? "" : L(sign(attr)), short)}
+          <span class="cs-op">+</span>${field(nameIsInput && !name ? "" : L(plain(prof)), "KOMP.")}${teml(R(rank), "grid")}
+          <span class="cs-op">+</span>${field(rest > 0 ? plain(rest) : "", "GEGENST.", "wide")}
+          ${armor ? `<span class="cs-op">−</span>${field(rest < 0 ? plain(-rest) : "", "RÜST.", "wide")}` : ""}
         </div>
       </div>`;
   }
@@ -252,7 +265,8 @@
     const rank = a.rank;
     const prof = rank != null ? profBonus(level, rank) : null;
     let item = a.acBonus != null ? a.acBonus : null;
-    if (prof != null) item = model.ac - 10 - dexPart - prof;
+    // Beim Stufenaufstieg-Bogen nur den Rüstungsbonus des Gegenstands eintragen.
+    if (prof != null && !blank.level) item = model.ac - 10 - dexPart - prof;
     const dp = model.defenseProficiencies || {};
     const sh = model.shield || {};
     const armorProf = [
@@ -261,7 +275,7 @@
       ["Mittel", dp.medium],
       ["Schwer", dp.heavy],
     ]
-      .map(([n, r]) => `<span class="cs-ap"><em>${n}</em>${teml(r, "row")}</span>`)
+      .map(([n, r]) => `<span class="cs-ap"><em>${n}</em>${teml(R(r), "row")}</span>`)
       .join("");
     return `
     <div class="cs-panel cs-ac">
@@ -269,20 +283,20 @@
       <div class="cs-ac-grid">
         <div class="cs-ac-main">
           <div class="cs-ac-row">
-            <strong class="cs-ac-label">RK</strong>${shaped("shield", model.ac)}
+            <strong class="cs-ac-label">RK</strong>${shaped("shield", L(model.ac))}
             <span class="cs-eq">=</span>
             <div class="cs-ac-calc">
-              <div>${blank(item != null ? plain(item) : "", "GEGENST.")}<span class="cs-op">+</span>${blank(prof != null ? plain(prof) : "", "KOMP.")}</div>
-              <div>${blank(sign(dexPart), "GE")}<span class="cs-op">+</span>${blank("10", "BASIS", "fixed")}</div>
+              <div>${field(item != null ? plain(item) : "", "GEGENST.")}<span class="cs-op">+</span>${field(prof != null ? L(plain(prof)) : "", "KOMP.")}</div>
+              <div>${field(L(sign(dexPart)), "GE")}<span class="cs-op">+</span>${field("10", "BASIS", "fixed")}</div>
             </div>
-            ${teml(rank, "col")}
+            ${teml(R(rank), "col")}
           </div>
           <div class="cs-ac-row">
             <strong class="cs-ac-label">+Schild</strong>${shaped("shield", sh.acBonus != null ? `+${sh.acBonus}` : "")}
             <span class="cs-eq">=</span>
             <div class="cs-ac-calc">
-              <div>${blank(sh.hp != null ? sh.hp : "", "TP")}<span class="cs-op">•</span>${blank(sh.hardness != null ? sh.hardness : "", "HÄRTE")}</div>
-              <div>${blank(sh.bt != null ? sh.bt : "", "BP")}<span class="cs-op">•</span>${blank(sh.maxHp != null ? sh.maxHp : "", "MAX")}</div>
+              <div>${field(sh.hp != null ? sh.hp : "", "TP")}<span class="cs-op">•</span>${field(sh.hardness != null ? sh.hardness : "", "HÄRTE")}</div>
+              <div>${field(sh.bt != null ? sh.bt : "", "BP")}<span class="cs-op">•</span>${field(sh.maxHp != null ? sh.maxHp : "", "MAX")}</div>
             </div>
           </div>
           ${a.name || sh.name ? `<div class="cs-ac-items">${esc([a.name, sh.name].filter(Boolean).join(" · "))}</div>` : ""}
@@ -305,11 +319,11 @@
         return `
         <div class="cs-save">
           <strong>${esc(s.name)}</strong>
-          ${shaped("box", sign(total))}
-          <span class="cs-eq">=</span>${blank(sign(attr), I18N.ABILITIES[s.ability].short)}<span class="cs-op">+</span>${blank(plain(prof), "KOMP.")}${
-          rest ? `<span class="cs-op">+</span>${blank(plain(rest), "GEG.")}` : ""
+          ${shaped("box", L(sign(total)))}
+          <span class="cs-eq">=</span>${field(L(sign(attr)), I18N.ABILITIES[s.ability].short)}<span class="cs-op">+</span>${field(L(plain(prof)), "KOMP.")}${
+          rest ? `<span class="cs-op">+</span>${field(plain(rest), "GEG.")}` : ""
         }
-          ${teml(node.rank, "grid")}
+          ${teml(R(node.rank), "grid")}
         </div>`;
       })
       .join("");
@@ -356,7 +370,16 @@
         third = sign(total - (agile ? 8 : 10));
         total = sign(total);
       }
-      if (w.die) {
+      if (blank.level) {
+        // Angriffswerte hängen von Stufe/Attributen ab; Gegenstandsbonus bleibt.
+        total = second = third = attr = prof = "";
+        rank = null;
+      }
+      if (w.die && blank.level) {
+        // Nur die Würfel (Waffe/Runen) – der Attributsanteil wird von Hand ergänzt.
+        const strPart = ranged ? (w.traits.some((t) => t.startsWith("propulsive")) ? " + ½ST" : "") : " + ST";
+        dmg = `${w.dice || 1}W${String(w.die).replace(/^d/i, "")}${w.bonusDamage ? sign(w.bonusDamage) : ""}${strPart}`;
+      } else if (w.die) {
         const dmgMod = ranged ? (w.traits.some((t) => t.startsWith("propulsive")) ? Math.floor(Math.max(str, 0) / 2) : 0) : str;
         dmg = `${w.dice || 1}W${String(w.die).replace(/^d/i, "")}${dmgMod ? sign(dmgMod) : ""}${w.bonusDamage ? sign(w.bonusDamage) : ""}`;
       } else {
@@ -373,9 +396,9 @@
         <span class="cs-map"><em>3. Angriff</em><b>${esc(third)}</b></span>
         <span class="cs-map-note">*Mehrfach&shy;angriffsmalus</span>
       </div>
-      <div class="cs-wpn-calc"><span class="cs-eq">=</span>${blank(attr, ranged ? "GE" : "ST")}<span class="cs-op">+</span>${blank(prof, "KOMP.")}<span class="cs-op">+</span>${blank(item, "GEGENST.")}</div>
-      <div class="cs-wpn-name">${blank(has ? w.name : "", ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE", has ? lengthClass(w.name, 30, 60) : "")}</div>
-      <div class="cs-wpn-dmg">${blank(dmg, "SCHADEN")}</div>
+      <div class="cs-wpn-calc"><span class="cs-eq">=</span>${field(attr, ranged ? "GE" : "ST")}<span class="cs-op">+</span>${field(prof, "KOMP.")}<span class="cs-op">+</span>${field(item, "GEGENST.")}</div>
+      <div class="cs-wpn-name">${field(has ? w.name : "", ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE", has ? lengthClass(w.name, 30, 60) : "")}</div>
+      <div class="cs-wpn-dmg">${field(dmg, "SCHADEN")}</div>
       <div class="cs-wpn-side">${teml(rank, "col")}<span class="cs-dtype">${typeCells}</span></div>
     </div>`;
   }
@@ -394,17 +417,23 @@
     <div class="cs-panel cs-wprof">
       <div class="cs-wprof-title">Waffenkompetenzen</div>
       <div class="cs-wprof-grid">
-        <span><em>Einfach</em>${teml(wp.simple, "row")}</span>
-        <span><em>Kriegswaffen</em>${teml(wp.martial, "row")}</span>
-        <span><em>Fortgeschr.</em>${teml(wp.advanced, "row")}</span>
-        <span><em>Waffenlos</em>${teml(wp.unarmed, "row")}</span>
+        <span><em>Einfach</em>${teml(R(wp.simple), "row")}</span>
+        <span><em>Kriegswaffen</em>${teml(R(wp.martial), "row")}</span>
+        <span><em>Fortgeschr.</em>${teml(R(wp.advanced), "row")}</span>
+        <span><em>Waffenlos</em>${teml(R(wp.unarmed), "row")}</span>
         <span class="wide"><em>Andere</em><i class="cs-line"></i>${teml(null, "row")}</span>
       </div>
       <div class="cs-wprof-crit"><em>Kritische Spezialisierung</em><i class="cs-line"></i></div>
     </div>`;
   }
 
-  function render(model) {
+  /**
+   * @param {object} model  Charaktermodell aus PF2_PARSER
+   * @param {object} [opts] { mode: "spielbereit" | "aufstieg" }
+   */
+  function render(model, opts) {
+    const mode = (opts && opts.mode) || "spielbereit";
+    blank = { session: true, level: mode === "aufstieg" };
     return `
     <section class="sheet-page cs-front">
       ${header(model)}
@@ -423,5 +452,5 @@
     </section>`;
   }
 
-  global.PF2_FRONT = { render };
+  global.PF2_FRONT = { render, blankFor: (mode) => ({ session: true, level: mode === "aufstieg" }) };
 })(window);

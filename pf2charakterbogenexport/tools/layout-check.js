@@ -5,7 +5,8 @@
  *   node tools/layout-check.js [beispiel.json] [ausgabe-ordner]
  *
  * Startet einen lokalen Server, lädt die JSON (Standard: Beispiel-Charakter),
- * erzeugt daraus das PDF und je Seite einen PNG-Screenshot und prüft im
+ * erzeugt daraus für beide Bogen-Arten ("spielbereit" und "aufstieg") das PDF
+ * und je Seite einen PNG-Screenshot (Unterordner je Art) und prüft im
  * Druck-Layout automatisch:
  *   - Texte, die sich überlappen oder zu eng beieinander stehen
  *   - Texte, die aus ihrem Kasten, Feld oder ihrer Form (Herz, Schild …) ragen
@@ -40,21 +41,26 @@ const server = http.createServer((req, res) => {
   const url = `http://127.0.0.1:${server.address().port}/index.html`;
   fs.mkdirSync(outDir, { recursive: true });
   const b = await chromium.launch();
+  let failed = false;
+  for (const mode of ["spielbereit", "aufstieg"]) {
+  const dir = path.join(outDir, mode);
+  fs.mkdirSync(dir, { recursive: true });
   const p = await (await b.newContext({ deviceScaleFactor: 2 })).newPage();
   const errs = [];
   p.on("pageerror", (e) => errs.push(e.message));
   await p.goto(url);
+  await p.check(`input[name="sheet-mode"][value="${mode}"]`);
   await p.fill("#json-paste", fs.readFileSync(jsonPath, "utf8"));
   await p.click("#generate-btn");
   await p.waitForSelector(".cs-front");
-  await p.pdf({ path: path.join(outDir, "charakterbogen.pdf"), format: "A4", printBackground: true });
+  await p.pdf({ path: path.join(dir, "charakterbogen.pdf"), format: "A4", printBackground: true });
   // Druck-Layout nachstellen: A4 minus 8 mm Rand = 194 mm ≈ 733 px Breite
   await p.emulateMedia({ media: "print" });
   await p.setViewportSize({ width: 733, height: 1000 });
   await p.waitForTimeout(200);
   const pages = await p.$$(".sheet-page");
   for (let i = 0; i < pages.length; i++) {
-    await pages[i].screenshot({ path: path.join(outDir, `seite-${i + 1}.png`), scale: "device" });
+    await pages[i].screenshot({ path: path.join(dir, `seite-${i + 1}.png`), scale: "device" });
   }
   const issues = await p.evaluate(() => {
     const out = [];
@@ -132,10 +138,14 @@ const server = http.createServer((req, res) => {
     });
     return [...new Set(out)];
   });
+  console.log(`== Bogen-Art: ${mode} ==`);
   console.log(errs.length ? "JS-FEHLER: " + errs.join("; ") : "JS-Fehler: keine");
   console.log(issues.length ? issues.join("\n") : "Keine Layout-Probleme gefunden.");
-  console.log(`${pages.length} Seiten – PDF und Screenshots in ${outDir}`);
+  console.log(`${pages.length} Seiten – PDF und Screenshots in ${dir}`);
+  if (errs.length || issues.length) failed = true;
+  await p.close();
+  }
   await b.close();
   server.close();
-  process.exit(errs.length || issues.length ? 1 : 0);
+  process.exit(failed ? 1 : 0);
 })();

@@ -34,13 +34,16 @@
   }
 
   /** Seitenkopf wie auf Seite 1: Marke links, Seitentitel rechts, Name darunter. */
+  // Bogen-Art: siehe PF2_FRONT.blankFor – wird in render() gesetzt.
+  let blank = { session: true, level: false };
+
   function pageHead(title, model) {
     return `
     <div class="cs-top">
       <div class="cs-brand">PATHFINDER<span>2. Edition</span></div>
       <div class="cs-title">${esc(title)}</div>
     </div>
-    <div class="cs-pagename"><span>${esc(model.meta.name)}</span><em>Stufe ${esc(model.meta.level)} · ${esc(model.meta.className)}</em></div>`;
+    <div class="cs-pagename"><span>${esc(model.meta.name)}</span><em>${blank.level ? "" : `Stufe ${esc(model.meta.level)} · `}${esc(model.meta.className)}</em></div>`;
   }
 
   /**
@@ -67,7 +70,7 @@
   function conditionsPage(model) {
     const active = new Map((model.conditions || []).map((c) => [c.name, c.value]));
     const rows = I18N.CONDITIONS.map((c) => {
-      const on = active.has(c.name);
+      const on = !blank.session && active.has(c.name);
       const val = active.get(c.name);
       return `
       <div class="cs-cond ${on ? "on" : ""}">
@@ -128,12 +131,12 @@
     if (!sc.entries.length && !sc.spells.length) return "";
     const entry = sc.entries[0] || {};
     const focus = entry.focusPoints != null ? Number(entry.focusPoints) : null;
-    const focusPips = Array.from({ length: 3 }, (_, i) => `<span class="cs-pip ${focus != null && i < focus ? "on" : ""}"></span>`).join("");
+    const focusPips = Array.from({ length: 3 }, (_, i) => `<span class="cs-pip ${!blank.session && focus != null && i < focus ? "on" : ""}"></span>`).join("");
     const stats = `
       <div class="cs-stat-row">
         <div class="cs-stat"><span class="cs-stat-box wide">${esc(sc.entries.map((e) => trad(e.tradition)).filter(Boolean).join(", "))}</span><em>Tradition</em></div>
-        <div class="cs-stat"><span class="cs-stat-box">${esc(entry.dc != null ? entry.dc : "")}</span><em>Zauber-SG</em></div>
-        <div class="cs-stat"><span class="cs-stat-box">${esc(entry.attack != null ? sign(entry.attack) : "")}</span><em>Zauberangriff</em></div>
+        <div class="cs-stat"><span class="cs-stat-box">${esc(entry.dc != null && !blank.level ? entry.dc : "")}</span><em>Zauber-SG</em></div>
+        <div class="cs-stat"><span class="cs-stat-box">${esc(entry.attack != null && !blank.level ? sign(entry.attack) : "")}</span><em>Zauberangriff</em></div>
         <div class="cs-stat"><span class="cs-stat-pips">${focusPips}</span><em>Fokuspunkte</em></div>
       </div>`;
     const slotCols = ["Trick", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -212,8 +215,8 @@
         <div class="cs-panel"><div class="cs-bar">Traglast</div>
           <div class="cs-stat-row">
             <div class="cs-stat"><span class="cs-stat-box">${esc(bulk)}</span><em>Getragen</em></div>
-            <div class="cs-stat"><span class="cs-stat-box">${esc(5 + str)}</span><em>Belastet ab</em></div>
-            <div class="cs-stat"><span class="cs-stat-box">${esc(10 + str)}</span><em>Maximum</em></div>
+            <div class="cs-stat"><span class="cs-stat-box">${esc(blank.level ? "" : 5 + str)}</span><em>Belastet ab</em></div>
+            <div class="cs-stat"><span class="cs-stat-box">${esc(blank.level ? "" : 10 + str)}</span><em>Maximum</em></div>
           </div>
         </div>
       </div>
@@ -239,8 +242,16 @@
     </div>`;
   }
 
-  function render(model) {
-    return `<div class="pf2-sheet">${warningsBlock(model)}${FRONT.render(model)}${conditionsPage(model)}${featsPage(model)}${spellsPage(
+  /**
+   * @param {object} model  Charaktermodell aus PF2_PARSER
+   * @param {object} [opts] { mode: "spielbereit" (Standard) | "aufstieg" }
+   *   spielbereit – alles ausgefüllt außer Werten, die sich in der Spielrunde ändern
+   *   aufstieg    – zusätzlich alles leer, was sich beim Stufenaufstieg ändert
+   */
+  function render(model, opts) {
+    const mode = (opts && opts.mode) || "spielbereit";
+    blank = FRONT.blankFor(mode);
+    return `<div class="pf2-sheet">${warningsBlock(model)}${FRONT.render(model, { mode })}${conditionsPage(model)}${featsPage(model)}${spellsPage(
       model
     )}${inventoryPage(model)}</div>`;
   }

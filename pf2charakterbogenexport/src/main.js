@@ -12,6 +12,12 @@
   const output = document.getElementById("sheet-output");
 
   let currentFileText = "";
+  let lastGeneratedText = "";
+
+  function selectedMode() {
+    const el = document.querySelector('input[name="sheet-mode"]:checked');
+    return el ? el.value : "spielbereit";
+  }
 
   function setStatus(text, type) {
     statusMsg.textContent = text || "";
@@ -61,7 +67,8 @@
     }
     try {
       const model = window.PF2_PARSER.parseFoundryActor(raw);
-      const html = window.PF2_RENDER.render(model);
+      const html = window.PF2_RENDER.render(model, { mode: selectedMode() });
+      lastGeneratedText = text;
       output.innerHTML = html;
       printBtn.disabled = false;
       const warnCount = model.warnings.length;
@@ -84,6 +91,13 @@
   });
 
   printBtn.addEventListener("click", () => window.print());
+
+  // Bogen-Art umschalten: einen bereits erzeugten Bogen sofort neu aufbauen.
+  document.querySelectorAll('input[name="sheet-mode"]').forEach((el) =>
+    el.addEventListener("change", () => {
+      if (lastGeneratedText) generateFromText(lastGeneratedText);
+    })
+  );
 
   sampleBtn.addEventListener("click", async () => {
     try {
