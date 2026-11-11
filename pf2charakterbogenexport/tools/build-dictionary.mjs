@@ -168,6 +168,8 @@ const ui = {
   weaponGroups: pick(/^WeaponGroup([A-Z]\w*)$/),
   armorGroups: pick(/^ArmorGroup([A-Z]\w*)$/),
   sizes: pick(/^ActorSize([A-Z]\w*)$/),
+  // Wertvolle Materialien ("cold-iron" → "Kaltes Eisen") und Qualitätsgrade ("low-grade" → "Geringwertig")
+  materials: pick(/^PreciousMaterial(?!\w*(?:Description|Label)$)[A-Z]\w*$/),
   languages,
 };
 

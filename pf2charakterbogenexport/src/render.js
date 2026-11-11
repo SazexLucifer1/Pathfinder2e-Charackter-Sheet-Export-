@@ -379,13 +379,23 @@
     ["abgelegt", "Abgelegt / zurückgelassen", "zählt nicht zur Traglast"],
   ];
 
+  // Bei Waffen, Rüstungen, Schilden und Munition sind die Merkmale am Tisch relevant
+  const TAG_KINDS = new Set(["waffe", "fernkampf", "stecken", "ruestung", "schild", "munition"]);
+  function itemTags(it) {
+    const tags = TAG_KINDS.has(it.kind) ? (it.traitsDe || []).filter(Boolean) : [];
+    return (
+      (it.material ? `<div class="cs-item-mat">${esc(it.material)}</div>` : "") +
+      (tags.length ? `<div class="cs-item-tags">${tags.map((t) => `<span>${esc(t)}</span>`).join(" · ")}</div>` : "")
+    );
+  }
+
   function itemRow(it) {
     return `<tr>
         <td class="c ico">${ICONS ? ICONS.icon(it.kind) : ""}</td>
         <td class="c">${esc(it.quantity)}</td>
         <td class="c">${esc(it.bulk == null || it.bulk === "" ? "–" : it.bulk)}</td>
         <td class="c">${it.invested ? "✔" : ""}</td>
-        <td class="b">${esc(it.name)}</td>
+        <td class="b">${esc(it.name)}${itemTags(it)}</td>
         <td class="desc">${itemInfo(it)}</td>
       </tr>`;
   }

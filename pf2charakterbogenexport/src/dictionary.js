@@ -202,6 +202,17 @@
     return langs[l] || term(l);
   }
 
+  /** Material eines Gegenstands auf Deutsch, z. B. ("silver", "low") → "Silber (geringwertig)". */
+  function material(type, grade) {
+    if (!type) return "";
+    const m = (DATA.ui && DATA.ui.materials) || {};
+    // Namen vor dem Remaster
+    const ALIAS = { mithral: "dawnsilver", darkwood: "duskwood" };
+    const name = m[type] || m[ALIAS[type]] || titleFromSlug(type);
+    const g = grade ? m[`${grade}-grade`] : "";
+    return g && grade !== "standard" ? `${name} (${g.toLowerCase()})` : name;
+  }
+
   function size(s) {
     const map = { tiny: "Winzig", sm: "Klein", small: "Klein", med: "Mittelgroß", medium: "Mittelgroß", lg: "Groß", large: "Groß", huge: "Riesig", grg: "Gigantisch", gargantuan: "Gigantisch" };
     return map[s] || s || "";
@@ -212,5 +223,5 @@
     return (DATA.actionIds || {})[id] || null;
   }
 
-  global.PF2_DICT = { actionSlugById, slug, entry, englishName, titleFromSlug, setClass, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
+  global.PF2_DICT = { material, actionSlugById, slug, entry, englishName, titleFromSlug, setClass, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
 })(typeof window !== "undefined" ? window : globalThis);

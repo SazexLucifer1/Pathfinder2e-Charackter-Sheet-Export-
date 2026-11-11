@@ -1435,6 +1435,8 @@
       spell,
       usage: get(s, "usage.value", ""),
       kind: itemKind(it, traits),
+      // Wertvolles Material (z. B. Silber gegen Teufel/Werwölfe, Kaltes Eisen gegen Dämonen/Feen)
+      material: D.material(get(s, "material.type", null), get(s, "material.grade", null)),
     };
   }
 

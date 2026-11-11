@@ -50,7 +50,9 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
   Abhaken, Fokuspunkten und Kurzbeschreibung, Reichweite und Verteidigung jedes Zaubers.
 - **Ausrüstung** gegliedert nach Ort – in der Hand, angelegt, am Körper/Gürtel (griffbereit), je
   Behälter (z. B. „Im Rucksack“), abgelegt – und darin nach Art sortiert; darunter leere Zeilen für
-  „Neue Gegenstände“, die bis zum Ende der letzten Seite reichen. Alle Gegenstände mit Piktogramm je Art (Waffe, Rüstung, Schild, Trank, Öl,
+  „Neue Gegenstände“, die bis zum Ende der letzten Seite reichen. Waffen, Rüstungen, Schilde und Munition mit ihren
+  Merkmalen (Agil, Finesse, Geworfen 20 Fuß …) und – bei allen Gegenständen – dem Material
+  (z. B. „Silber (geringwertig)“, „Kaltes Eisen“), hervorgehoben. Alle Gegenstände mit Piktogramm je Art (Waffe, Rüstung, Schild, Trank, Öl,
   Schriftrolle, Zauberstab, Talisman, Schmuck, Werkzeug, Behälter …), Anzahl, Traglast,
   angelegt/investiert und Kurzinfo
   (Aktivierung, Wirkung, Runen); Vermögen, Traglast und Notizen.

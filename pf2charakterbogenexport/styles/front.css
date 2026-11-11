@@ -429,3 +429,8 @@
 .cs-dmg-sneak .v { width: 100%; font-size: 8.6pt; white-space: nowrap; font-weight: 700; }
 .cs-dmg-sneak .l { font-size: 5.4pt; }
 .cs-page .cs-table tr.cs-new td { height: 7mm; }
+
+/* Ausrüstung: Material und Merkmale unter dem Namen */
+.cs-item-mat { color: var(--cs-orange); font-weight: 700; font-size: 7.4pt; margin-top: 0.4mm; }
+.cs-item-tags { font-weight: 400; font-size: 7.2pt; color: #333; margin-top: 0.3mm; line-height: 1.25; }
+.cs-item-tags span { white-space: nowrap; hyphens: none; }
