@@ -204,7 +204,7 @@
         <div class="cs-speed-row">${shaped("arrow", model.speed.value)}<span class="cs-unit">Fuß</span></div>
         ${
           model.speed.others.length
-            ? `<div class="cs-speed-other">${model.speed.others.map((s) => `${esc(s.type)} ${esc(s.value)} Fuß`).join(", ")}</div>`
+            ? `<div class="cs-speed-other">${model.speed.others.map((s) => (typeof s === "string" ? esc(s) : `${esc(s.label || s.type)} ${esc(s.value)} Fuß`)).join(", ")}</div>`
             : ""
         }
       </div>
@@ -216,6 +216,7 @@
           ${teml(R(per.rank), "grid")}
         </div>
         ${perItem && !blank.level ? `<div class="cs-perc-item">Gegenstand/Sonstiges: ${esc(sign(perItem))}</div>` : ""}
+        ${(per.senses || []).length ? `<div class="cs-perc-item">Sinne: ${esc(per.senses.join(", "))}</div>` : ""}
       </div>
     </div>`;
   }
@@ -223,12 +224,14 @@
   // Fertigkeiten mit Rüstungsmalus (wie im Original markiert)
   const ARMOR_SKILLS = new Set(["acrobatics", "athletics", "stealth", "thievery"]);
 
-  function skillRow(name, attrKey, rank, explicitMod, model, armor, nameIsInput) {
+  function skillRow(name, attrKey, rank, explicitMod, model, armor, nameIsInput, armorPenalty) {
     const level = model.meta.level;
     const attr = model.abilities[attrKey] || 0;
     const prof = profBonus(level, rank);
     const total = explicitMod != null ? explicitMod : attr + prof;
-    const rest = total - attr - prof;
+    // Rüstungsmalus (negativ) separat; der Rest sind Gegenstands-/sonstige Boni.
+    const penalty = armorPenalty || 0;
+    const item = total - attr - prof - penalty;
     const short = I18N.ABILITIES[attrKey].short;
     return `
       <div class="cs-skill">
@@ -237,8 +240,8 @@
         <div class="cs-skill-calc">
           <span class="cs-eq">=</span>${field(nameIsInput && !name ? "" : L(sign(attr)), short)}
           <span class="cs-op">+</span>${field(nameIsInput && !name ? "" : L(plain(prof)), "KOMP.")}${teml(R(rank), "grid")}
-          <span class="cs-op">+</span>${field(rest > 0 ? plain(rest) : "", "GEGENST.", "wide")}
-          ${armor ? `<span class="cs-op">−</span>${field(rest < 0 ? plain(-rest) : "", "RÜST.", "wide")}` : ""}
+          <span class="cs-op">+</span>${field(item ? plain(item) : "", "GEGENST.", "wide")}
+          ${armor ? `<span class="cs-op">−</span>${field(penalty ? plain(-penalty) : "", "RÜST.", "wide")}` : ""}
         </div>
       </div>`;
   }
@@ -246,9 +249,10 @@
   function skills(model) {
     const entries = Object.entries(I18N.SKILLS).map(([key, s]) => {
       const node = model.skills[key] || { rank: 0, mod: null };
-      return { sortName: s.name, html: skillRow(s.name, s.ability, node.rank, node.mod, model, ARMOR_SKILLS.has(key), false) };
+      return { sortName: s.name, html: skillRow(s.name, s.ability, node.rank, node.mod, model, ARMOR_SKILLS.has(key), false, node.armorPenalty) };
     });
-    const lores = model.lores.slice(0, 2);
+    // „Kenntnis (Handel)“ → „Handel“ (das Wort „Kenntnis“ steht schon unter dem Feld)
+    const lores = model.lores.slice(0, 2).map((l) => Object.assign({}, l, { name: String(l.name || "").replace(/^Kenntnis\s*\((.*)\)$/, "$1") }));
     while (lores.length < 2) lores.push({ name: "", rank: 0, mod: null });
     // Kenntnis-Zeilen stehen im Original zwischen Einschüchtern und Heilkunde.
     const loreHtml = lores.map((l) => skillRow(l.name, "int", l.rank, l.mod, model, false, true)).join("");
@@ -259,15 +263,14 @@
 
   function armorClass(model) {
     const level = model.meta.level;
-    const a = model.armor || {};
+    const a = model.ac || {};
     const dex = model.abilities.dex || 0;
     const dexPart = a.dexCap != null ? Math.min(dex, a.dexCap) : dex;
     const rank = a.rank;
     const prof = rank != null ? profBonus(level, rank) : null;
-    let item = a.acBonus != null ? a.acBonus : null;
-    // Beim Stufenaufstieg-Bogen nur den Rüstungsbonus des Gegenstands eintragen.
-    if (prof != null && !blank.level) item = model.ac - 10 - dexPart - prof;
-    const dp = model.defenseProficiencies || {};
+    // Gegenstandsanteil (Rüstung inkl. Runen und sonstige Boni) – bleibt auch beim Stufenaufstieg-Bogen stehen.
+    const item = prof != null ? a.value - 10 - dexPart - prof : null;
+    const dp = (model.proficiencies && model.proficiencies.defenses) || {};
     const sh = model.shield || {};
     const armorProf = [
       ["Ungerüstet", dp.unarmored],
@@ -283,7 +286,7 @@
       <div class="cs-ac-grid">
         <div class="cs-ac-main">
           <div class="cs-ac-row">
-            <strong class="cs-ac-label">RK</strong>${shaped("shield", L(model.ac))}
+            <strong class="cs-ac-label">RK</strong>${shaped("shield", L(a.value))}
             <span class="cs-eq">=</span>
             <div class="cs-ac-calc">
               <div>${field(item != null ? plain(item) : "", "GEGENST.")}<span class="cs-op">+</span>${field(prof != null ? L(plain(prof)) : "", "KOMP.")}</div>
@@ -292,14 +295,14 @@
             ${teml(R(rank), "col")}
           </div>
           <div class="cs-ac-row">
-            <strong class="cs-ac-label">+Schild</strong>${shaped("shield", sh.acBonus != null ? `+${sh.acBonus}` : "")}
+            <strong class="cs-ac-label">+Schild</strong>${shaped("shield", sh.bonus != null ? `+${sh.bonus}` : "")}
             <span class="cs-eq">=</span>
             <div class="cs-ac-calc">
               <div>${field(sh.hp != null ? sh.hp : "", "TP")}<span class="cs-op">•</span>${field(sh.hardness != null ? sh.hardness : "", "HÄRTE")}</div>
-              <div>${field(sh.bt != null ? sh.bt : "", "BP")}<span class="cs-op">•</span>${field(sh.maxHp != null ? sh.maxHp : "", "MAX")}</div>
+              <div>${field(sh.brokenThreshold != null ? sh.brokenThreshold : "", "BP")}<span class="cs-op">•</span>${field(sh.hpMax != null ? sh.hpMax : "", "MAX")}</div>
             </div>
           </div>
-          ${a.name || sh.name ? `<div class="cs-ac-items">${esc([a.name, sh.name].filter(Boolean).join(" · "))}</div>` : ""}
+          ${a.armor || sh.name ? `<div class="cs-ac-items">${esc([a.armor, sh.name].filter(Boolean).join(" · "))}</div>` : ""}
         </div>
         <div class="cs-notes"><span>Notizen</span></div>
       </div>
@@ -334,10 +337,9 @@
     </div>`;
   }
 
-  const DMG_LETTER = { bludgeoning: "W", piercing: "S", slashing: "H", b: "W", p: "S", s: "H" };
+  const DMG_LETTER = { bludgeoning: "W", piercing: "S", slashing: "H" };
 
-  function weaponBlock(w, ranged, model) {
-    const level = model.meta.level;
+  function weaponBlock(w, ranged) {
     const has = !!w;
     let total = "";
     let attr = "";
@@ -349,44 +351,25 @@
     let dmgType = "";
     let rank = null;
     if (has) {
-      const str = model.abilities.str || 0;
-      const dex = model.abilities.dex || 0;
-      const finesse = w.traits.includes("finesse");
-      const attrVal = ranged ? dex : finesse ? Math.max(str, dex) : str;
-      rank = w.rank;
-      if (rank != null) {
-        const p = profBonus(level, rank);
-        const it = w.potency || 0;
-        total = attrVal + p + it;
-        attr = sign(attrVal);
-        prof = plain(p);
-        item = it ? plain(it) : "";
-      } else if (w.bonus != null) {
-        total = w.bonus;
-      }
-      if (total !== "") {
-        const agile = w.traits.includes("agile");
-        second = sign(total - (agile ? 4 : 5));
-        third = sign(total - (agile ? 8 : 10));
-        total = sign(total);
-      }
+      dmgType = DMG_LETTER[w.damageTypeKey] || "";
+      // Gegenstands-/sonstige Boni bleiben auch auf dem Stufenaufstieg-Bogen stehen.
+      item = w.otherBonus ? plain(w.otherBonus) : "";
       if (blank.level) {
-        // Angriffswerte hängen von Stufe/Attributen ab; Gegenstandsbonus bleibt.
-        total = second = third = attr = prof = "";
-        rank = null;
-      }
-      if (w.die && blank.level) {
-        // Nur die Würfel (Waffe/Runen) – der Attributsanteil wird von Hand ergänzt.
-        const strPart = ranged ? (w.traits.some((t) => t.startsWith("propulsive")) ? " + ½ST" : "") : " + ST";
-        dmg = `${w.dice || 1}W${String(w.die).replace(/^d/i, "")}${w.bonusDamage ? sign(w.bonusDamage) : ""}${strPart}`;
-      } else if (w.die) {
-        const dmgMod = ranged ? (w.traits.some((t) => t.startsWith("propulsive")) ? Math.floor(Math.max(str, 0) / 2) : 0) : str;
-        dmg = `${w.dice || 1}W${String(w.die).replace(/^d/i, "")}${dmgMod ? sign(dmgMod) : ""}${w.bonusDamage ? sign(w.bonusDamage) : ""}`;
+        const strPart = w.damageAttr === "str" ? " + ST" : w.damageAttr === "str/2" ? " + ½ST" : "";
+        dmg = w.dice ? `${w.dice}${strPart}` : "";
       } else {
-        dmg = w.damage || "";
+        total = sign(w.bonus);
+        second = sign(w.map[1]);
+        third = sign(w.map[2]);
+        attr = sign(w.attrMod);
+        prof = plain(w.profBonus);
+        rank = w.rank;
+        // Schadensart steht in den W/S/H-Kästchen – nur zusätzliche Arten (z. B. „+1 Feuer“) bleiben im Text.
+        const typeWord = { W: "Wucht", S: "Stich", H: "Hieb" }[dmgType];
+        dmg = typeWord ? w.damage.replace(new RegExp("\\s*" + typeWord + "\\b"), "") : w.damage;
       }
-      dmgType = DMG_LETTER[String(w.damageType || "").toLowerCase()] || "";
     }
+    const attrLabel = has ? (w.attr === "dex" ? "GE" : "ST") : ranged ? "GE" : "ST";
     const typeCells = ["W", "S", "H"].map((l) => `<span class="${dmgType === l ? "on" : ""}">${l}</span>`).join("");
     return `
     <div class="cs-wpn">
@@ -396,7 +379,7 @@
         <span class="cs-map"><em>3. Angriff</em><b>${esc(third)}</b></span>
         <span class="cs-map-note">*Mehrfach&shy;angriffsmalus</span>
       </div>
-      <div class="cs-wpn-calc"><span class="cs-eq">=</span>${field(attr, ranged ? "GE" : "ST")}<span class="cs-op">+</span>${field(prof, "KOMP.")}<span class="cs-op">+</span>${field(item, "GEGENST.")}</div>
+      <div class="cs-wpn-calc"><span class="cs-eq">=</span>${field(attr, attrLabel)}<span class="cs-op">+</span>${field(prof, "KOMP.")}<span class="cs-op">+</span>${field(item, "GEGENST.")}</div>
       <div class="cs-wpn-name">${field(has ? w.name : "", ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE", has ? lengthClass(w.name, 30, 60) : "")}</div>
       <div class="cs-wpn-dmg">${field(dmg, "SCHADEN")}</div>
       <div class="cs-wpn-side">${teml(rank, "col")}<span class="cs-dtype">${typeCells}</span></div>
@@ -404,11 +387,14 @@
   }
 
   function weapons(model) {
-    const melee = model.attacks.filter((a) => !a.ranged);
-    const ranged = model.attacks.filter((a) => a.ranged);
-    const blocks = [0, 1, 2].map((i) => weaponBlock(melee[i], false, model)).join("") +
-      [0, 1, 2].map((i) => weaponBlock(ranged[i], true, model)).join("");
-    const wp = model.weaponProficiencies || {};
+    // Waffen vor waffenlosen Angriffen, getragene vor verstauten; je 3 Plätze Nah-/Fernkampf
+    const order = (a) => (a.unarmed ? 2 : 0) + (a.equipped ? 0 : 1);
+    const sorted = (model.strikes || []).slice().sort((a, b) => order(a) - order(b));
+    const melee = sorted.filter((a) => !a.ranged);
+    const ranged = sorted.filter((a) => a.ranged);
+    const blocks = [0, 1, 2].map((i) => weaponBlock(melee[i], false)).join("") +
+      [0, 1, 2].map((i) => weaponBlock(ranged[i], true)).join("");
+    const wp = (model.proficiencies && model.proficiencies.attacks) || {};
     return `
     <div class="cs-panel cs-weapons">
       <div class="cs-bar">Waffen &amp; Angriffe</div>

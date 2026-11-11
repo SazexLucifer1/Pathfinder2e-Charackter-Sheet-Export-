@@ -22,7 +22,7 @@ const path = require("path");
 const { chromium } = require("playwright");
 
 const ROOT = path.resolve(__dirname, "..");
-const jsonPath = path.resolve(process.argv[2] || path.join(ROOT, "sample/beispiel-charakter.json"));
+const jsonPath = path.resolve(process.argv[2] || path.join(ROOT, "sample/valeros-kaempfer-stufe-7.json"));
 const outDir = path.resolve(process.argv[3] || path.join(ROOT, "layout-check"));
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json" };
 
@@ -50,7 +50,8 @@ const server = http.createServer((req, res) => {
   p.on("pageerror", (e) => errs.push(e.message));
   await p.goto(url);
   await p.check(`input[name="sheet-mode"][value="${mode}"]`);
-  await p.fill("#json-paste", fs.readFileSync(jsonPath, "utf8"));
+  // Große Exporte direkt setzen (fill() tippt zu langsam)
+  await p.evaluate((t) => { document.getElementById("json-paste").value = t; }, fs.readFileSync(jsonPath, "utf8"));
   await p.click("#generate-btn");
   await p.waitForSelector(".cs-front");
   await p.pdf({ path: path.join(dir, "charakterbogen.pdf"), format: "A4", printBackground: true });

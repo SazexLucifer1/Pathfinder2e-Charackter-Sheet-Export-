@@ -1,0 +1,3368 @@
+{
+ "_id": "QjHNnbpwWvCOAO94",
+ "folder": "mQZ9emBv92JSPIWv",
+ "items": [
+  {
+   "_id": "4QKHaQdbGltG9HsO",
+   "name": "Farming Lore",
+   "sort": 0,
+   "system": {
+    "description": {
+     "value": ""
+    },
+    "mod": {
+     "value": 0
+    },
+    "proficient": {
+     "value": 1
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": ""
+    },
+    "rules": [],
+    "slug": null,
+    "traits": {}
+   },
+   "type": "lore"
+  },
+  {
+   "_id": "5rlfnozppburd7f8",
+   "name": "Backpack",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "capacity": 4,
+     "heldOrStowed": 0.1,
+     "ignored": 2,
+     "value": 0
+    },
+    "collapsed": false,
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "inSlot": true,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "backpack",
+    "stowing": true,
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "wornbackpack"
+    }
+   },
+   "type": "backpack"
+  },
+  {
+   "_id": "rde77ltby3148608",
+   "name": "Rations",
+   "sort": 100000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "category": "other",
+    "containerId": "5rlfnozppburd7f8",
+    "damage": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 4
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 2,
+    "rules": [],
+    "size": "med",
+    "slug": "rations",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 7,
+     "value": 7
+    }
+   },
+   "type": "consumable"
+  },
+  {
+   "_id": "oo4agzqx9hll6iv6",
+   "name": "Rope",
+   "sort": 200000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "rope",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-two-hands"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "uvovdiuudvfxu2tx",
+   "name": "Waterskin",
+   "sort": 300000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 10,
+    "rules": [],
+    "size": "med",
+    "slug": "waterskin",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "kwl9nm6t1s1xjpvk",
+   "name": "Flint and Steel",
+   "sort": 75000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 2,
+    "rules": [],
+    "size": "med",
+    "slug": "flint-and-steel",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-two-hands"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "oq183rkinsx8dh1m",
+   "name": "Bedroll",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 2
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "bedroll",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "other"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "zlgi3cq6v8o8glhv",
+   "name": "Soap",
+   "sort": 250000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 2
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "soap",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "WxLVOY3JBFgZGVe9",
+   "name": "Grappling Hook",
+   "sort": 87500,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "grappling-hook",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "NtwULtr5g9pvZMp3",
+   "name": "Mug",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "mug",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "ffcTyk3v1qsikwrq",
+   "name": "Longsword",
+   "sort": 0,
+   "system": {
+    "ammo": null,
+    "baseItem": "longsword",
+    "bonus": {
+     "value": 0
+    },
+    "bonusDamage": {
+     "value": 0
+    },
+    "bulk": {
+     "value": 1
+    },
+    "category": "martial",
+    "containerId": null,
+    "damage": {
+     "damageType": "slashing",
+     "dice": 1,
+     "die": "d8"
+    },
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "held",
+     "handsHeld": 1,
+     "invested": null
+    },
+    "expend": null,
+    "grade": null,
+    "group": "sword",
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "range": null,
+    "reload": {
+     "value": null
+    },
+    "rules": [],
+    "runes": {
+     "potency": 1,
+     "property": [],
+     "striking": 1
+    },
+    "size": "med",
+    "slug": "longsword",
+    "splashDamage": {
+     "value": 0
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "versatile-p"
+     ]
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "weapon"
+  },
+  {
+   "_id": "QMGx8In5RZFDNr8U",
+   "name": "Shortbow",
+   "sort": 0,
+   "system": {
+    "ammo": {
+     "baseType": "arrows",
+     "builtIn": false,
+     "capacity": null
+    },
+    "baseItem": "shortbow",
+    "bonus": {
+     "value": 0
+    },
+    "bonusDamage": {
+     "value": 0
+    },
+    "bulk": {
+     "value": 1
+    },
+    "category": "martial",
+    "containerId": null,
+    "damage": {
+     "damageType": "piercing",
+     "dice": 1,
+     "die": "d6"
+    },
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "expend": 1,
+    "grade": null,
+    "group": "bow",
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 3
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "range": 60,
+    "reload": {
+     "value": "0"
+    },
+    "rules": [],
+    "runes": {
+     "potency": 1,
+     "property": [],
+     "striking": 0
+    },
+    "size": "med",
+    "slug": "shortbow",
+    "splashDamage": {
+     "value": 0
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "deadly-d10"
+     ]
+    },
+    "usage": {
+     "value": "held-in-one-plus-hands"
+    }
+   },
+   "type": "weapon"
+  },
+  {
+   "_id": "hHbfspdpQgfrJsC2",
+   "name": "Arrows",
+   "sort": 0,
+   "system": {
+    "baseItem": "arrows",
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": null,
+    "craftableAs": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn"
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "per": 10,
+     "value": {
+      "sp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 20,
+    "rules": [],
+    "size": "med",
+    "slug": "arrows",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "consumable"
+     ]
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 1,
+     "value": 1
+    }
+   },
+   "type": "ammo"
+  },
+  {
+   "_id": "B43okg5RRzfB4KMi",
+   "name": "Half Plate",
+   "sort": 0,
+   "system": {
+    "acBonus": 5,
+    "baseItem": "half-plate",
+    "bulk": {
+     "value": 3
+    },
+    "category": "heavy",
+    "checkPenalty": -3,
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "dexCap": 1,
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "inSlot": true,
+     "invested": true
+    },
+    "grade": null,
+    "group": "plate",
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 1
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 18
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "runes": {
+     "potency": 1,
+     "property": [],
+     "resilient": 0
+    },
+    "size": "med",
+    "slug": "half-plate",
+    "speedPenalty": -10,
+    "strength": 3,
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "armor"
+  },
+  {
+   "_id": "ckBDoziHR37mUnGW",
+   "name": "Steel Shield",
+   "sort": 0,
+   "system": {
+    "acBonus": 2,
+    "baseItem": "steel-shield",
+    "bulk": {
+     "value": 1
+    },
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "held",
+     "handsHeld": 1,
+     "invested": null
+    },
+    "grade": null,
+    "hardness": 5,
+    "hp": {
+     "max": 20,
+     "value": 20
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 2
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "runes": {
+     "reinforcing": 0
+    },
+    "size": "med",
+    "slug": "steel-shield",
+    "speedPenalty": 0,
+    "subitems": [
+     {
+      "_id": "GwmZp11qcPxBpMMt",
+      "flags": {
+       "core": {
+        "sourceId": "Compendium.pf2e.equipment-srd.Item.dfum7DpOEkwxwTsT"
+       }
+      },
+      "name": "Shield Boss",
+      "sort": 0,
+      "system": {
+       "ammo": null,
+       "baseItem": "shield-boss",
+       "bonus": {
+        "value": 0
+       },
+       "bonusDamage": {
+        "value": 0
+       },
+       "bulk": {
+        "value": 0
+       },
+       "category": "martial",
+       "containerId": null,
+       "damage": {
+        "damageType": "bludgeoning",
+        "dice": 1,
+        "die": "d6"
+       },
+       "description": {
+        "value": ""
+       },
+       "equipped": {
+        "carryType": "held",
+        "handsHeld": 1,
+        "invested": null
+       },
+       "expend": null,
+       "group": "shield",
+       "hardness": 0,
+       "hp": {
+        "max": 0,
+        "value": 0
+       },
+       "level": {
+        "value": 0
+       },
+       "material": {
+        "grade": null,
+        "type": null
+       },
+       "price": {
+        "value": {
+         "sp": 5
+        }
+       },
+       "publication": {
+        "license": "ORC",
+        "remaster": true,
+        "title": "Pathfinder Player Core"
+       },
+       "quantity": 1,
+       "range": null,
+       "reload": {
+        "value": null
+       },
+       "rules": [],
+       "runes": {
+        "potency": 1,
+        "property": {
+         "0": ""
+        },
+        "striking": 1
+       },
+       "size": "med",
+       "slug": "shield-boss",
+       "splashDamage": {
+        "value": 0
+       },
+       "traits": {
+        "rarity": "common",
+        "value": [
+         "attached-to-shield"
+        ]
+       },
+       "usage": {
+        "value": "held-in-one-hand"
+       }
+      },
+      "type": "weapon"
+     }
+    ],
+    "traits": {
+     "integrated": null,
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "shield"
+  },
+  {
+   "_id": "c0x2EVnrGKWsi5YL",
+   "name": "Repair Toolkit",
+   "sort": 150000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 1
+    },
+    "containerId": "5rlfnozppburd7f8",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 2
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "repair-toolkit",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-two-hands"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "6IQe7ZmL6s16tRs2",
+   "name": "Gold Pieces",
+   "sort": -100000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 1
+    },
+    "category": "coin",
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn"
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "per": 1,
+     "value": {
+      "gp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 34,
+    "rules": [],
+    "size": "med",
+    "slug": "gold-pieces",
+    "temporary": false,
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "treasure"
+  },
+  {
+   "_id": "ceCUI2wQIK1jKdRR",
+   "name": "Doubling Rings",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": true
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 3
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 50
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder GM Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "doubling-rings",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "invested",
+      "magical"
+     ]
+    },
+    "usage": {
+     "value": "worn"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "rogYuTzBMKftOOjX",
+   "name": "Warfare Lore",
+   "sort": 0,
+   "system": {
+    "description": {
+     "value": ""
+    },
+    "mod": {
+     "value": 0
+    },
+    "proficient": {
+     "value": 1
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": ""
+    },
+    "rules": [],
+    "slug": null,
+    "traits": {}
+   },
+   "type": "lore"
+  },
+  {
+   "_id": "WaUPz8ZmDg1Y86nV",
+   "name": "Pendant of the Occult",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": true
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 3
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 60
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder GM Core"
+    },
+    "quantity": 1,
+    "rules": [
+     {
+      "key": "FlatModifier",
+      "selector": "occultism",
+      "type": "item",
+      "value": 1
+     }
+    ],
+    "size": "med",
+    "slug": "pendant-of-the-occult",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "invested",
+      "occult"
+     ]
+    },
+    "usage": {
+     "value": "worn"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "XCBdQghhN0F55wgF",
+   "name": "Human",
+   "sort": 0,
+   "system": {
+    "additionalLanguages": {
+     "count": 1,
+     "custom": "",
+     "value": []
+    },
+    "boosts": {
+     "0": {
+      "selected": "str",
+      "value": [
+       "cha",
+       "con",
+       "dex",
+       "int",
+       "str",
+       "wis"
+      ]
+     },
+     "1": {
+      "selected": "dex",
+      "value": [
+       "str",
+       "dex",
+       "con",
+       "int",
+       "wis",
+       "cha"
+      ]
+     },
+     "2": {
+      "value": []
+     }
+    },
+    "description": {
+     "value": ""
+    },
+    "flaws": {
+     "0": {
+      "value": []
+     }
+    },
+    "hands": 2,
+    "hp": 8,
+    "items": {},
+    "languages": {
+     "custom": "",
+     "value": [
+      "common"
+     ]
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": "Pathfinder Core Rulebook"
+    },
+    "reach": 5,
+    "rules": [],
+    "size": "med",
+    "slug": "human",
+    "speed": 25,
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "human",
+      "humanoid"
+     ]
+    },
+    "vision": "normal"
+   },
+   "type": "ancestry"
+  },
+  {
+   "_id": "VSVjlSBkXqEWRLVF",
+   "name": "Chalk",
+   "sort": 50000,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "category": "other",
+    "containerId": "5rlfnozppburd7f8",
+    "damage": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "per": 10,
+     "value": {
+      "cp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 10,
+    "rules": [],
+    "size": "med",
+    "slug": "chalk",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 1,
+     "value": 1
+    }
+   },
+   "type": "consumable"
+  },
+  {
+   "_id": "1676HglZWNZrcqgF",
+   "name": "Skilled Human (Intimidation)",
+   "sort": 0,
+   "system": {
+    "ancestry": {
+     "name": "Human",
+     "slug": "human",
+     "uuid": "Compendium.pf2e.ancestries.Item.IiG7DgeLWYrSNXuX"
+    },
+    "description": {
+     "value": ""
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": [
+       {
+        "label": "PF2E.Skill.Acrobatics",
+        "value": "acrobatics"
+       },
+       {
+        "label": "PF2E.Skill.Arcana",
+        "value": "arcana"
+       },
+       {
+        "label": "PF2E.Skill.Athletics",
+        "value": "athletics"
+       },
+       {
+        "label": "PF2E.Skill.Crafting",
+        "value": "crafting"
+       },
+       {
+        "label": "PF2E.Skill.Deception",
+        "value": "deception"
+       },
+       {
+        "label": "PF2E.Skill.Diplomacy",
+        "value": "diplomacy"
+       },
+       {
+        "label": "PF2E.Skill.Intimidation",
+        "value": "intimidation"
+       },
+       {
+        "label": "PF2E.Skill.Medicine",
+        "value": "medicine"
+       },
+       {
+        "label": "PF2E.Skill.Nature",
+        "value": "nature"
+       },
+       {
+        "label": "PF2E.Skill.Occultism",
+        "value": "occultism"
+       },
+       {
+        "label": "PF2E.Skill.Performance",
+        "value": "performance"
+       },
+       {
+        "label": "PF2E.Skill.Religion",
+        "value": "religion"
+       },
+       {
+        "label": "PF2E.Skill.Society",
+        "value": "society"
+       },
+       {
+        "label": "PF2E.Skill.Stealth",
+        "value": "stealth"
+       },
+       {
+        "label": "PF2E.Skill.Survival",
+        "value": "survival"
+       },
+       {
+        "label": "PF2E.Skill.Thievery",
+        "value": "thievery"
+       }
+      ],
+      "flag": "skill",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Prompt.Skill",
+      "selection": "intimidation"
+     },
+     {
+      "key": "ActiveEffectLike",
+      "mode": "upgrade",
+      "path": "system.skills.{item|flags.system.rulesSelections.skill}.rank",
+      "value": "ternary(gte(@actor.level,5),2,1)"
+     }
+    ],
+    "slug": "skilled-human",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "heritage"
+  },
+  {
+   "_id": "aknieEVcLHPeTsjW",
+   "name": "Farmhand",
+   "sort": 0,
+   "system": {
+    "boosts": {
+     "0": {
+      "selected": "con",
+      "value": [
+       "con",
+       "wis"
+      ]
+     },
+     "1": {
+      "selected": "str",
+      "value": [
+       "cha",
+       "con",
+       "dex",
+       "int",
+       "str",
+       "wis"
+      ]
+     }
+    },
+    "description": {
+     "value": ""
+    },
+    "items": {
+     "00b8b": {
+      "level": 1,
+      "name": "Assurance",
+      "uuid": "Compendium.pf2e.feats-srd.Item.Assurance"
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "farmhand",
+    "trainedSkills": {
+     "lore": [
+      "Farming Lore"
+     ],
+     "value": [
+      "athletics"
+     ]
+    },
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "background"
+  },
+  {
+   "_id": "ZsX4eH3eVEXCJCsn",
+   "name": "Assurance (Athletics)",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "skill",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "aknieEVcLHPeTsjW",
+    "maxTakable": null,
+    "prerequisites": {
+     "value": [
+      {
+       "value": "trained in at least one skill"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": [
+       {
+        "label": "PF2E.Skill.Acrobatics",
+        "value": "acrobatics"
+       },
+       {
+        "label": "PF2E.Skill.Arcana",
+        "value": "arcana"
+       },
+       {
+        "label": "PF2E.Skill.Athletics",
+        "value": "athletics"
+       },
+       {
+        "label": "PF2E.Skill.Crafting",
+        "value": "crafting"
+       },
+       {
+        "label": "PF2E.Skill.Deception",
+        "value": "deception"
+       },
+       {
+        "label": "PF2E.Skill.Diplomacy",
+        "value": "diplomacy"
+       },
+       {
+        "label": "PF2E.Skill.Intimidation",
+        "value": "intimidation"
+       },
+       {
+        "label": "PF2E.Skill.Medicine",
+        "value": "medicine"
+       },
+       {
+        "label": "PF2E.Skill.Nature",
+        "value": "nature"
+       },
+       {
+        "label": "PF2E.Skill.Occultism",
+        "value": "occultism"
+       },
+       {
+        "label": "PF2E.Skill.Performance",
+        "value": "performance"
+       },
+       {
+        "label": "PF2E.Skill.Religion",
+        "value": "religion"
+       },
+       {
+        "label": "PF2E.Skill.Society",
+        "value": "society"
+       },
+       {
+        "label": "PF2E.Skill.Stealth",
+        "value": "stealth"
+       },
+       {
+        "label": "PF2E.Skill.Survival",
+        "value": "survival"
+       },
+       {
+        "label": "PF2E.Skill.Thievery",
+        "value": "thievery"
+       },
+       {
+        "label": "PF2E.SkillLore",
+        "value": "lore"
+       }
+      ],
+      "flag": "assurance",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Prompt.Skill",
+      "selection": "athletics"
+     },
+     {
+      "key": "SubstituteRoll",
+      "label": "PF2E.SpecificRule.SubstituteRoll.Assurance",
+      "selector": "{item|flags.system.rulesSelections.assurance}",
+      "slug": "assurance",
+      "value": 10
+     },
+     {
+      "key": "AdjustModifier",
+      "predicate": [
+       "substitute:assurance",
+       {
+        "not": "bonus:type:proficiency"
+       }
+      ],
+      "selector": "{item|flags.system.rulesSelections.assurance}",
+      "suppress": true
+     }
+    ],
+    "slug": "assurance",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fortune",
+      "general",
+      "skill"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "xrokG2G0ecNJkhuI",
+   "name": "Fighter",
+   "sort": 0,
+   "system": {
+    "ancestryFeatLevels": {
+     "value": [
+      1,
+      5,
+      9,
+      13,
+      17
+     ]
+    },
+    "attacks": {
+     "advanced": 1,
+     "martial": 2,
+     "other": {
+      "name": "",
+      "rank": 0
+     },
+     "simple": 2,
+     "unarmed": 2
+    },
+    "classFeatLevels": {
+     "value": [
+      1,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20
+     ]
+    },
+    "defenses": {
+     "heavy": 1,
+     "light": 1,
+     "medium": 1,
+     "unarmored": 1
+    },
+    "description": {
+     "value": ""
+    },
+    "generalFeatLevels": {
+     "value": [
+      3,
+      7,
+      11,
+      15,
+      19
+     ]
+    },
+    "hp": 10,
+    "items": {
+     "0c3e5": {
+      "level": 13,
+      "name": "Weapon Legend",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Weapon Legend"
+     },
+     "2jey6": {
+      "level": 11,
+      "name": "Fighter Expertise",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Fighter Expertise"
+     },
+     "9c5ay": {
+      "level": 11,
+      "name": "Armor Expertise",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Armor Expertise"
+     },
+     "EYY9w": {
+      "level": 1,
+      "name": "Reactive Strike",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Reactive Strike"
+     },
+     "Yo8rt": {
+      "level": 15,
+      "name": "Tempered Reflexes",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Tempered Reflexes"
+     },
+     "e1e4m": {
+      "level": 1,
+      "name": "Shield Block",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Shield Block"
+     },
+     "eDncW": {
+      "level": 9,
+      "name": "Battle Hardened",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Battle Hardened"
+     },
+     "enizk": {
+      "level": 15,
+      "name": "Improved Flexibility",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Improved Flexibility"
+     },
+     "ij943": {
+      "level": 7,
+      "name": "Battlefield Surveyor",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Battlefield Surveyor"
+     },
+     "lakjk": {
+      "level": 3,
+      "name": "Bravery",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Bravery"
+     },
+     "q0xyz": {
+      "level": 17,
+      "name": "Armor Mastery",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Armor Mastery"
+     },
+     "txlgu": {
+      "level": 9,
+      "name": "Combat Flexibility",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Combat Flexibility"
+     },
+     "u1d1r": {
+      "level": 7,
+      "name": "Weapon Specialization",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Weapon Specialization"
+     },
+     "u8k07": {
+      "level": 5,
+      "name": "Fighter Weapon Mastery",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Fighter Weapon Mastery"
+     },
+     "uKeq1": {
+      "level": 15,
+      "name": "Greater Weapon Specialization",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Greater Weapon Specialization"
+     },
+     "x98c2": {
+      "level": 19,
+      "name": "Versatile Legend",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Versatile Legend"
+     }
+    },
+    "keyAbility": {
+     "selected": "str",
+     "value": [
+      "dex",
+      "str"
+     ]
+    },
+    "perception": 2,
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "savingThrows": {
+     "fortitude": 2,
+     "reflex": 2,
+     "will": 1
+    },
+    "skillFeatLevels": {
+     "value": [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20
+     ]
+    },
+    "skillIncreaseLevels": {
+     "value": [
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15,
+      17,
+      19
+     ]
+    },
+    "slug": "fighter",
+    "spellcasting": 0,
+    "trainedSkills": {
+     "additional": 3,
+     "value": []
+    },
+    "traits": {
+     "rarity": "common"
+    }
+   },
+   "type": "class"
+  },
+  {
+   "_id": "9PnjiGVZxHtLSBA2",
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "reactiveStrike": {
+       "id": "anN7dTwCgGcgVYr9",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "Reactive Strike",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "xrokG2G0ecNJkhuI",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "flag": "reactiveStrike",
+      "key": "GrantItem",
+      "uuid": "Compendium.pf2e.actionspf2e.Item.Reactive Strike"
+     }
+    ],
+    "slug": "reactive-strike",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "mifhvmUKKWIXX7E8",
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "shieldBlock": {
+       "id": "0ziqXXCIsPxumCM6",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "Shield Block",
+   "sort": 100,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "xrokG2G0ecNJkhuI",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "flag": "shieldBlock",
+      "key": "GrantItem",
+      "uuid": "Compendium.pf2e.feats-srd.Item.Shield Block"
+     }
+    ],
+    "slug": "shield-block",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "champion",
+      "druid",
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "hrJZZcpFMwJT9k2K",
+   "name": "Bravery",
+   "sort": 600,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 3
+    },
+    "location": "xrokG2G0ecNJkhuI",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "Note",
+      "outcome": [
+       "success"
+      ],
+      "predicate": [
+       "fear"
+      ],
+      "selector": "will",
+      "text": "When you roll a success at a Will save against a fear effect, you get a critical success instead.",
+      "title": "{item|name}"
+     },
+     {
+      "adjustment": {
+       "success": "one-degree-better"
+      },
+      "key": "AdjustDegreeOfSuccess",
+      "predicate": [
+       "fear"
+      ],
+      "selector": "will",
+      "type": "save"
+     }
+    ],
+    "slug": "bravery",
+    "subfeatures": {
+     "proficiencies": {
+      "will": {
+       "attribute": null,
+       "rank": 2
+      }
+     },
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "Ohq3xKZOscx7Qkn9",
+   "name": "Fighter Weapon Mastery (Sword)",
+   "sort": 1500,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 5
+    },
+    "location": "xrokG2G0ecNJkhuI",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": "weaponGroups",
+      "flag": "fighterWeaponMastery",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Prompt.WeaponGroup",
+      "selection": "sword"
+     },
+     {
+      "definition": [
+       "item:group:{item|flags.system.rulesSelections.fighterWeaponMastery}",
+       {
+        "or": [
+         "item:category:unarmed",
+         "item:category:simple",
+         "item:category:martial"
+        ]
+       }
+      ],
+      "key": "MartialProficiency",
+      "label": "PF2E.SpecificRule.FighterWeaponMasteryLegend.SimpleMartial.{item|flags.system.rulesSelections.fighterWeaponMastery}",
+      "slug": "weapon-mastery-simple-martial",
+      "value": 3
+     },
+     {
+      "definition": [
+       "item:category:advanced",
+       "item:group:{item|flags.system.rulesSelections.fighterWeaponMastery}"
+      ],
+      "key": "MartialProficiency",
+      "label": "PF2E.SpecificRule.FighterWeaponMasteryLegend.Advanced.{item|flags.system.rulesSelections.fighterWeaponMastery}",
+      "slug": "weapon-mastery-advanced",
+      "value": 2
+     },
+     {
+      "key": "CriticalSpecialization",
+      "predicate": [
+       {
+        "gte": [
+         "item:proficiency:rank",
+         3
+        ]
+       }
+      ]
+     }
+    ],
+    "slug": "fighter-weapon-mastery",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "anN7dTwCgGcgVYr9",
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "9PnjiGVZxHtLSBA2",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Reactive Strike",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "reaction"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "defensive",
+    "description": {
+     "value": ""
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "reactive-strike",
+    "traits": {
+     "value": []
+    }
+   },
+   "type": "action"
+  },
+  {
+   "_id": "0ziqXXCIsPxumCM6",
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "mifhvmUKKWIXX7E8",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Shield Block",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "reaction"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "general",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": null,
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "shield-block",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "LlEsxoHJiczLKsj5",
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "reactiveShield": {
+       "id": "iXF3BkBw7ClB3Gl6",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "Natural Ambition",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "ancestry",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "ancestry-1",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "adjustName": false,
+      "choices": {
+       "filter": [
+        "item:level:1",
+        "item:category:class",
+        "item:trait:{actor|system.details.class.trait}",
+        {
+         "or": [
+          "feature:dragon-instinct",
+          {
+           "not": "item:draconic-arrogance"
+          }
+         ]
+        },
+        {
+         "nor": [
+          "item:animal-companion",
+          "item:animal-companion-druid",
+          "item:bardic-lore",
+          "item:fire-lung",
+          "item:lingering-composition",
+          "item:leshy-familiar",
+          "item:martial-performance",
+          "item:shore-step",
+          "item:steadying-stone",
+          "item:storm-born",
+          "item:versatile-performance",
+          "item:untamed-form"
+         ]
+        }
+       ],
+       "itemType": "feat"
+      },
+      "flag": "naturalAmbition",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Prompt.LevelOneClassFeat",
+      "selection": "Compendium.pf2e.feats-srd.Item.Reactive Shield"
+     },
+     {
+      "flag": "reactiveShield",
+      "key": "GrantItem",
+      "uuid": "{item|flags.system.rulesSelections.naturalAmbition}"
+     }
+    ],
+    "slug": "natural-ambition",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "human"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "iXF3BkBw7ClB3Gl6",
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "LlEsxoHJiczLKsj5",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Reactive Shield",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "reaction"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "class",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": null,
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "reactive-shield",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "WByMMNZK8HIc7ARW",
+   "name": "Double Slice",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "action"
+    },
+    "actions": {
+     "value": 2
+    },
+    "category": "class",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "class-1",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "RollOption",
+      "label": "PF2E.SpecificRule.Fighter.DoubleSlice.SecondAttackLabel",
+      "option": "double-slice-second",
+      "toggleable": true
+     },
+     {
+      "key": "FlatModifier",
+      "predicate": [
+       "double-slice-second",
+       {
+        "not": "item:trait:agile"
+       }
+      ],
+      "selector": [
+       "melee-strike-attack-roll"
+      ],
+      "value": -2
+     }
+    ],
+    "slug": "double-slice",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "mJclfBEij3yGqg93",
+   "name": "Aggressive Block",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "free"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "class",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 2
+    },
+    "location": "class-2",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "aggressive-block",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "SodoyUsJYXiqwXcK",
+   "name": "Combat Climber",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "skill",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "skill-2",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "trained in Athletics"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "combat-climber",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general",
+      "skill"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "DUvF9Hv1rtVr6wJi",
+   "name": "Toughness",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "general",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "general-3",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "FlatModifier",
+      "selector": "hp",
+      "value": "@actor.level"
+     },
+     {
+      "key": "ActiveEffectLike",
+      "mode": "subtract",
+      "path": "system.attributes.dying.recoveryDC",
+      "value": 1
+     }
+    ],
+    "slug": "toughness",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "WUps3YUTA6WejWCN",
+   "name": "Haughty Obstinacy",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "ancestry",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "ancestry-5",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "adjustment": {
+       "success": "one-degree-better"
+      },
+      "key": "AdjustDegreeOfSuccess",
+      "predicate": [
+       "mental",
+       "inflicts:controlled"
+      ],
+      "selector": "will",
+      "type": "save"
+     }
+    ],
+    "slug": "haughty-obstinacy",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "human"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "uw1Vlpe8accgFs7p",
+   "name": "Powerful Shove",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "class",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 4
+    },
+    "location": "class-4",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "Aggressive Block or Brutish Shove"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "powerful-shove",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "GM2PT6EKQwFeqgXL",
+   "name": "Powerful Leap",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "skill",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 2
+    },
+    "location": "skill-4",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "expert in Athletics"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "powerful-leap",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general",
+      "skill"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "LK5EBvsmjebLbzof",
+   "name": "Healing Potion (Moderate)",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "category": "potion",
+    "containerId": null,
+    "damage": {
+     "formula": "3d8+10",
+     "kind": "healing",
+     "type": "vitality"
+    },
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn"
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 6
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 50
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder GM Core"
+    },
+    "quantity": 2,
+    "rules": [],
+    "size": "med",
+    "slug": "healing-potion-moderate",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "consumable",
+      "healing",
+      "magical",
+      "potion",
+      "vitality"
+     ]
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 1,
+     "value": 1
+    }
+   },
+   "type": "consumable"
+  },
+  {
+   "_id": "uOso63H1nxYdG14d",
+   "name": "Battlefield Surveyor",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 7
+    },
+    "location": "xrokG2G0ecNJkhuI",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "FlatModifier",
+      "predicate": [
+       "perception"
+      ],
+      "selector": "initiative",
+      "type": "circumstance",
+      "value": 2
+     }
+    ],
+    "slug": "battlefield-surveyor",
+    "subfeatures": {
+     "proficiencies": {
+      "perception": {
+       "attribute": null,
+       "rank": 3
+      }
+     },
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "n0YpkoahoCTVIsbH",
+   "name": "Weapon Specialization",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 7
+    },
+    "location": "xrokG2G0ecNJkhuI",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Guns & Gears"
+    },
+    "rules": [
+     {
+      "hideIfDisabled": true,
+      "key": "FlatModifier",
+      "label": "PF2E.WeaponSpecialization",
+      "predicate": [
+       {
+        "gte": [
+         "item:proficiency:rank",
+         2
+        ]
+       }
+      ],
+      "selector": [
+       "unarmed-damage",
+       "weapon-damage"
+      ],
+      "slug": "weapon-specialization",
+      "value": 2
+     },
+     {
+      "key": "AdjustModifier",
+      "mode": "upgrade",
+      "predicate": [
+       "item:proficiency:rank:3"
+      ],
+      "priority": 0,
+      "selectors": [
+       "unarmed-damage",
+       "weapon-damage"
+      ],
+      "slug": "weapon-specialization",
+      "value": 3
+     },
+     {
+      "key": "AdjustModifier",
+      "mode": "upgrade",
+      "predicate": [
+       "item:proficiency:rank:4"
+      ],
+      "priority": 0,
+      "selectors": [
+       "unarmed-damage",
+       "weapon-damage"
+      ],
+      "slug": "weapon-specialization",
+      "value": 4
+     }
+    ],
+    "slug": "weapon-specialization",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "alchemist",
+      "animist",
+      "bard",
+      "champion",
+      "cleric",
+      "commander",
+      "druid",
+      "fighter",
+      "gunslinger",
+      "inventor",
+      "investigator",
+      "kineticist",
+      "necromancer",
+      "ranger",
+      "rogue",
+      "sorcerer",
+      "summoner",
+      "swashbuckler",
+      "witch",
+      "wizard"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "4Nr7ZXL28zTOanmT",
+   "folder": "dYkg05JEhiF1J6gL",
+   "name": "Intimidating Prowess",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "skill",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "taken": 6,
+     "value": 2
+    },
+    "location": "skill-6",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "Strength +3"
+      },
+      {
+       "value": "expert in Intimidation"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "FlatModifier",
+      "predicate": [
+       "target:physically-menaced",
+       {
+        "or": [
+         "action:coerce",
+         "action:demoralize"
+        ]
+       }
+      ],
+      "selector": "intimidation",
+      "slug": "intimidating-prowess",
+      "type": "circumstance",
+      "value": 1
+     },
+     {
+      "key": "AdjustModifier",
+      "mode": "upgrade",
+      "predicate": [
+       {
+        "gte": [
+         "attribute:str:mod",
+         5
+        ]
+       },
+       {
+        "gte": [
+         "skill:intimidation:rank",
+         3
+        ]
+       }
+      ],
+      "selector": "intimidation",
+      "slug": "intimidating-prowess",
+      "value": 2
+     }
+    ],
+    "slug": "intimidating-prowess",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general",
+      "skill"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "rV6D13sAsms9ZZvX",
+   "folder": "68m1OED3fDU3fIfR",
+   "name": "Fast Recovery",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "general",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "taken": 7,
+     "value": 1
+    },
+    "location": "general-7",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "Constitution +2"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "Note",
+      "outcome": [
+       "success",
+       "criticalSuccess"
+      ],
+      "predicate": [
+       "ongoing",
+       {
+        "or": [
+         "disease",
+         "poison"
+        ]
+       }
+      ],
+      "selector": "fortitude",
+      "text": "PF2E.SpecificRule.Feat.FastRecovery.Note",
+      "title": "{item|name}"
+     },
+     {
+      "key": "ActiveEffectLike",
+      "mode": "add",
+      "path": "system.attributes.hp.recoveryMultiplier",
+      "value": 1
+     }
+    ],
+    "slug": "fast-recovery",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "DW4DEkJ8SO6YLBqX",
+   "folder": "sfO1XeUhjfbTZCxd",
+   "name": "Shield Warden",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "class",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "taken": 6,
+     "value": 6
+    },
+    "location": "class-6",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "shield block"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "shield-warden",
+    "subfeatures": {
+     "proficiencies": {},
+     "senses": {},
+     "suppressedFeatures": []
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "champion",
+      "commander",
+      "fighter"
+     ]
+    }
+   },
+   "type": "feat"
+  }
+ ],
+ "name": "Valeros (Level 7)",
+ "prototypeToken": {
+  "name": "Valeros",
+  "ring": {
+   "enabled": true,
+   "subject": {
+    "scale": 2,
+    "texture": "systems/pf2e/icons/iconics/subjects/valeros.webp"
+   }
+  },
+  "texture": {
+   "scaleX": 2,
+   "scaleY": 2,
+   "src": "systems/pf2e/icons/iconics/tokens/valeros.webp"
+  }
+ },
+ "system": {
+  "abilities": null,
+  "attributes": {
+   "hp": {
+    "temp": 0,
+    "value": 106
+   }
+  },
+  "build": {
+   "attributes": {
+    "boosts": {
+     "1": [
+      "str",
+      "dex",
+      "con",
+      "int"
+     ],
+     "5": [
+      "str",
+      "con",
+      "wis",
+      "cha"
+     ]
+    }
+   }
+  },
+  "crafting": {
+   "formulas": []
+  },
+  "customModifiers": {},
+  "details": {
+   "age": {
+    "value": ""
+   },
+   "alliance": "party",
+   "biography": {},
+   "deity": {
+    "image": "systems/pf2e/icons/default-icons/deity.svg",
+    "value": ""
+   },
+   "ethnicity": {
+    "value": ""
+   },
+   "gender": {
+    "value": "M/He/Him"
+   },
+   "height": {
+    "value": ""
+   },
+   "keyability": {
+    "value": "str"
+   },
+   "languages": {
+    "details": "",
+    "value": [
+     "goblin",
+     "kelish"
+    ]
+   },
+   "level": {
+    "value": 7
+   },
+   "nationality": {
+    "value": ""
+   },
+   "weight": {
+    "value": ""
+   },
+   "xp": {
+    "max": 1000,
+    "min": 0,
+    "pct": 0,
+    "value": 0
+   }
+  },
+  "exploration": [],
+  "initiative": {
+   "statistic": "perception"
+  },
+  "pfs": {
+   "characterNumber": null,
+   "currentFaction": "EA",
+   "fame": 0,
+   "levelBump": false,
+   "playerNumber": null,
+   "reputation": {
+    "EA": 0,
+    "GA": 0,
+    "HH": 0,
+    "RO": 0,
+    "VS": 0,
+    "VW": 0
+   },
+   "school": "none"
+  },
+  "resources": {
+   "heroPoints": {
+    "max": 3,
+    "value": 1
+   }
+  },
+  "saves": {},
+  "skills": {
+   "acrobatics": {
+    "rank": 1
+   },
+   "arcana": {
+    "rank": 0
+   },
+   "athletics": {
+    "rank": 3
+   },
+   "crafting": {
+    "rank": 1
+   },
+   "deception": {
+    "rank": 0
+   },
+   "diplomacy": {
+    "rank": 1
+   },
+   "intimidation": {
+    "rank": 2
+   },
+   "medicine": {
+    "rank": 0
+   },
+   "nature": {
+    "rank": 0
+   },
+   "occultism": {
+    "rank": 1
+   },
+   "performance": {
+    "rank": 0
+   },
+   "religion": {
+    "rank": 0
+   },
+   "society": {
+    "rank": 0
+   },
+   "stealth": {
+    "rank": 0
+   },
+   "survival": {
+    "rank": 0
+   },
+   "thievery": {
+    "rank": 0
+   }
+  }
+ },
+ "type": "character"
+}

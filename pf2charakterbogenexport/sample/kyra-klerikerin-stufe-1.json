@@ -1,0 +1,3621 @@
+{
+ "_id": "yoAU5rWYH4KJGPr5",
+ "folder": "ba8bbnwb3JiQ8agS",
+ "items": [
+  {
+   "_id": "pX7qEBjjBx3G6Xbn",
+   "name": "Scribing Lore",
+   "sort": 1100000,
+   "system": {
+    "description": {
+     "value": ""
+    },
+    "mod": {
+     "value": 0
+    },
+    "proficient": {
+     "value": 1
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": ""
+    },
+    "rules": [],
+    "slug": null,
+    "traits": {}
+   },
+   "type": "lore"
+  },
+  {
+   "_id": "EeVttZj6KlRdLeqf",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.ancestries.Item.IiG7DgeLWYrSNXuX"
+   },
+   "name": "Human",
+   "sort": 0,
+   "system": {
+    "additionalLanguages": {
+     "count": 1,
+     "custom": "",
+     "value": []
+    },
+    "boosts": {
+     "0": {
+      "selected": "wis",
+      "value": [
+       "cha",
+       "con",
+       "dex",
+       "int",
+       "str",
+       "wis"
+      ]
+     },
+     "1": {
+      "selected": "str",
+      "value": [
+       "str",
+       "dex",
+       "con",
+       "int",
+       "wis",
+       "cha"
+      ]
+     },
+     "2": {
+      "value": []
+     }
+    },
+    "description": {
+     "value": ""
+    },
+    "flaws": {
+     "0": {
+      "value": []
+     }
+    },
+    "hands": 2,
+    "hp": 8,
+    "items": {},
+    "languages": {
+     "custom": "",
+     "value": [
+      "common"
+     ]
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": "Pathfinder Core Rulebook"
+    },
+    "reach": 5,
+    "rules": [],
+    "size": "med",
+    "slug": "human",
+    "speed": 25,
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "human",
+      "humanoid"
+     ]
+    },
+    "vision": "normal"
+   },
+   "type": "ancestry"
+  },
+  {
+   "_id": "eFm4cnF9OgFRBgrq",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.backgrounds.Item.CAjQrHZZbALE7Qjy"
+   },
+   "name": "Acolyte",
+   "sort": 0,
+   "system": {
+    "boosts": {
+     "0": {
+      "selected": "wis",
+      "value": [
+       "int",
+       "wis"
+      ]
+     },
+     "1": {
+      "selected": "cha",
+      "value": [
+       "cha",
+       "con",
+       "dex",
+       "int",
+       "str",
+       "wis"
+      ]
+     }
+    },
+    "description": {
+     "value": ""
+    },
+    "items": {
+     "1v9gz": {
+      "level": 1,
+      "name": "Student of the Canon",
+      "uuid": "Compendium.pf2e.feats-srd.Item.Student of the Canon"
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "acolyte",
+    "trainedSkills": {
+     "lore": [
+      "Scribing"
+     ],
+     "value": [
+      "religion"
+     ]
+    },
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "background"
+  },
+  {
+   "_id": "YCfE3vxKKsZbZqk1",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.feats-srd.Item.x7EMZNMavris2aHY"
+   },
+   "name": "Student of the Canon",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "skill",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "taken": 1,
+     "value": 1
+    },
+    "location": "eFm4cnF9OgFRBgrq",
+    "prerequisites": {
+     "value": [
+      {
+       "value": "trained in Religion"
+      }
+     ]
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "Note",
+      "predicate": [
+       {
+        "or": [
+         "action:recall-knowledge",
+         "action:decipher-writing"
+        ]
+       }
+      ],
+      "selector": "religion",
+      "text": "When you roll a critical failure at a Religion check to Decipher Writing of a religious nature or to Recall Knowledge about the tenets of faiths, you get a failure instead.",
+      "title": "{item|name}"
+     },
+     {
+      "key": "Note",
+      "predicate": [
+       {
+        "or": [
+         "action:recall-knowledge",
+         "your-faith"
+        ]
+       }
+      ],
+      "selector": "religion",
+      "text": "When attempting to Recall Knowledge about the tenets of your own faith, if you roll a failure, you get a success instead, and if you roll a success, you get a critical success instead.",
+      "title": "{item|name}"
+     }
+    ],
+    "slug": "student-of-the-canon",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general",
+      "skill"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "G4YeJDKZJKOVsjpL",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classes.Item.EizrWvUPMS67Pahd"
+   },
+   "name": "Cleric",
+   "sort": 0,
+   "system": {
+    "ancestryFeatLevels": {
+     "value": [
+      1,
+      5,
+      9,
+      13,
+      17
+     ]
+    },
+    "attacks": {
+     "advanced": 0,
+     "martial": 0,
+     "other": {
+      "name": "Deity's favored weapon",
+      "rank": 1
+     },
+     "simple": 1,
+     "unarmed": 1
+    },
+    "classFeatLevels": {
+     "value": [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20
+     ]
+    },
+    "defenses": {
+     "heavy": 0,
+     "light": 0,
+     "medium": 0,
+     "unarmored": 1
+    },
+    "description": {
+     "value": ""
+    },
+    "generalFeatLevels": {
+     "value": [
+      3,
+      7,
+      11,
+      15,
+      19
+     ]
+    },
+    "hp": 8,
+    "items": {
+     "765ut": {
+      "level": 3,
+      "name": "Second Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Second Doctrine"
+     },
+     "7gkd0": {
+      "level": 1,
+      "name": "Divine Font",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Divine Font"
+     },
+     "AbLjR": {
+      "level": 11,
+      "name": "Reflex Expertise",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Reflex Expertise"
+     },
+     "DeQbl": {
+      "level": 1,
+      "name": "Cleric Spellcasting",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Cleric Spellcasting"
+     },
+     "GUa4t": {
+      "level": 9,
+      "name": "Resolute Faith",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Resolute Faith"
+     },
+     "QhM5T": {
+      "level": 5,
+      "name": "Perception Expertise",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Perception Expertise"
+     },
+     "ckmdj": {
+      "level": 11,
+      "name": "Fourth Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Fourth Doctrine"
+     },
+     "cwo2e": {
+      "level": 1,
+      "name": "Deity",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Deity (Cleric)"
+     },
+     "ilsvf": {
+      "level": 1,
+      "name": "Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Doctrine"
+     },
+     "oj8f7": {
+      "level": 1,
+      "name": "First Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.First Doctrine"
+     },
+     "r47we": {
+      "level": 15,
+      "name": "Fifth Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Fifth Doctrine"
+     },
+     "uzcka": {
+      "level": 7,
+      "name": "Third Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Third Doctrine"
+     },
+     "vmpzh": {
+      "level": 19,
+      "name": "Miraculous Spell",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Miraculous Spell"
+     },
+     "xe44z": {
+      "level": 13,
+      "name": "Divine Defense",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Divine Defense"
+     },
+     "z2puy": {
+      "level": 19,
+      "name": "Final Doctrine",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Final Doctrine"
+     },
+     "zrd25": {
+      "level": 13,
+      "name": "Weapon Specialization",
+      "uuid": "Compendium.pf2e.classfeatures.Item.Weapon Specialization"
+     }
+    },
+    "keyAbility": {
+     "value": [
+      "wis"
+     ]
+    },
+    "perception": 1,
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "savingThrows": {
+     "fortitude": 1,
+     "reflex": 1,
+     "will": 2
+    },
+    "skillFeatLevels": {
+     "value": [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20
+     ]
+    },
+    "skillIncreaseLevels": {
+     "value": [
+      3,
+      5,
+      7,
+      9,
+      11,
+      13,
+      15,
+      17,
+      19
+     ]
+    },
+    "slug": "cleric",
+    "spellcasting": 1,
+    "trainedSkills": {
+     "additional": 2,
+     "value": [
+      "religion"
+     ]
+    },
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "class"
+  },
+  {
+   "_id": "eK3xwAsbafQQd2h0",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.DutW12WMFPHBoLTH"
+   },
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "sarenrae": {
+       "id": "CUmTCEUUUTqlPToD",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "Deity (Sarenrae)",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "G4YeJDKZJKOVsjpL",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": {
+       "filter": [
+        {
+         "or": [
+          "item:category:deity",
+          "item:category:pantheon"
+         ]
+        }
+       ],
+       "itemType": "deity"
+      },
+      "flag": "deity",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Prompt.Deity",
+      "selection": "Compendium.pf2e.deities.Item.Sarenrae"
+     },
+     {
+      "allowDuplicate": false,
+      "flag": "sarenrae",
+      "key": "GrantItem",
+      "uuid": "{item|flags.system.rulesSelections.deity}"
+     },
+     {
+      "adjustName": false,
+      "choices": [
+       {
+        "label": "PF2E.TraitHoly",
+        "predicate": [
+         {
+          "or": [
+           "deity:primary:sanctification:can:holy",
+           "deity:primary:sanctification:must:holy"
+          ]
+         }
+        ],
+        "value": "holy"
+       },
+       {
+        "label": "PF2E.TraitUnholy",
+        "predicate": [
+         {
+          "or": [
+           "deity:primary:sanctification:can:unholy",
+           "deity:primary:sanctification:must:unholy"
+          ]
+         }
+        ],
+        "value": "unholy"
+       },
+       {
+        "label": "PF2E.NoneOption",
+        "predicate": [
+         {
+          "nor": [
+           "deity:primary:sanctification:must:holy",
+           "deity:primary:sanctification:must:unholy"
+          ]
+         }
+        ],
+        "value": "none"
+       }
+      ],
+      "flag": "sanctification",
+      "key": "ChoiceSet",
+      "predicate": [
+       {
+        "not": "deity:primary:sanctification:none"
+       }
+      ],
+      "prompt": "PF2E.SpecificRule.Prompt.Sanctification",
+      "rollOption": "sanctification",
+      "selection": "holy",
+      "slug": "sanctification"
+     },
+     {
+      "add": [
+       "holy"
+      ],
+      "key": "ActorTraits",
+      "predicate": [
+       "sanctification:holy"
+      ]
+     },
+     {
+      "add": [
+       "unholy"
+      ],
+      "key": "ActorTraits",
+      "predicate": [
+       "sanctification:unholy"
+      ]
+     },
+     {
+      "fist": true,
+      "key": "Strike",
+      "predicate": [
+       "deity:primary:favored-weapon:fist"
+      ],
+      "priority": 99
+     },
+     {
+      "key": "ActiveEffectLike",
+      "mode": "upgrade",
+      "path": "flags.system.favoredWeaponRank",
+      "predicate": [
+       "class:cleric"
+      ],
+      "value": 1
+     }
+    ],
+    "slug": "deity",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "QwEq7In94697ATYY",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.tyrBwBTzo5t9Zho7"
+   },
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "cloisteredCleric": {
+       "id": "lG9DVihpKNXVTUl8",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "Doctrine",
+   "sort": 100,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "G4YeJDKZJKOVsjpL",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "adjustName": false,
+      "choices": {
+       "filter": [
+        "item:tag:cleric-doctrine"
+       ]
+      },
+      "flag": "doctrine",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Cleric.Doctrine.Prompt",
+      "selection": "Compendium.pf2e.classfeatures.Item.Cloistered Cleric"
+     },
+     {
+      "flag": "cloisteredCleric",
+      "key": "GrantItem",
+      "uuid": "{item|flags.system.rulesSelections.doctrine}"
+     }
+    ],
+    "slug": "doctrine",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "NiohG4flSJkhrngk",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.AvNbdGSOTWNRgcxs"
+   },
+   "name": "Cleric Spellcasting",
+   "sort": 200,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "G4YeJDKZJKOVsjpL",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "slug": "cleric-spellcasting",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "3smiPxnF9U3zk7yd",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.gblTFUOgolqFS9v4"
+   },
+   "name": "Divine Font (Healing)",
+   "sort": 300,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "G4YeJDKZJKOVsjpL",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": [
+       {
+        "label": "PF2E.SpecificRule.Cleric.DivineFont.Healing",
+        "predicate": [
+         "deity:primary:font:heal"
+        ],
+        "value": "heal"
+       },
+       {
+        "label": "PF2E.SpecificRule.Cleric.DivineFont.Harmful",
+        "predicate": [
+         "deity:primary:font:harm"
+        ],
+        "value": "harm"
+       }
+      ],
+      "flag": "divineFont",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Cleric.DivineFont.Prompt",
+      "rollOption": "divine-font",
+      "selection": "heal"
+     }
+    ],
+    "slug": "divine-font",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "Bi6AJZ4DFyXcvEOo",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.Qejo7FUWQtPTpgWH"
+   },
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "firstDoctrineCloisteredCleric": {
+       "id": "RAwKLSgkQtBBKZfV",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "First Doctrine",
+   "sort": 400,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": "G4YeJDKZJKOVsjpL",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "flag": "firstDoctrineCloisteredCleric",
+      "key": "GrantItem",
+      "uuid": "{actor|flags.system.cleric.firstDoctrine}"
+     }
+    ],
+    "slug": "first-doctrine",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "CUmTCEUUUTqlPToD",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.deities.Item.BNycwu3I21dTh4D9"
+   },
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "eK3xwAsbafQQd2h0",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Sarenrae",
+   "sort": 0,
+   "system": {
+    "attribute": [
+     "con",
+     "wis"
+    ],
+    "category": "deity",
+    "description": {
+     "value": ""
+    },
+    "domains": {
+     "alternate": [
+      "repose"
+     ],
+     "primary": [
+      "fire",
+      "healing",
+      "sun",
+      "truth"
+     ]
+    },
+    "font": [
+     "heal"
+    ],
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [],
+    "sanctification": {
+     "modal": "can",
+     "what": [
+      "holy"
+     ]
+    },
+    "skill": [
+     "medicine"
+    ],
+    "slug": "sarenrae",
+    "spells": {
+     "1": "Compendium.pf2e.spells-srd.Item.Breathe Fire",
+     "3": "Compendium.pf2e.spells-srd.Item.Fireball",
+     "4": "Compendium.pf2e.spells-srd.Item.Wall of Fire"
+    },
+    "traits": {},
+    "weapons": [
+     "scimitar"
+    ]
+   },
+   "type": "deity"
+  },
+  {
+   "_id": "lG9DVihpKNXVTUl8",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.ZZzLMOUAtBVgV1DF"
+   },
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "QwEq7In94697ATYY",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Cloistered Cleric",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": null,
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "key": "ActiveEffectLike",
+      "mode": "override",
+      "path": "flags.system.cleric",
+      "value": {
+       "fifthDoctrine": "Compendium.pf2e.classfeatures.Item.Fifth Doctrine (Cloistered Cleric)",
+       "finalDoctrine": "Compendium.pf2e.classfeatures.Item.Final Doctrine (Cloistered Cleric)",
+       "firstDoctrine": "Compendium.pf2e.classfeatures.Item.First Doctrine (Cloistered Cleric)",
+       "fourthDoctrine": "Compendium.pf2e.classfeatures.Item.Fourth Doctrine (Cloistered Cleric)",
+       "secondDoctrine": "Compendium.pf2e.classfeatures.Item.Second Doctrine (Cloistered Cleric)",
+       "thirdDoctrine": "Compendium.pf2e.classfeatures.Item.Third Doctrine (Cloistered Cleric)"
+      }
+     }
+    ],
+    "slug": "cloistered-cleric",
+    "traits": {
+     "otherTags": [
+      "cleric-doctrine"
+     ],
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "e2tECYO3ZNavk5gY",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.feats-srd.Item.hT4INKGtly4QY8KN"
+   },
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "RAwKLSgkQtBBKZfV",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Domain Initiate (Fire)",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "class",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": null,
+    "maxTakable": null,
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": "system.details.deities.domains",
+      "flag": "domainInitiate",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.Prompt.DeitysDomain",
+      "selection": "fire"
+     }
+    ],
+    "slug": "domain-initiate",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "RAwKLSgkQtBBKZfV",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.classfeatures.Item.aiwxBj5MjnafCMyn"
+   },
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "Bi6AJZ4DFyXcvEOo",
+      "onDelete": "cascade"
+     },
+     "itemGrants": {
+      "domainInitiate": {
+       "id": "e2tECYO3ZNavk5gY",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "First Doctrine (Cloistered Cleric)",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "classfeature",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": null,
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "flag": "domainInitiate",
+      "key": "GrantItem",
+      "uuid": "Compendium.pf2e.feats-srd.Item.Domain Initiate"
+     }
+    ],
+    "slug": "first-doctrine-cloistered-cleric",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "cleric"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "b3JYDqWB1O2Ho6dY",
+   "name": "Divine Focus Spells",
+   "sort": 0,
+   "system": {
+    "ability": {
+     "value": "wis"
+    },
+    "autoHeightenLevel": {
+     "value": null
+    },
+    "description": {
+     "value": ""
+    },
+    "prepared": {
+     "value": "focus"
+    },
+    "proficiency": {
+     "slug": "",
+     "value": 1
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": ""
+    },
+    "rules": [],
+    "slots": {},
+    "slug": null,
+    "spelldc": {
+     "dc": 0,
+     "value": 0
+    },
+    "tradition": {
+     "value": "divine"
+    },
+    "traits": {}
+   },
+   "type": "spellcastingEntry"
+  },
+  {
+   "_id": "E54Fkvpn6Bj6y1Xh",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.oJKZi8OQgmVXHOc0"
+   },
+   "name": "Fire Ray",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {
+     "0": {
+      "applyMod": false,
+      "category": null,
+      "formula": "2d6",
+      "kinds": [
+       "damage"
+      ],
+      "materials": [],
+      "type": "fire"
+     }
+    },
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": "until the end of the target's next turn"
+    },
+    "heightening": {
+     "damage": {
+      "0": "2d6"
+     },
+     "interval": 1,
+     "type": "interval"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "b3JYDqWB1O2Ho6dY"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "60 feet"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "fire-ray",
+    "target": {
+     "value": "1 creature"
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "uncommon",
+     "traditions": [],
+     "value": [
+      "attack",
+      "cleric",
+      "concentrate",
+      "fire",
+      "focus",
+      "manipulate"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "aWSJAzSyfcOBMM1G",
+   "name": "Divine Font (Healing)",
+   "sort": 0,
+   "system": {
+    "ability": {
+     "value": "wis"
+    },
+    "autoHeightenLevel": {
+     "value": null
+    },
+    "description": {
+     "value": ""
+    },
+    "prepared": {
+     "value": "spontaneous"
+    },
+    "proficiency": {
+     "slug": "",
+     "value": 1
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": ""
+    },
+    "rules": [],
+    "showSlotlessLevels": {
+     "value": false
+    },
+    "slots": {
+     "slot1": {
+      "max": 4,
+      "value": 4
+     }
+    },
+    "slug": null,
+    "spelldc": {
+     "dc": 0,
+     "value": 0
+    },
+    "tradition": {
+     "value": "divine"
+    },
+    "traits": {}
+   },
+   "type": "spellcastingEntry"
+  },
+  {
+   "_id": "52bLi0WSY8RN8AHL",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.rfZpqmj0AIIdkVIs"
+   },
+   "name": "Heal",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {
+     "0": {
+      "applyMod": false,
+      "category": null,
+      "formula": "1d8",
+      "kinds": [
+       "damage",
+       "healing"
+      ],
+      "materials": [],
+      "type": "vitality"
+     }
+    },
+    "defense": {
+     "save": {
+      "basic": true,
+      "statistic": "fortitude"
+     }
+    },
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": ""
+    },
+    "heightening": {
+     "damage": {
+      "0": "1d8"
+     },
+     "interval": 1,
+     "type": "interval"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "heightenedLevel": 1,
+     "signature": true,
+     "value": "aWSJAzSyfcOBMM1G"
+    },
+    "overlays": {
+     "37gy7l19tik74o4s": {
+      "_id": "37gy7l19tik74o4s",
+      "name": "Heal (vs. Living)",
+      "overlayType": "override",
+      "sort": 2,
+      "system": {
+       "damage": {
+        "0": {
+         "formula": "1d8+8",
+         "kinds": [
+          "healing"
+         ]
+        }
+       },
+       "defense": null,
+       "heightening": {
+        "damage": {
+         "0": "1d8+8"
+        }
+       },
+       "range": {
+        "value": "30 feet"
+       },
+       "time": {
+        "value": "2"
+       },
+       "traits": {
+        "value": [
+         "concentrate",
+         "healing",
+         "manipulate",
+         "vitality"
+        ]
+       }
+      }
+     },
+     "7qdtetowq348s9oc": {
+      "_id": "7qdtetowq348s9oc",
+      "overlayType": "override",
+      "sort": 1,
+      "system": {
+       "range": {
+        "value": "touch"
+       },
+       "time": {
+        "value": "1"
+       }
+      }
+     },
+     "7vbvdrv2cl87sqta": {
+      "_id": "7vbvdrv2cl87sqta",
+      "overlayType": "override",
+      "sort": 4,
+      "system": {
+       "area": {
+        "type": "emanation",
+        "value": 30
+       },
+       "range": {
+        "value": ""
+       },
+       "target": {
+        "value": "all living and undead creatures"
+       },
+       "time": {
+        "value": "3"
+       },
+       "traits": {
+        "value": [
+         "concentrate",
+         "healing",
+         "manipulate",
+         "vitality"
+        ]
+       }
+      }
+     },
+     "lfxcoz2d3f8j2zq1": {
+      "_id": "lfxcoz2d3f8j2zq1",
+      "name": "Heal (vs. Undead)",
+      "overlayType": "override",
+      "sort": 3,
+      "system": {
+       "damage": {
+        "0": {
+         "kinds": [
+          "damage"
+         ]
+        }
+       },
+       "range": {
+        "value": "30 feet"
+       },
+       "target": {
+        "value": "1 undead"
+       },
+       "time": {
+        "value": "2"
+       },
+       "traits": {
+        "value": [
+         "concentrate",
+         "healing",
+         "manipulate",
+         "vitality"
+        ]
+       }
+      }
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "varies"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "heal",
+    "target": {
+     "value": "1 willing living creature or 1 undead"
+    },
+    "time": {
+     "value": "1 to 3"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "divine",
+      "primal"
+     ],
+     "value": [
+      "healing",
+      "manipulate",
+      "vitality"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "NlWWw5Ofio7v6YVN",
+   "name": "Divine Prepared Spells",
+   "sort": 0,
+   "system": {
+    "ability": {
+     "value": "wis"
+    },
+    "autoHeightenLevel": {
+     "value": null
+    },
+    "description": {
+     "value": ""
+    },
+    "prepared": {
+     "flexible": false,
+     "value": "prepared"
+    },
+    "proficiency": {
+     "slug": "",
+     "value": 1
+    },
+    "publication": {
+     "license": "OGL",
+     "remaster": false,
+     "title": ""
+    },
+    "rules": [],
+    "slots": {
+     "slot0": {
+      "max": 5,
+      "prepared": [
+       {
+        "id": "gO0ioezECtpWeNzQ"
+       },
+       {
+        "id": "yOOa420Fhxc5bOjR"
+       },
+       {
+        "id": "sRFel3sdVhLWuHdw"
+       },
+       {
+        "id": "g2G7dMtTeaHMC0Ez"
+       },
+       {
+        "id": "adsXO9ZoGQdGesK5"
+       }
+      ]
+     },
+     "slot1": {
+      "max": 2,
+      "prepared": [
+       {
+        "id": "gNHgylqXGg9pfRkF"
+       },
+       {
+        "id": "HFjfzPZnhSQGcVZA"
+       }
+      ]
+     }
+    },
+    "slug": null,
+    "spelldc": {
+     "dc": 0,
+     "value": 0
+    },
+    "tradition": {
+     "value": "divine"
+    },
+    "traits": {}
+   },
+   "type": "spellcastingEntry"
+  },
+  {
+   "_id": "gO0ioezECtpWeNzQ",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.4gBIw4IDrSfFHik4"
+   },
+   "name": "Daze",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {
+     "0": {
+      "applyMod": false,
+      "category": null,
+      "formula": "1d6",
+      "kinds": [
+       "damage"
+      ],
+      "materials": [],
+      "type": "mental"
+     }
+    },
+    "defense": {
+     "save": {
+      "basic": true,
+      "statistic": "will"
+     }
+    },
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": "1 round"
+    },
+    "heightening": {
+     "damage": {
+      "0": "1d6"
+     },
+     "interval": 2,
+     "type": "interval"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "60 feet"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "daze",
+    "target": {
+     "value": "1 creature"
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "arcane",
+      "divine",
+      "occult"
+     ],
+     "value": [
+      "cantrip",
+      "concentrate",
+      "manipulate",
+      "mental",
+      "nonlethal"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "yOOa420Fhxc5bOjR",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.qwZBXN6zBoB9BHXE"
+   },
+   "name": "Divine Lance",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {
+     "0": {
+      "applyMod": false,
+      "category": null,
+      "formula": "2d4",
+      "kinds": [
+       "damage"
+      ],
+      "materials": [],
+      "type": "spirit"
+     }
+    },
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": ""
+    },
+    "heightening": {
+     "damage": {
+      "0": "1d4"
+     },
+     "interval": 1,
+     "type": "interval"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "overlays": {},
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "60 feet"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "divine-lance",
+    "target": {
+     "value": "1 creature"
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "divine"
+     ],
+     "value": [
+      "attack",
+      "cantrip",
+      "concentrate",
+      "manipulate",
+      "sanctified"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "sRFel3sdVhLWuHdw",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.izcxFQFwf3woCnFs"
+   },
+   "name": "Guidance",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {},
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": "until the start of your next turn"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "30 feet"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "guidance",
+    "target": {
+     "value": "1 creature"
+    },
+    "time": {
+     "value": "1"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "divine",
+      "occult",
+      "primal"
+     ],
+     "value": [
+      "cantrip",
+      "concentrate"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "g2G7dMtTeaHMC0Ez",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.WBmvzNDfpwka3qT4"
+   },
+   "name": "Light",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {},
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": "until your next daily preparations"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "120 feet"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "light",
+    "target": {
+     "value": ""
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "arcane",
+      "divine",
+      "occult",
+      "primal"
+     ],
+     "value": [
+      "cantrip",
+      "concentrate",
+      "light",
+      "manipulate"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "adsXO9ZoGQdGesK5",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.SnjhtQYexDtNDdEg"
+   },
+   "name": "Stabilize",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {},
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "30 feet"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "stabilize",
+    "target": {
+     "value": "1 dying creature"
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "divine",
+      "primal"
+     ],
+     "value": [
+      "cantrip",
+      "concentrate",
+      "healing",
+      "manipulate",
+      "vitality"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "gNHgylqXGg9pfRkF",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.XSujb7EsSwKl19Uu"
+   },
+   "name": "Bless",
+   "sort": 0,
+   "system": {
+    "area": {
+     "type": "emanation",
+     "value": 15
+    },
+    "cost": {
+     "value": ""
+    },
+    "counteraction": true,
+    "damage": {},
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": "1 minute"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": ""
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "bless",
+    "target": {
+     "value": "you and allies in the area"
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "divine",
+      "occult"
+     ],
+     "value": [
+      "aura",
+      "concentrate",
+      "manipulate",
+      "mental"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "HFjfzPZnhSQGcVZA",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.spells-srd.Item.8xRzLhwGL7Dgy3EZ"
+   },
+   "name": "Sanctuary",
+   "sort": 0,
+   "system": {
+    "area": null,
+    "cost": {
+     "value": ""
+    },
+    "counteraction": false,
+    "damage": {},
+    "defense": null,
+    "description": {
+     "value": ""
+    },
+    "duration": {
+     "sustained": false,
+     "value": "1 minute"
+    },
+    "level": {
+     "value": 1
+    },
+    "location": {
+     "value": "NlWWw5Ofio7v6YVN"
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "range": {
+     "value": "touch"
+    },
+    "requirements": "",
+    "rules": [],
+    "slug": "sanctuary",
+    "target": {
+     "value": "1 creature"
+    },
+    "time": {
+     "value": "2"
+    },
+    "traits": {
+     "rarity": "common",
+     "traditions": [
+      "divine",
+      "occult"
+     ],
+     "value": [
+      "concentrate",
+      "manipulate"
+     ]
+    }
+   },
+   "type": "spell"
+  },
+  {
+   "_id": "EM65CjjyKfzaVgOX",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.feats-srd.Item.RmiMUZlae6yGUyXY"
+   },
+   "name": "Haughty Obstinacy",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "ancestry",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "taken": 1,
+     "value": 1
+    },
+    "location": "ancestry-1",
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "adjustment": {
+       "success": "one-degree-better"
+      },
+      "key": "AdjustDegreeOfSuccess",
+      "predicate": [
+       "mental",
+       "inflicts:controlled"
+      ],
+      "selector": "will",
+      "type": "save"
+     }
+    ],
+    "slug": "haughty-obstinacy",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "human"
+     ]
+    }
+   },
+   "type": "feat"
+  },
+  {
+   "_id": "tjYnOS7x7hJ2FuQz",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.3lgwjrFEsQVKzhh7"
+   },
+   "name": "Backpack",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "capacity": 4,
+     "heldOrStowed": 0.1,
+     "ignored": 2,
+     "value": 0
+    },
+    "collapsed": false,
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "inSlot": true,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "backpack",
+    "stowing": true,
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "wornbackpack"
+    }
+   },
+   "type": "backpack"
+  },
+  {
+   "_id": "EB4D06stLJWiGqK2",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.fyYnQf1NAx9fWFaS"
+   },
+   "name": "Rope",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "rope",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-two-hands"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "b6T2FXSg3J8MAURH",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.VnPh324pKwd2ZB66"
+   },
+   "name": "Waterskin",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "waterskin",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "2gynvl8DXODADW1O",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.xShIDyydOMkGvGNb"
+   },
+   "name": "Chalk",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "category": "other",
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "damage": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "per": 10,
+     "value": {
+      "cp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 10,
+    "rules": [],
+    "size": "med",
+    "slug": "chalk",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 1,
+     "value": 1
+    }
+   },
+   "type": "consumable"
+  },
+  {
+   "_id": "BCTp7GVFLWvmJgwu",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.UlIxxLm71UdRgCFE"
+   },
+   "name": "Flint and Steel",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "flint-and-steel",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-two-hands"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "hO1hDzYAMBdNBjFy",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.L9ZV076913otGtiB"
+   },
+   "name": "Rations",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "category": "other",
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "damage": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 4
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 2,
+    "rules": [],
+    "size": "med",
+    "slug": "rations",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 7,
+     "value": 7
+    }
+   },
+   "type": "consumable"
+  },
+  {
+   "_id": "ISf9pn2A7nVEgMZU",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.8Jdw4yAzWYylGePS"
+   },
+   "name": "Torch",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 5,
+    "rules": [
+     {
+      "key": "TokenLight",
+      "predicate": [
+       "lit-torch"
+      ],
+      "value": {
+       "alpha": 0.45,
+       "animation": {
+        "intensity": 1,
+        "speed": 2,
+        "type": "flame"
+       },
+       "attenuation": 0.4,
+       "bright": 20,
+       "color": "#ffae3d",
+       "dim": 40,
+       "shadows": 0.2
+      }
+     },
+     {
+      "category": "simple",
+      "damage": {
+       "base": {
+        "damageType": "bludgeoning",
+        "dice": 1,
+        "die": "d4"
+       }
+      },
+      "key": "Strike",
+      "otherTags": [
+       "improvised"
+      ],
+      "predicate": [
+       {
+        "not": "lit-torch"
+       }
+      ]
+     },
+     {
+      "category": "simple",
+      "damage": {
+       "base": {
+        "damageType": "bludgeoning",
+        "dice": 1,
+        "die": "d4"
+       }
+      },
+      "key": "Strike",
+      "otherTags": [
+       "improvised"
+      ],
+      "predicate": [
+       "lit-torch"
+      ]
+     },
+     {
+      "damageType": "fire",
+      "key": "FlatModifier",
+      "predicate": [
+       "lit-torch"
+      ],
+      "selector": "{item|_id}-damage",
+      "value": 1
+     },
+     {
+      "key": "RollOption",
+      "label": "PF2E.SpecificRule.LitTorch",
+      "option": "lit-torch",
+      "toggleable": true
+     },
+     {
+      "key": "TokenEffectIcon",
+      "predicate": [
+       "lit-torch"
+      ],
+      "value": "icons/sundries/lights/torch-brown-lit.webp"
+     }
+    ],
+    "size": "med",
+    "slug": "torch",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "UC4J0GiwdeLYDpvU",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.fagzYdmfYyMQ6J77"
+   },
+   "name": "Bedroll",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 2
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "bedroll",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "other"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "tetsM2naMH6BdxBB",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.81aHsD27HFGnq1Nt"
+   },
+   "name": "Soap",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0
+    },
+    "containerId": "tjYnOS7x7hJ2FuQz",
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 2
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "soap",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "mUb9AbdxhW60eC41",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.MPcM4Wt6KmWE2kGL"
+   },
+   "name": "Chain Shirt",
+   "sort": 0,
+   "system": {
+    "acBonus": 2,
+    "baseItem": "chain-shirt",
+    "bulk": {
+     "value": 1
+    },
+    "category": "light",
+    "checkPenalty": -1,
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "dexCap": 3,
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "inSlot": true,
+     "invested": null
+    },
+    "grade": null,
+    "group": "chain",
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "runes": {
+     "potency": 0,
+     "property": [],
+     "resilient": 0
+    },
+    "size": "med",
+    "slug": "chain-shirt",
+    "speedPenalty": 0,
+    "strength": 1,
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "flexible",
+      "noisy"
+     ]
+    }
+   },
+   "type": "armor"
+  },
+  {
+   "_id": "f6GzH5qhfGop6QKq",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.s1vB3HdXjMigYAnY"
+   },
+   "name": "Healer's Toolkit",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 1
+    },
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 5
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "healers-toolkit",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "other"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "2JBFD3AR5KN3CsHC",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.plplsXJsqrdqNQVI"
+   },
+   "name": "Religious Symbol (Wooden)",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "rules": [
+     {
+      "key": "RollOption",
+      "option": "has-religious-symbol",
+      "requiresEquipped": false
+     }
+    ],
+    "size": "med",
+    "slug": "religious-symbol-wooden",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    },
+    "usage": {
+     "value": "other"
+    }
+   },
+   "type": "equipment"
+  },
+  {
+   "_id": "0TXJWbO7cDqfagp5",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.grmaV4GdoGD7sKbn"
+   },
+   "name": "Scimitar",
+   "sort": 0,
+   "system": {
+    "ammo": null,
+    "baseItem": "scimitar",
+    "bonus": {
+     "value": 0
+    },
+    "bonusDamage": {
+     "value": 0
+    },
+    "bulk": {
+     "value": 1
+    },
+    "category": "martial",
+    "containerId": null,
+    "damage": {
+     "damageType": "slashing",
+     "dice": 1,
+     "die": "d6"
+    },
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "expend": null,
+    "grade": null,
+    "group": "sword",
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "range": null,
+    "reload": {
+     "value": null
+    },
+    "rules": [],
+    "runes": {
+     "potency": 0,
+     "property": [],
+     "striking": 0
+    },
+    "size": "med",
+    "slug": "scimitar",
+    "splashDamage": {
+     "value": 0
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "forceful",
+      "sweep"
+     ]
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "weapon"
+  },
+  {
+   "_id": "G1Go2Ct2dBLXxgEJ",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.UCH4myuFnokGv0vF"
+   },
+   "name": "Sling",
+   "sort": 0,
+   "system": {
+    "ammo": {
+     "baseType": "sling-bullets",
+     "builtIn": false,
+     "capacity": 1
+    },
+    "baseItem": "sling",
+    "bonus": {
+     "value": 0
+    },
+    "bonusDamage": {
+     "value": 0
+    },
+    "bulk": {
+     "value": 0.1
+    },
+    "category": "simple",
+    "containerId": null,
+    "damage": {
+     "damageType": "bludgeoning",
+     "dice": 1,
+     "die": "d6"
+    },
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0,
+     "invested": null
+    },
+    "expend": 1,
+    "grade": null,
+    "group": "sling",
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {}
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 1,
+    "range": 50,
+    "reload": {
+     "value": "1"
+    },
+    "rules": [],
+    "runes": {
+     "potency": 0,
+     "property": [],
+     "striking": 0
+    },
+    "size": "med",
+    "slug": "sling",
+    "splashDamage": {
+     "value": 0
+    },
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "propulsive"
+     ]
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    }
+   },
+   "type": "weapon"
+  },
+  {
+   "_id": "av5j0955njCyRULk",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.MKSeXwUm56c15MZa"
+   },
+   "name": "Sling Bullets",
+   "sort": 0,
+   "system": {
+    "baseItem": "sling-bullets",
+    "bulk": {
+     "value": 0.1
+    },
+    "containerId": null,
+    "craftableAs": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn"
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "per": 10,
+     "value": {
+      "cp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 10,
+    "rules": [],
+    "size": "med",
+    "slug": "sling-bullets",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "consumable"
+     ]
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 1,
+     "value": 1
+    }
+   },
+   "type": "ammo"
+  },
+  {
+   "_id": "fZymiJlTqN7Rgef7",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.2RuepCemJhrpKKao"
+   },
+   "name": "Healing Potion (Minor)",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 0.1
+    },
+    "category": "potion",
+    "containerId": null,
+    "damage": {
+     "formula": "1d8",
+     "kind": "healing",
+     "type": "vitality"
+    },
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 1
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "gp": 4
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder GM Core"
+    },
+    "quantity": 1,
+    "rules": [],
+    "size": "med",
+    "slug": "healing-potion-minor",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "consumable",
+      "healing",
+      "magical",
+      "potion",
+      "vitality"
+     ]
+    },
+    "usage": {
+     "value": "held-in-one-hand"
+    },
+    "uses": {
+     "autoDestroy": true,
+     "max": 1,
+     "value": 1
+    }
+   },
+   "type": "consumable"
+  },
+  {
+   "_id": "yFLYHHOtHExjs5Pr",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.5Ew82vBF9YfaiY9f"
+   },
+   "name": "Silver Pieces",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 1
+    },
+    "category": "coin",
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "sp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 7,
+    "rules": [],
+    "size": "med",
+    "slug": "silver-pieces",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "treasure"
+  },
+  {
+   "_id": "dhLpxNtu46VHSZOO",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.equipment-srd.Item.lzJ8AVhRcbFul5fh"
+   },
+   "name": "Copper Pieces",
+   "sort": 0,
+   "system": {
+    "baseItem": null,
+    "bulk": {
+     "value": 1
+    },
+    "category": "coin",
+    "containerId": null,
+    "description": {
+     "value": ""
+    },
+    "equipped": {
+     "carryType": "worn",
+     "handsHeld": 0
+    },
+    "hardness": 0,
+    "hp": {
+     "max": 0,
+     "value": 0
+    },
+    "level": {
+     "value": 0
+    },
+    "material": {
+     "grade": null,
+     "type": null
+    },
+    "price": {
+     "value": {
+      "cp": 1
+     }
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "quantity": 9,
+    "rules": [],
+    "size": "med",
+    "slug": "copper-pieces",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "treasure"
+  },
+  {
+   "_id": "xy5rMlPhvzKQv3jL",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.heritages.Item.hFBwsVcSnNCJoimo"
+   },
+   "flags": {
+    "pf2e": {
+     "itemGrants": {
+      "armorProficiency": {
+       "id": "OICiPtdvmhMIqauo",
+       "onDelete": "detach"
+      }
+     }
+    }
+   },
+   "name": "Versatile Human",
+   "sort": 0,
+   "system": {
+    "ancestry": {
+     "name": "Human",
+     "slug": "human",
+     "uuid": "Compendium.pf2e.ancestries.Item.IiG7DgeLWYrSNXuX"
+    },
+    "description": {
+     "value": ""
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "adjustName": false,
+      "choices": {
+       "filter": [
+        "item:level:1",
+        "item:trait:general"
+       ],
+       "itemType": "feat"
+      },
+      "flag": "versatileHeritage",
+      "key": "ChoiceSet",
+      "prompt": "PF2E.SpecificRule.GeneralTraining.Prompt",
+      "selection": "Compendium.pf2e.feats-srd.Item.Armor Proficiency"
+     },
+     {
+      "flag": "armorProficiency",
+      "key": "GrantItem",
+      "uuid": "{item|flags.system.rulesSelections.versatileHeritage}"
+     }
+    ],
+    "slug": "versatile-human",
+    "traits": {
+     "rarity": "common",
+     "value": []
+    }
+   },
+   "type": "heritage"
+  },
+  {
+   "_id": "OICiPtdvmhMIqauo",
+   "_stats": {
+    "compendiumSource": "Compendium.pf2e.feats-srd.Item.BStw1cANwx5baL6d"
+   },
+   "flags": {
+    "pf2e": {
+     "grantedBy": {
+      "id": "xy5rMlPhvzKQv3jL",
+      "onDelete": "cascade"
+     }
+    }
+   },
+   "name": "Armor Proficiency (Light)",
+   "sort": 0,
+   "system": {
+    "actionType": {
+     "value": "passive"
+    },
+    "actions": {
+     "value": null
+    },
+    "category": "general",
+    "description": {
+     "value": ""
+    },
+    "level": {
+     "value": 1
+    },
+    "location": null,
+    "maxTakable": 3,
+    "prerequisites": {
+     "value": []
+    },
+    "publication": {
+     "license": "ORC",
+     "remaster": true,
+     "title": "Pathfinder Player Core"
+    },
+    "rules": [
+     {
+      "choices": [
+       {
+        "label": "PF2E.Actor.Character.Proficiency.Defense.LightShort",
+        "predicate": [
+         "defense:light:rank:0"
+        ],
+        "value": "light"
+       },
+       {
+        "label": "PF2E.Actor.Character.Proficiency.Defense.MediumShort",
+        "predicate": [
+         "defense:medium:rank:0",
+         {
+          "not": "defense:light:rank:0"
+         }
+        ],
+        "value": "medium"
+       },
+       {
+        "label": "PF2E.Actor.Character.Proficiency.Defense.HeavyShort",
+        "predicate": [
+         "defense:heavy:rank:0",
+         {
+          "nor": [
+           "defense:light:rank:0",
+           "defense:medium:rank:0"
+          ]
+         }
+        ],
+        "value": "heavy"
+       }
+      ],
+      "flag": "armorProficiency",
+      "key": "ChoiceSet",
+      "selection": "light"
+     },
+     {
+      "key": "ActiveEffectLike",
+      "mode": "upgrade",
+      "path": "system.proficiencies.defenses.{item|flags.system.rulesSelections.armorProficiency}.rank",
+      "value": "ternary(gte(@actor.level,13),2,1)"
+     }
+    ],
+    "slug": "armor-proficiency",
+    "traits": {
+     "rarity": "common",
+     "value": [
+      "general"
+     ]
+    }
+   },
+   "type": "feat"
+  }
+ ],
+ "name": "Kyra (Level 1)",
+ "prototypeToken": {
+  "name": "Kyra",
+  "ring": {
+   "enabled": true,
+   "subject": {
+    "scale": 2,
+    "texture": "systems/pf2e/icons/iconics/subjects/kyra.webp"
+   }
+  },
+  "texture": {
+   "scaleX": 2,
+   "scaleY": 2,
+   "src": "systems/pf2e/icons/iconics/tokens/kyra.webp"
+  }
+ },
+ "system": {
+  "abilities": null,
+  "attributes": {
+   "bonusbulk": 0,
+   "hp": {
+    "temp": 0,
+    "value": 16
+   }
+  },
+  "build": {
+   "attributes": {
+    "boosts": {
+     "1": [
+      "wis",
+      "str",
+      "dex",
+      "cha"
+     ]
+    }
+   }
+  },
+  "crafting": {
+   "formulas": []
+  },
+  "customModifiers": {},
+  "details": {
+   "age": {
+    "value": ""
+   },
+   "alliance": "party",
+   "ancestry": {
+    "value": ""
+   },
+   "background": {
+    "value": ""
+   },
+   "biography": {},
+   "class": {
+    "value": ""
+   },
+   "deity": {
+    "image": "systems/pf2e/icons/deity/Sarenrae.webp",
+    "value": "Saranrae"
+   },
+   "ethnicity": {
+    "value": "Kelish"
+   },
+   "gender": {
+    "value": "F/She/Her"
+   },
+   "height": {
+    "value": ""
+   },
+   "keyability": {
+    "value": "str"
+   },
+   "languages": {
+    "details": "",
+    "value": [
+     "common",
+     "kelish"
+    ]
+   },
+   "level": {
+    "min": 1,
+    "value": 1
+   },
+   "nationality": {
+    "value": ""
+   },
+   "weight": {
+    "value": ""
+   },
+   "xp": {
+    "max": 1000,
+    "min": 0,
+    "pct": 0,
+    "value": 0
+   }
+  },
+  "exploration": [],
+  "initiative": {
+   "statistic": "perception"
+  },
+  "pfs": {
+   "characterNumber": null,
+   "currentFaction": "EA",
+   "fame": 0,
+   "levelBump": false,
+   "playerNumber": null,
+   "reputation": {
+    "EA": 0,
+    "GA": 0,
+    "HH": 0,
+    "RO": 0,
+    "VS": 0,
+    "VW": 0
+   },
+   "school": "none"
+  },
+  "resources": {
+   "focus": {
+    "value": 1
+   },
+   "heroPoints": {
+    "max": 3,
+    "value": 1
+   }
+  },
+  "saves": {
+   "fortitude": {
+    "rank": 0,
+    "value": 0
+   },
+   "reflex": {
+    "rank": 0,
+    "value": 0
+   },
+   "will": {
+    "rank": 0,
+    "value": 0
+   }
+  },
+  "skills": {
+   "acrobatics": {
+    "rank": 0
+   },
+   "arcana": {
+    "rank": 0
+   },
+   "athletics": {
+    "rank": 1
+   },
+   "crafting": {
+    "rank": 0
+   },
+   "deception": {
+    "rank": 0
+   },
+   "diplomacy": {
+    "rank": 1
+   },
+   "intimidation": {
+    "rank": 0
+   },
+   "medicine": {
+    "rank": 1
+   },
+   "nature": {
+    "rank": 0
+   },
+   "occultism": {
+    "rank": 0
+   },
+   "performance": {
+    "rank": 1
+   },
+   "religion": {
+    "rank": 0
+   },
+   "society": {
+    "rank": 0
+   },
+   "stealth": {
+    "rank": 0
+   },
+   "survival": {
+    "rank": 0
+   },
+   "thievery": {
+    "rank": 0
+   }
+  }
+ },
+ "type": "character"
+}

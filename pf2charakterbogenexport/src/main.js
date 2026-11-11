@@ -7,6 +7,7 @@
   const jsonPaste = document.getElementById("json-paste");
   const generateBtn = document.getElementById("generate-btn");
   const sampleBtn = document.getElementById("sample-btn");
+  const sampleSelect = document.getElementById("sample-select");
   const printBtn = document.getElementById("print-btn");
   const statusMsg = document.getElementById("status-msg");
   const output = document.getElementById("sheet-output");
@@ -102,11 +103,11 @@
   sampleBtn.addEventListener("click", async () => {
     try {
       setStatus("Lade Beispiel-Charakter…", "");
-      const res = await fetch("sample/beispiel-charakter.json");
+      const res = await fetch(sampleSelect.value);
       const text = await res.text();
       currentFileText = text;
       jsonPaste.value = "";
-      dropZoneText.textContent = "Beispiel-Charakter geladen";
+      dropZoneText.textContent = "Beispiel geladen: " + sampleSelect.options[sampleSelect.selectedIndex].text.replace(/^Beispiel: /, "");
       generateFromText(text);
     } catch (e) {
       setStatus("Beispiel konnte nicht geladen werden (nur über einen lokalen Webserver verfügbar, nicht bei file://). Alternativ Datei per Drag & Drop laden.", "error");

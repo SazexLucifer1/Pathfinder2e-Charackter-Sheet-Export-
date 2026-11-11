@@ -342,3 +342,34 @@
 .cs-lore.xlong + .cs-lore-suffix { display: none; }
 /* Rahmen bei Seitenumbruch auf jeder Seite schließen */
 .cs-panel { -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* Gruppenzeilen in Tabellen (Fähigkeiten nach Kampf/außerhalb, Zauber je Quelle) */
+.cs-page .cs-table tr.cs-grp td {
+  background: #fbe7d9; color: var(--cs-black); font-weight: 700; font-size: 6.8pt; text-transform: uppercase;
+  letter-spacing: 0.04em; padding: 0.7mm 1.2mm; height: auto; border-left: none; border-top: var(--cs-line) solid var(--cs-orange);
+}
+.cs-page .cs-table tr.cs-grp td small { font-weight: 400; text-transform: none; letter-spacing: 0; color: #555; }
+.cs-page .cs-table td.desc b { font-weight: 700; }
+
+/* Stufenplan */
+.cs-fill > .cs-plan { flex: 1 1 auto; height: 100%; }
+.cs-page .cs-plan td { vertical-align: middle; height: auto; }
+.cs-plan tr.reached td { background: #fff7f0; }
+.cs-plan .cs-check { width: 3mm; height: 3mm; margin: 0; vertical-align: middle; }
+.cs-plan-cell { display: flex; flex-wrap: wrap; gap: 0.8mm 3mm; align-items: baseline; }
+.cs-plan-entry { display: inline-flex; align-items: baseline; gap: 1mm; font-size: 6.8pt; }
+.cs-plan-entry em { font-style: normal; color: var(--cs-gray); font-weight: 700; font-size: 5.6pt; text-transform: uppercase; }
+.cs-plan-blank { display: inline-block; width: 30mm; border-bottom: var(--cs-line) solid #444; height: 3mm; }
+
+/* Zustände: englischer Name klein daneben */
+.cs-cond-en { font-size: 5.5pt; color: var(--cs-gray); }
+
+/* Zauberquellen-Tabelle mit Fokuspunkten daneben */
+.cs-spell-head { display: flex; gap: 3mm; align-items: flex-start; padding: 1.5mm 2mm; }
+.cs-spell-head .cs-entries { flex: 1; border: var(--cs-line) solid #bbb; }
+.cs-page .cs-entries td { height: 5.5mm; vertical-align: middle; }
+.cs-page .cs-entries td.cs-num { font-size: 9pt; font-weight: 700; color: var(--cs-black); }
+.cs-focus { display: flex; flex-direction: column; align-items: center; gap: 0.6mm; padding-top: 1mm; min-width: 22mm; }
+.cs-focus em { font-style: normal; font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
+.cs-slots.multi th:first-child { width: 30mm; }
+.cs-slot-src { display: block; font-size: 5.6pt; text-transform: none; line-height: 1.1; margin-bottom: 0.5mm; }

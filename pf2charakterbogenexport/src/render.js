@@ -1,14 +1,18 @@
 /*
- * Baut aus dem normalisierten Charaktermodell (PF2_PARSER) die
- * mehrseitige, druckfertige HTML-Ansicht des Charakterbogens.
+ * Baut aus dem Charaktermodell (PF2_PARSER) die mehrseitige, druckfertige
+ * HTML-Ansicht des Charakterbogens.
  *
- * Seite 1 (klassischer Bogen) kommt aus src/front.js, die Folgeseiten
- * (Zustände, Talente, Zauber, Ausrüstung) verwenden dasselbe Design.
+ * Seite 1 (klassischer Bogen) kommt aus src/front.js; die Folgeseiten
+ * (Fähigkeiten, Stufenplan, Zauber, Ausrüstung, Zustände) verwenden dasselbe
+ * Design. Zwei Bogen-Arten, siehe render():
+ *   spielbereit – alles ausgefüllt außer Werten, die sich in der Spielrunde ändern
+ *   aufstieg    – zusätzlich alles leer, was sich beim Stufenaufstieg ändert
  */
 (function (global) {
   "use strict";
 
   const I18N = global.PF2_I18N;
+  const D = global.PF2_DICT;
   const FRONT = global.PF2_FRONT;
 
   function esc(s) {
@@ -28,15 +32,28 @@
 
   function shorten(text, max) {
     if (!text) return "";
+    text = String(text).replace(/…$/, "").trim();
     if (text.length <= max) return text;
     const cut = text.slice(0, max);
     return cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 20)) + " …";
   }
 
-  /** Seitenkopf wie auf Seite 1: Marke links, Seitentitel rechts, Name darunter. */
+  /** Aktionskosten als Symbol: 1–3 ◆, F ◇, R ⤾, sonst Kurztext. */
+  function costSymbol(cost) {
+    if (cost == null || cost === "") return "—";
+    if (cost === "R") return "⤾";
+    if (cost === "F") return "◇";
+    if (cost === "E") return "Erk.";
+    if (cost === "A") return "Ausz.";
+    if (cost === "M") return "Min.";
+    if (typeof cost === "number") return "◆".repeat(Math.min(Math.max(cost, 1), 3));
+    return String(cost);
+  }
+
   // Bogen-Art: siehe PF2_FRONT.blankFor – wird in render() gesetzt.
   let blank = { session: true, level: false };
 
+  /** Seitenkopf wie auf Seite 1: Marke links, Seitentitel rechts, Name darunter. */
   function pageHead(title, model) {
     return `
     <div class="cs-top">
@@ -57,154 +74,228 @@
     return `<div class="cs-lines"><table class="cs-table cs-table-blank">${colgroup}<tbody>${row.repeat(45)}</tbody></table></div>`;
   }
 
-  const FEAT_COLS = `<colgroup><col style="width:9mm"><col style="width:27mm"><col style="width:38mm"><col style="width:11mm"><col></colgroup>`;
-  const SPELL_COLS = `<colgroup><col style="width:12mm"><col style="width:42mm"><col style="width:22mm"><col></colgroup>`;
-  const ITEM_COLS = `<colgroup><col style="width:16mm"><col style="width:16mm"><col style="width:18mm"><col></colgroup>`;
+  const ABILITY_COLS = `<colgroup><col style="width:9mm"><col style="width:27mm"><col style="width:40mm"><col style="width:11mm"><col></colgroup>`;
+  const PLAN_COLS = `<colgroup><col style="width:11mm"><col style="width:7mm"><col></colgroup>`;
+  const SPELL_COLS = `<colgroup><col style="width:11mm"><col style="width:38mm"><col style="width:11mm"><col style="width:17mm"><col style="width:22mm"><col></colgroup>`;
+  const ITEM_COLS = `<colgroup><col style="width:13mm"><col style="width:14mm"><col style="width:16mm"><col style="width:52mm"><col></colgroup>`;
 
   function page(title, model, body, extraCls) {
     return `<section class="sheet-page cs-page ${extraCls || ""}">${pageHead(title, model)}${body}</section>`;
   }
 
-  /* ------------------------------------------------------------ Zustände */
+  function groupRow(title, cols, hint) {
+    return `<tr class="cs-grp"><td colspan="${cols}">${esc(title)}${hint ? ` <small>– ${esc(hint)}</small>` : ""}</td></tr>`;
+  }
 
-  function conditionsPage(model) {
-    const active = new Map((model.conditions || []).map((c) => [c.name, c.value]));
-    const rows = I18N.CONDITIONS.map((c) => {
-      const on = !blank.session && active.has(c.name);
-      const val = active.get(c.name);
-      return `
-      <div class="cs-cond ${on ? "on" : ""}">
-        <span class="cs-check ${on ? "on" : ""}"></span>
-        <div class="cs-cond-body">
-          <div class="cs-cond-head"><strong>${esc(c.name)}</strong>${
-            c.value ? `<span class="cs-cond-val">${on && val != null ? esc(val) : ""}</span>` : ""
-          }</div>
-          <div class="cs-cond-text">${esc(c.text)}</div>
-        </div>
-      </div>`;
+  /* ------------------------------------------------ Fähigkeiten & Talente */
+
+  const WHEN_GROUPS = [
+    ["kampf", "Aktionen & Reaktionen im Kampf", ""],
+    ["kampf-passiv", "Im Kampf – immer aktiv", ""],
+    ["ausserhalb", "Außerhalb des Kampfes", "Erkundung, Auszeit, Gespräche, Handwerk"],
+    ["immer", "Immer aktiv", ""],
+    ["eingerechnet", "Schon auf Seite 1 eingerechnet", "verändern nur Zahlen"],
+  ];
+
+  function abilityDesc(a) {
+    const parts = [];
+    if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(shorten(a.trigger, 110))}`);
+    if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(shorten(a.requirement, 110))}`);
+    if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(a.frequency)}`);
+    if (a.summary) parts.push(esc(shorten(a.summary, a.when === "eingerechnet" ? 120 : 240)));
+    return parts.join(" ");
+  }
+
+  function abilitiesPage(model) {
+    const list = model.abilitiesList || [];
+    const order = { 1: 1, 2: 2, 3: 3, F: 4, R: 5 };
+    const body = WHEN_GROUPS.map(([key, title, hint]) => {
+      const items = list.filter((a) => a.when === key);
+      if (!items.length) return "";
+      items.sort((a, b) => (order[a.cost] || 9) - (order[b.cost] || 9) || (a.level || 0) - (b.level || 0) || a.name.localeCompare(b.name, "de"));
+      return (
+        groupRow(title, 5, hint) +
+        items
+          .map(
+            (a) => `<tr>
+          <td class="c">${a.level || "–"}</td>
+          <td>${esc(a.categoryName || "")}</td>
+          <td class="b">${esc(a.name)}</td>
+          <td class="c act">${esc(costSymbol(a.cost))}</td>
+          <td class="desc">${abilityDesc(a)}</td>
+        </tr>`
+          )
+          .join("")
+      );
     }).join("");
     return page(
-      "Zustände",
+      "Fähigkeiten & Talente",
       model,
-      `<div class="cs-panel cs-fill"><div class="cs-bar">Zustände <small>– ankreuzen, Wert ins Kästchen</small></div>
-        <div class="cs-cond-grid">${rows}</div></div>`
+      `<div class="cs-panel cs-fill">
+        <div class="cs-bar">Talente, Klassenmerkmale &amp; Aktionen</div>
+        <table class="cs-table">
+          ${ABILITY_COLS}
+          <thead><tr><th class="c">Stufe</th><th>Art</th><th>Name</th><th class="c">Aktion</th><th>Kurzbeschreibung</th></tr></thead>
+          <tbody>${body || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
+        </table>
+        ${lines(ABILITY_COLS, 5)}
+      </div>`
     );
   }
 
-  /* ------------------------------------------------------------- Talente */
+  /* ---------------------------------------------------------- Stufenplan */
 
-  function featsPage(model) {
-    const rows = model.feats
-      .map(
-        (f) => `
-      <tr>
-        <td class="c">${f.level || "–"}</td>
-        <td>${esc(I18N.featCategoryName(f.category))}</td>
-        <td class="b">${esc(f.name)}</td>
-        <td class="c act">${esc(I18N.actionSymbol(f.actionType, f.actionCount))}</td>
-        <td class="desc">${esc(shorten(f.description, 230))}</td>
-      </tr>`
-      )
+  function levelPlanPage(model) {
+    const plan = model.levelPlan || [];
+    if (!plan.length) return "";
+    const rows = plan
+      .map((lv) => {
+        // Auf dem Stufenaufstieg-Bogen wird „erreicht“ nicht vorgegeben.
+        const reached = lv.reached && !blank.level;
+        const entries = (lv.entries || [])
+          .map(
+            (e) =>
+              `<span class="cs-plan-entry"><em>${esc(e.kind)}</em>${
+                e.name ? `<b>${esc(e.name)}</b>` : `<i class="cs-plan-blank"></i>`
+              }</span>`
+          )
+          .join("");
+        return `<tr class="${reached ? "reached" : ""}">
+          <td class="c b">${esc(lv.level)}</td>
+          <td class="c"><span class="cs-check ${reached ? "on" : ""}"></span></td>
+          <td><div class="cs-plan-cell">${entries || "–"}</div></td>
+        </tr>`;
+      })
       .join("");
     return page(
-      "Talente & Fähigkeiten",
+      "Stufenplan",
       model,
       `<div class="cs-panel cs-fill">
-        <div class="cs-bar">Talente &amp; Klassenmerkmale</div>
-        <table class="cs-table">
-          ${FEAT_COLS}
-          <thead><tr><th>Stufe</th><th>Art</th><th>Name</th><th>Aktion</th><th>Kurzbeschreibung</th></tr></thead>
-          <tbody>${rows || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
+        <div class="cs-bar">Stufenaufstieg 1–20 <small>– Gewähltes steht schon drin, leere Linien beim Aufstieg ausfüllen</small></div>
+        <table class="cs-table cs-plan">
+          ${PLAN_COLS}
+          <thead><tr><th class="c">Stufe</th><th class="c">✔</th><th>Was du auf dieser Stufe erhältst</th></tr></thead>
+          <tbody>${rows}</tbody>
         </table>
-        ${lines(FEAT_COLS, 5)}
       </div>`
     );
   }
 
   /* -------------------------------------------------------------- Zauber */
 
-  const TRADITIONS = { arcane: "Arkan", divine: "Göttlich", occult: "Okkult", primal: "Primal" };
-  const trad = (t) => TRADITIONS[t] || t || "";
+  const SLOT_RANKS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   function spellsPage(model) {
-    const sc = model.spellcasting;
-    if (!sc.entries.length && !sc.spells.length) return "";
-    const entry = sc.entries[0] || {};
-    const focus = entry.focusPoints != null ? Number(entry.focusPoints) : null;
-    const focusPips = Array.from({ length: 3 }, (_, i) => `<span class="cs-pip ${!blank.session && focus != null && i < focus ? "on" : ""}"></span>`).join("");
-    const stats = `
-      <div class="cs-stat-row">
-        <div class="cs-stat"><span class="cs-stat-box wide">${esc(sc.entries.map((e) => trad(e.tradition)).filter(Boolean).join(", "))}</span><em>Tradition</em></div>
-        <div class="cs-stat"><span class="cs-stat-box">${esc(entry.dc != null && !blank.level ? entry.dc : "")}</span><em>Zauber-SG</em></div>
-        <div class="cs-stat"><span class="cs-stat-box">${esc(entry.attack != null && !blank.level ? sign(entry.attack) : "")}</span><em>Zauberangriff</em></div>
-        <div class="cs-stat"><span class="cs-stat-pips">${focusPips}</span><em>Fokuspunkte</em></div>
-      </div>`;
-    const slotCols = ["Trick", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const slots = `
-      <table class="cs-slots">
-        <tr><th>Rang</th>${slotCols.map((r) => `<th>${r}</th>`).join("")}</tr>
-        <tr><th>Plätze</th>${slotCols.map(() => "<td></td>").join("")}</tr>
-        <tr><th>Verbraucht</th>${slotCols.map(() => "<td></td>").join("")}</tr>
-      </table>`;
-    const rows = sc.spells
+    const sc = model.spellcasting || { entries: [], focus: { value: 0, max: 0 } };
+    const entries = sc.entries || [];
+    if (!entries.length) return "";
+    const focus = sc.focus || { value: 0, max: 0 };
+    const focusPips = Array.from(
+      { length: Math.max(blank.level ? 3 : focus.max || 0, focus.max ? 1 : 0) },
+      (_, i) => `<span class="cs-pip ${!blank.session && i < (focus.value || 0) ? "on" : ""}"></span>`
+    ).join("");
+    const entryRows = entries
       .map(
-        (s) => `<tr>
-        <td class="c">${s.level === 0 ? "Trick" : s.level}</td>
-        <td class="b">${esc(s.name)}</td>
-        <td>${esc(s.traditions.map(trad).join(", "))}</td>
-        <td class="desc">${esc(shorten(s.description, 200))}</td>
+        (e) => `<tr>
+        <td class="b">${esc(e.name)}</td>
+        <td>${esc(e.kind || "")}</td>
+        <td>${esc(e.tradition || "")}</td>
+        <td class="c cs-num">${esc(blank.level || e.dc == null ? "" : e.dc)}</td>
+        <td class="c cs-num">${esc(blank.level || e.attack == null ? "" : sign(e.attack))}</td>
       </tr>`
       )
+      .join("");
+    const entryStats = `
+      <div class="cs-spell-head">
+        <table class="cs-table cs-entries">
+          <colgroup><col><col style="width:22mm"><col style="width:18mm"><col style="width:17mm"><col style="width:22mm"></colgroup>
+          <thead><tr><th>Zauberquelle</th><th>Art</th><th>Tradition</th><th class="c">Zauber-SG</th><th class="c">Zauberangriff</th></tr></thead>
+          <tbody>${entryRows}</tbody>
+        </table>
+        ${focus.max || blank.level ? `<div class="cs-focus"><span class="cs-stat-pips">${focusPips}</span><em>Fokuspunkte</em></div>` : ""}
+      </div>`;
+    const withSlots = entries.filter((e) => (e.slots || []).some((s) => s.max));
+    const slotRows = withSlots
+      .map((e) => {
+        const max = new Map((e.slots || []).map((s) => [s.rank, s.max]));
+        const label = withSlots.length > 1 ? `<span class="cs-slot-src">${esc(e.name)}</span>` : "";
+        return `<tr><th>${label}Plätze</th>${SLOT_RANKS.map((r) => `<td>${blank.level ? "" : esc(max.get(r) || "")}</td>`).join("")}</tr>
+          <tr><th>Verbraucht</th>${SLOT_RANKS.map(() => "<td></td>").join("")}</tr>`;
+      })
+      .join("");
+    const slots = `
+      <table class="cs-slots ${withSlots.length > 1 ? "multi" : ""}">
+        <tr><th>Rang</th>${SLOT_RANKS.map((r) => `<th>${r === 0 ? "Trick" : r}</th>`).join("")}</tr>
+        ${slotRows || `<tr><th>Plätze</th>${SLOT_RANKS.map(() => "<td></td>").join("")}</tr><tr><th>Verbraucht</th>${SLOT_RANKS.map(() => "<td></td>").join("")}</tr>`}
+      </table>`;
+    const rows = entries
+      .map((e) => {
+        const spells = (e.spells || []).slice().sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name, "de"));
+        if (!spells.length) return "";
+        return (
+          (entries.length > 1 ? groupRow(e.name, 6, [e.kind, e.tradition].filter(Boolean).join(" · ")) : "") +
+          spells
+            .map(
+              (s) => `<tr>
+            <td class="c">${s.cantrip ? "Trick" : s.focus ? `F${s.rank || ""}` : s.rank}</td>
+            <td class="b">${esc(s.name)}</td>
+            <td class="c act">${esc(costSymbol(s.cost))}</td>
+            <td>${esc(s.range || "")}</td>
+            <td>${esc(s.defense || "")}</td>
+            <td class="desc">${esc(shorten(s.summary, 200))}</td>
+          </tr>`
+            )
+            .join("")
+        );
+      })
       .join("");
     return page(
       "Zauber",
       model,
-      `<div class="cs-panel"><div class="cs-bar">Zauberwirken</div>${stats}${slots}</div>
+      `<div class="cs-panel"><div class="cs-bar">Zauberwirken</div>
+        ${entryStats}
+        ${slots}
+      </div>
       <div class="cs-panel cs-fill">
         <div class="cs-bar">Zauber</div>
         <table class="cs-table">
           ${SPELL_COLS}
-          <thead><tr><th>Rang</th><th>Name</th><th>Tradition</th><th>Kurzbeschreibung</th></tr></thead>
+          <thead><tr><th class="c">Rang</th><th>Name</th><th class="c">Akt.</th><th>Reichweite</th><th>Verteidigung</th><th>Kurzbeschreibung</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-        ${lines(SPELL_COLS, 4)}
+        ${lines(SPELL_COLS, 6)}
       </div>`
     );
   }
 
   /* ---------------------------------------------------------- Ausrüstung */
 
-  function bulkText(b) {
-    if (b === "" || b == null) return "–";
-    const n = Number(b);
-    if (Number.isNaN(n)) return String(b);
-    if (n === 0) return "–";
-    if (n < 1) return "L";
-    return String(n);
+  function itemInfo(it) {
+    const parts = [];
+    const d = it.desc || {};
+    if (d.act) parts.push(`<b>${esc(d.act)}</b>`);
+    if (d.s) parts.push(esc(shorten(d.s, 140)));
+    (it.runes || []).forEach((r) => parts.push(`<b>${esc(r.name)}</b>`));
+    return parts.join(" ");
   }
 
   function inventoryPage(model) {
-    const items = model.inventory;
-    let bulk = 0;
-    items.forEach((it) => {
-      const n = Number(it.bulk);
-      // Leichte Gegenstände (L) zählen je 0,1; 10 davon ergeben 1 Traglast.
-      if (!Number.isNaN(n) && n > 0) bulk += (n < 1 ? 0.1 : n) * (Number(it.quantity) || 1);
-    });
-    bulk = Math.floor(bulk);
-    const str = model.abilities.str || 0;
+    const items = model.inventory || [];
     const rows = items
       .map(
         (it) => `<tr>
         <td class="c">${esc(it.quantity)}</td>
-        <td class="c">${esc(bulkText(it.bulk))}</td>
-        <td class="c">${it.equipped ? "✔" : ""}</td>
-        <td class="b">${esc(it.name)}</td>
+        <td class="c">${esc(it.bulk == null || it.bulk === "" ? "–" : it.bulk)}</td>
+        <td class="c">${it.invested ? "✔ inv." : it.equipped ? "✔" : ""}</td>
+        <td class="b">${it.container ? "↳ " : ""}${esc(it.name)}</td>
+        <td class="desc">${itemInfo(it)}</td>
       </tr>`
       )
       .join("");
-    const cur = model.currency;
+    const cur = model.currency || {};
+    const bulk = model.bulk || {};
     const coin = (v, l) => `<div class="cs-stat"><span class="cs-stat-box">${esc(v || "")}</span><em>${l}</em></div>`;
+    const bulkNow = bulk.value != null ? `${bulk.value}${bulk.light ? ` + ${bulk.light} L` : ""}` : "";
     return page(
       "Ausrüstung",
       model,
@@ -214,9 +305,9 @@
         </div>
         <div class="cs-panel"><div class="cs-bar">Traglast</div>
           <div class="cs-stat-row">
-            <div class="cs-stat"><span class="cs-stat-box">${esc(bulk)}</span><em>Getragen</em></div>
-            <div class="cs-stat"><span class="cs-stat-box">${esc(blank.level ? "" : 5 + str)}</span><em>Belastet ab</em></div>
-            <div class="cs-stat"><span class="cs-stat-box">${esc(blank.level ? "" : 10 + str)}</span><em>Maximum</em></div>
+            <div class="cs-stat"><span class="cs-stat-box">${esc(bulkNow)}</span><em>Getragen</em></div>
+            <div class="cs-stat"><span class="cs-stat-box">${esc(blank.level ? "" : bulk.encumbered)}</span><em>Belastet ab</em></div>
+            <div class="cs-stat"><span class="cs-stat-box">${esc(blank.level ? "" : bulk.max)}</span><em>Maximum</em></div>
           </div>
         </div>
       </div>
@@ -224,12 +315,53 @@
         <div class="cs-bar">Gegenstände</div>
         <table class="cs-table">
           ${ITEM_COLS}
-          <thead><tr><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Angelegt</th><th>Gegenstand</th></tr></thead>
+          <thead><tr><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Angelegt</th><th>Gegenstand</th><th>Wirkung / Kurzinfo</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-        ${lines(ITEM_COLS, 4)}
+        ${lines(ITEM_COLS, 5)}
       </div>
       <div class="cs-panel cs-notes-panel"><div class="cs-bar">Notizen</div>${lines("<colgroup><col></colgroup>", 1)}</div>`
+    );
+  }
+
+  /* ------------------------------------------------------------ Zustände */
+
+  function englishCondition(slug) {
+    if (slug === "off-guard") return "Off-Guard";
+    return slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+
+  function conditionsPage(model) {
+    const active = new Map((model.conditions || []).map((c) => [D.slug(c.name), c.value]));
+    const list = I18N.CONDITIONS.map((c) => {
+      const e = D.entry("cond:" + c.slug) || D.entry(c.slug) || {};
+      return Object.assign({}, c, { name: e.n || englishCondition(c.slug) });
+    }).sort((a, b) => a.name.localeCompare(b.name, "de"));
+    const rows = list
+      .map((c) => {
+        const key = active.has(D.slug(c.name)) ? D.slug(c.name) : c.slug;
+        const on = !blank.session && active.has(key);
+        const val = active.get(key);
+        return `
+      <div class="cs-cond ${on ? "on" : ""}">
+        <span class="cs-check ${on ? "on" : ""}"></span>
+        <div class="cs-cond-body">
+          <div class="cs-cond-head"><strong>${esc(c.name)}</strong><span class="cs-cond-en">${esc(englishCondition(c.slug))}</span>${
+          c.value ? `<span class="cs-cond-val">${on && val != null ? esc(val) : ""}</span>` : ""
+        }</div>
+          <div class="cs-cond-text">${esc(c.text)}</div>
+        </div>
+      </div>`;
+      })
+      .join("");
+    return page(
+      "Zustände",
+      model,
+      `<div class="cs-panel cs-fill"><div class="cs-bar">Zustände <small>– ankreuzen, Wert ins Kästchen</small></div>
+        <div class="cs-cond-grid" style="grid-template-rows: repeat(${Math.ceil(list.length / 2)}, 1fr)">${rows}</div></div>`
     );
   }
 
@@ -245,16 +377,14 @@
   /**
    * @param {object} model  Charaktermodell aus PF2_PARSER
    * @param {object} [opts] { mode: "spielbereit" (Standard) | "aufstieg" }
-   *   spielbereit – alles ausgefüllt außer Werten, die sich in der Spielrunde ändern
-   *   aufstieg    – zusätzlich alles leer, was sich beim Stufenaufstieg ändert
    */
   function render(model, opts) {
     const mode = (opts && opts.mode) || "spielbereit";
     blank = FRONT.blankFor(mode);
-    return `<div class="pf2-sheet">${warningsBlock(model)}${FRONT.render(model, { mode })}${conditionsPage(model)}${featsPage(model)}${spellsPage(
+    return `<div class="pf2-sheet">${warningsBlock(model)}${FRONT.render(model, { mode })}${abilitiesPage(model)}${levelPlanPage(
       model
-    )}${inventoryPage(model)}</div>`;
+    )}${spellsPage(model)}${inventoryPage(model)}${conditionsPage(model)}</div>`;
   }
 
   global.PF2_RENDER = { render };
-})(window);
+})(typeof window !== "undefined" ? window : globalThis);

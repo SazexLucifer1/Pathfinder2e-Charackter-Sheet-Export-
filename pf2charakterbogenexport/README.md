@@ -1,99 +1,130 @@
 # Pathfinder 2e – Charakterbogen-Export (Foundry VTT → Papierbogen, Deutsch)
 
-Ein kleines, rein clientseitiges Web-Tool, das einen in **Foundry VTT** (System: `pf2e`)
-angelegten Charakter einliest und daraus einen **druckfertigen, deutschsprachigen
-Papier-Charakterbogen** im Stil der Pathfinder-2-**Einsteigerbox** erzeugt.
+Ein rein clientseitiges Web-Tool: Es liest einen in **Foundry VTT** (System `pf2e`) angelegten
+Charakter aus der exportierten **JSON-Datei** und erzeugt daraus einen **druckfertigen,
+komplett deutschen Charakterbogen im Stil der Pathfinder-2-Einsteigerbox** – für **Stufe 1 bis 20**.
 
-Kein Server, kein Upload, keine Installation nötig – alles läuft lokal im Browser.
+Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
 
-## Eigenschaften
+## Was der Bogen kann
 
-- **Seite 1 = klassischer Charakterbogen**: Aufbau wie der bekannte Einsteigerbox-Bogen
-  (Würfel-, Aktions- und Kompetenzleiste links; Attributsmodifikatoren, Trefferpunkte,
-  Bewegungsrate, Wahrnehmung, Fertigkeiten; Rüstungsklasse, Rettungswürfe, Waffen & Angriffe
-  mit Mehrfachangriffsmalus, Waffenkompetenzen). Alle Werte werden mit ihrer Aufschlüsselung
-  (Attribut + Kompetenz + Gegenstand) eingetragen; die Kompetenzkästchen **G/E/M/L**
-  (Geübt, Experte, Meister, Legendär) und die Formel „Kompetenz = 2/4/6/8 + Stufe" machen den
-  Bogen bis Stufe 20 von Hand fortschreibbar.
-- **Komplett auf Deutsch** übersetzt (Fertigkeiten, Zustände, Kompetenzstufen, Rettungswürfe usw.),
-  basierend auf der offiziellen deutschen PF2-Terminologie.
-- **Maßeinheiten bleiben im englischen (imperialen) System** – Geschwindigkeit wird z. B. als
-  „25 Fuß" angezeigt, nicht in Meter umgerechnet (so wie es auch im deutschen Regelwerk üblich ist).
-- **Stufen 1–20**: Alle Werte sind aufgeschlüsselt und mit G/E/M/L-Kästchen versehen; Talente-,
-  Zauber- und Ausrüstungsseite haben leere Zeilen zum Nachtragen bei jedem Stufenaufstieg.
-- **Zustände-Seite**: Alle Pathfinder-2-Zustände mit Ankreuzkästchen und Wertfeld, um den
-  aktuellen Zustand des Charakters während des Spiels zu markieren.
-- **Talente & Fähigkeiten-Seite**: Listet alle importierten Talente/Merkmale mit Stufe, Quelle
-  (Volkstalent, Klassentalent, Fertigkeitstalent, Allgemeines Talent, Klassenmerkmal …) und
-  Beschreibung auf.
-- **Einheitliches Design** auf allen Seiten: Charakterbogen, Zustände, Talente & Fähigkeiten,
-  Zauber (nur bei Zauberwirkern, mit Zauberplätzen für Rang 1–10) und Ausrüstung (Vermögen,
-  Traglast, Gegenstände, Notizen).
+- **Seite 1 = klassischer Charakterbogen** im Aufbau des bekannten Einsteigerbox-Bogens:
+  Würfel-, Aktions- und Kompetenzleiste links; Attributsmodifikatoren, Trefferpunkte,
+  Bewegungsrate, Wahrnehmung (mit Sinnen), Fertigkeiten; Rüstungsklasse mit Schild,
+  Rettungswürfe, je 3 Nah- und Fernkampfangriffe mit Mehrfachangriffsmalus, Waffenkompetenzen.
+  Jeder Wert steht mit Aufschlüsselung da (Attribut + Kompetenz + Gegenstand, bei Fertigkeiten
+  zusätzlich Rüstungsmalus); Kompetenz als Kästchen **G / E / M / L**.
+- **Werte werden berechnet**: Foundry exportiert nur Rohdaten (keine fertigen Boni). Das Tool
+  rechnet Attribute (inkl. Teilsteigerungen ab +4), RK, TP, Rettungswürfe, Wahrnehmung,
+  Fertigkeiten, Angriffe/Schaden (Runen, Waffenspezialisierung, Lieblingswaffe …), Zauber-SG,
+  Zauberplätze und Traglast selbst aus. Situative Boni („+2 gegen Furcht“) werden nicht
+  eingerechnet – sie stehen bei der Fähigkeit.
+- **Zwei Bogen-Arten**:
+  - **Spielbereit** – alles ausgefüllt; leer bleibt nur, was sich während einer Spielrunde ändert
+    (aktuelle TP, temporäre TP, Heldenpunkte, Sterbend/Verwundet, Zustände, aktuelle Fokuspunkte).
+  - **Für Stufenaufstieg** – zusätzlich bleibt alles leer, was sich beim Stufenaufstieg ändert
+    (Stufe, EP, maximale TP, Attributsmodifikatoren, Kompetenzen und Kompetenzboni, RK,
+    Rettungswürfe, Wahrnehmung, Fertigkeiten, Angriffswerte inkl. Mehrfachangriffsmalus,
+    Zauber-SG/-angriff, Zauberplätze, Traglast-Grenzen). Namen, Ausrüstung, Waffenwürfel
+    (z. B. „2W8 + ST“), Gegenstandsboni, Talente und Zauber bleiben stehen – ideal, um die Werte
+    mit Bleistift zu führen.
+- **Fähigkeiten & Talente** auf das Nötigste gekürzt und nach Einsatz sortiert: Aktionen &
+  Reaktionen im Kampf (mit Auslöser/Voraussetzung), im Kampf immer aktiv, außerhalb des Kampfes,
+  immer aktiv, schon auf Seite 1 eingerechnet.
+- **Stufenplan 1–20**: bereits Gewähltes ist eingetragen, künftige Klassenmerkmale vorgemerkt,
+  freie Talentplätze und Steigerungen als Linien zum Ausfüllen.
+- **Zauber** mit allen Zauberquellen (Zauber-SG, Zauberangriff), Zauberplätzen für Rang 1–10 zum
+  Abhaken, Fokuspunkten und Kurzbeschreibung, Reichweite und Verteidigung jedes Zaubers.
+- **Ausrüstung**: alle Gegenstände mit Anzahl, Traglast, angelegt/investiert und Kurzinfo
+  (Aktivierung, Wirkung, Runen); Vermögen, Traglast und Notizen.
+- **Zustände** zum Ankreuzen mit Wertkästchen, Kurzerklärung und englischem Namen.
+- **Komplett deutsch**: Namen von Talenten, Zaubern, Gegenständen, Merkmalen usw. stammen aus der
+  offiziellen deutschen Übersetzung (siehe unten). Maßeinheiten bleiben – wie im deutschen
+  Regelwerk – in Fuß.
 
 ## Benutzung
 
-1. **Charakter aus Foundry exportieren**: Im Actor-Verzeichnis mit Rechtsklick auf den Charakter
-   → **„Export Data"** → es wird eine `.json`-Datei heruntergeladen.
-2. `index.html` in einem Browser öffnen (Doppelklick genügt, es wird kein Server benötigt).
-3. Die `.json`-Datei per Drag & Drop in das Feld ziehen (oder den Inhalt in das Textfeld einfügen).
-4. **Art des Bogens** wählen:
-   - **Spielbereit** – alles ausgefüllt; leer bleibt nur, was sich während einer Spielrunde ändert
-     (aktuelle TP, temporäre TP, Heldenpunkte, Sterbend/Verwundet, Zustände, aktuelle Fokuspunkte).
-   - **Für Stufenaufstieg** – zusätzlich bleibt alles leer, was sich beim Stufenaufstieg ändert
-     (Stufe, EP, maximale TP, Attributsmodifikatoren, Kompetenzen G/E/M/L und Kompetenzboni, RK,
-     Rettungswürfe, Wahrnehmung, Fertigkeiten, Angriffswerte inkl. Mehrfachangriffsmalus,
-     Zauber-SG/-angriff, Traglast-Grenzen). Namen, Ausrüstung, Waffenwürfel, Gegenstandsboni und
-     Talente bleiben stehen – ideal, um die Werte mit Bleistift zu führen.
-5. Auf **„Bogen erzeugen"** klicken (ein Wechsel der Bogen-Art baut den Bogen sofort neu auf).
-6. Auf **„Drucken / Als PDF speichern"** klicken und im Druckdialog des Browsers als PDF speichern
-   oder direkt ausdrucken.
+1. **In Foundry exportieren**: Im Actor-Verzeichnis mit Rechtsklick auf den Charakter →
+   **„Export Data“** → eine `.json`-Datei wird heruntergeladen.
+2. `index.html` im Browser öffnen (Doppelklick genügt).
+3. Die `.json`-Datei hineinziehen (oder den Inhalt einfügen).
+4. **Art des Bogens** wählen (spielbereit / für Stufenaufstieg) und **„Bogen erzeugen“** klicken.
+   Ein Wechsel der Bogen-Art baut den Bogen sofort neu auf.
+5. **„Drucken / Als PDF speichern“** → im Druckdialog *Hintergrundgrafiken* aktivieren und
+   „Als PDF speichern“ wählen (oder direkt drucken).
 
-Zum Ausprobieren kann über den Button **„Beispiel-Charakter laden"** ein mitgelieferter
-Beispiel-Charakter geladen werden (`sample/beispiel-charakter.json`). Dieser Button funktioniert
-nur, wenn die Seite über einen lokalen Webserver aufgerufen wird (z. B. `python3 -m http.server`),
-da Browser das Nachladen von Dateien über `file://` aus Sicherheitsgründen blockieren – die
-Kernfunktion (Drag & Drop / Einfügen) ist davon nicht betroffen.
+Die Beispiel-Charaktere (Valeros, Ezren, Kyra) lassen sich nur laden, wenn die Seite über einen
+lokalen Webserver läuft (z. B. `python3 -m http.server` im Ordner und dann
+`http://localhost:8000` öffnen) – Browser blockieren das Nachladen über `file://`.
+Die eigentliche Funktion (eigene Datei laden) geht auch ohne Server.
 
-## Technische Hinweise
+## Grenzen
 
-- Reines HTML/CSS/JavaScript ohne Build-Schritt und ohne externe Abhängigkeiten.
-- Der Parser (`src/parser.js`) liest ein Foundry-`pf2e`-Actor-Export-JSON defensiv aus:
-  Foundry-Exporte unterscheiden sich je nach Systemversion leicht in ihrer Struktur; fehlende
-  Felder führen zu Hinweisen auf dem Bogen statt zu Fehlern.
-- Die Kurztexte zu den Zuständen sind eigene Zusammenfassungen – maßgeblich bleibt immer das
-  offizielle Regelwerk.
-
-## Layout-Prüfung
-
-`tools/layout-check.js` erzeugt aus einer Foundry-JSON das PDF sowie je Seite einen Screenshot
-und prüft das Druck-Layout automatisch auf überlappende oder zu eng stehende Texte, Texte, die aus
-ihren Kästen oder Formen (Herz, Schild, Lupe …) ragen, Rahmen außerhalb ihres Bereichs sowie
-abgeschnittene Inhalte. Benötigt Node.js und Playwright (`npm i -D playwright`).
-
-```bash
-node tools/layout-check.js                      # Beispiel-Charakter
-node tools/layout-check.js mein-charakter.json  # eigener Export
-```
-
-Geprüft werden beide Bogen-Arten; das Ergebnis landet in `layout-check/spielbereit/` und
-`layout-check/aufstieg/` (PDF + `seite-N.png`); bei Problemen endet das Skript mit Exit-Code 1.
+- Die Berechnung bildet die wichtigsten Foundry-Regeln nach. Exotische Regelelemente
+  (z. B. Verwandlungen, Effekte, Homebrew-Skripte) werden nicht ausgewertet. Aktive Effekte
+  (Buffs) aus Foundry werden bewusst ignoriert, der Bogen zeigt die Grundwerte.
+- Für sehr neue oder selbst erstellte Inhalte gibt es eventuell keine deutsche Übersetzung –
+  dann steht dort der Originalname und ein Hinweis.
+- Seite 1 hat Platz für 3 Nah- und 3 Fernkampfangriffe (Waffen vor waffenlosen Angriffen).
 
 ## Projektstruktur
 
 ```
-index.html              Haupt-App (Upload-Oberfläche + Bogen-Ausgabe)
-src/i18n.js              Deutsche Begriffsdatenbank (Fertigkeiten, Zustände, Kompetenz, …)
-src/parser.js            Foundry-Actor-JSON → normalisiertes Charaktermodell
-src/front.js              Seite 1: klassischer Charakterbogen
-src/render.js             Charaktermodell → druckfertiges HTML (alle Seiten)
-src/main.js               UI-Verdrahtung (Datei-Upload, Buttons, Fehlerbehandlung)
-styles/front.css          Aussehen aller Bogen-Seiten
-styles/sheet.css          Seitengerüst (Bildschirm + Druck)
-styles/app.css            Aussehen der Upload-Oberfläche
-sample/beispiel-charakter.json   Beispiel-Charakter zum Testen
-tools/layout-check.js     Automatische Layout-Prüfung mit Screenshots
+index.html                 Oberfläche (Upload, Bogen-Art, Bogen-Ausgabe)
+src/data/dictionary-de.js  Deutsches Wörterbuch (automatisch erzeugt, s. u.)
+src/summarize.js           Kürzt deutsche Beschreibungen auf 1–2 Sätze
+src/dictionary.js          Nachschlagen deutscher Namen/Kurzfassungen/Merkmale
+src/i18n.js                Grundbegriffe (Attribute, Fertigkeiten, Zustände)
+src/skill-actions.js       Grund- und Fertigkeitsaktionen (für die Einordnung von Fähigkeiten)
+src/parser.js              Foundry-JSON → berechnetes Charaktermodell
+src/front.js               Seite 1: klassischer Charakterbogen
+src/render.js              Folgeseiten + Bogen-Arten (spielbereit / Stufenaufstieg)
+src/main.js                UI (Datei laden, Beispiele, Bogen-Art, Drucken)
+styles/front.css           Aussehen aller Bogen-Seiten
+styles/sheet.css           Seitengerüst (Bildschirm + Druck)
+styles/app.css             Aussehen der Oberfläche
+sample/                    Beispiel-Charaktere im echten Foundry-Exportformat
+tools/build-dictionary.mjs Erzeugt src/data/dictionary-de.js
+tools/test-parser.js       Testet Parser + Renderer (beide Bogen-Arten) mit Foundry-JSON-Dateien
+tools/layout-check.js      Automatische Layout-Prüfung mit PDF und Screenshots
 ```
 
-## Haftungsausschluss
+### Wörterbuch neu erzeugen
 
-Inoffizielles Fan-Projekt, nicht mit Paizo Inc. oder Ulisses Spiele verbunden.
+```bash
+git clone --depth 1 https://github.com/Foundry-VTT-PF2-German/lang-de-pf2e
+git clone --depth 1 https://github.com/foundryvtt/pf2e
+node tools/build-dictionary.mjs lang-de-pf2e pf2e/static/lang/en.json pf2e/packs/pf2e
+```
+
+### Testen
+
+```bash
+node tools/test-parser.js sample                      # Beispiele: berechnete Werte je Charakter
+node tools/test-parser.js pf2e/packs/pf2e/iconics     # alle Iconics des pf2e-Systems
+```
+
+### Layout-Prüfung
+
+`tools/layout-check.js` erzeugt aus einer Foundry-JSON für beide Bogen-Arten das PDF sowie je Seite
+einen Screenshot und prüft das Druck-Layout automatisch auf überlappende oder zu eng stehende
+Texte, Texte, die aus ihren Kästen oder Formen (Herz, Schild, Lupe …) ragen, Rahmen außerhalb
+ihres Bereichs sowie abgeschnittene Inhalte. Benötigt Node.js und Playwright (`npm i -D playwright`).
+
+```bash
+node tools/layout-check.js                      # Beispiel: Valeros
+node tools/layout-check.js mein-charakter.json  # eigener Export
+```
+
+Das Ergebnis landet in `layout-check/spielbereit/` und `layout-check/aufstieg/`
+(PDF + `seite-N.png`); bei Problemen endet das Skript mit Exit-Code 1.
+
+## Quellen & Lizenzen
+
+- Deutsche Namen und Kurzfassungen: Foundry-Modul **„German [Pathfinder 2e]“**
+  ([lang-de-pf2e](https://github.com/Foundry-VTT-PF2-German/lang-de-pf2e), MIT-Lizenz,
+  © Marco Seither), basierend auf den deutschen Texten von Ulisses Spiele.
+- Beispiel-Charaktere: Iconics aus dem [pf2e-System für Foundry VTT](https://github.com/foundryvtt/pf2e)
+  (Beschreibungstexte entfernt).
+- Inoffizielles Fan-Projekt, nicht mit Paizo Inc. oder Ulisses Spiele verbunden. Pathfinder ist
+  eine Marke von Paizo Inc. Dieses Werk nutzt Material gemäß der Paizo Community Use Policy.
