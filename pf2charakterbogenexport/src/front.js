@@ -388,8 +388,14 @@
     }
     // Wurfwaffe mit gleichen Werten: ein Feld, Hinweis am Namen
     const name = has ? w.name : "";
+    // Material (z. B. Silber gegen Teufel/Werwölfe) farbig in Klammern hinter dem Namen
+    const matSuffix = has && w.material ? ` (${w.material})` : "";
     // Wurfwaffe mit gleichen Werten: Hinweis in der Beschriftung unter dem Namen
     const thrownNote = has && w.thrownRange != null ? ` · AUCH WURF${w.thrownRange ? ` ${w.thrownRange} FUSS` : ""}` : "";
+    const nameLabel = (ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE") + thrownNote;
+    const nameField = matSuffix
+      ? `<span class="cs-blank ${lengthClass(name + matSuffix, 30, 60)}"><span class="v">${esc(name)}<span class="cs-mat">${esc(matSuffix)}</span></span><span class="l">${esc(nameLabel)}</span></span>`
+      : field(name, nameLabel, has ? lengthClass(name, 30, 60) : "");
     const attrLabel = has ? (w.attr === "dex" ? "GE" : "ST") : ranged ? "GE" : "ST";
     // Hinterhältiger Angriff: Zusatzwürfel orange hinter dem Schaden (Würfelzahl steigt mit der Stufe)
     const sneak = has && w.sneak ? (blank.level ? "+__W6" : `+${w.sneak}`) : "";
@@ -406,7 +412,7 @@
         <span class="cs-map-note">*Mehrfach&shy;angriffsmalus</span>
       </div>
       <div class="cs-wpn-calc"><span class="cs-eq">=</span>${field(attr, attrLabel)}<span class="cs-op">+</span>${field(prof, "KOMP.")}<span class="cs-op">+</span>${field(item, "GEGENST.")}</div>
-      <div class="cs-wpn-name">${field(name, (ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE") + thrownNote, has ? lengthClass(name, 30, 60) : "")}</div>
+      <div class="cs-wpn-name">${nameField}</div>
       <div class="cs-wpn-dmg">${dmgField}</div>
       <div class="cs-wpn-side">${teml(rank, "col")}<span class="cs-dtype">${typeCells}</span></div>
     </div>`;

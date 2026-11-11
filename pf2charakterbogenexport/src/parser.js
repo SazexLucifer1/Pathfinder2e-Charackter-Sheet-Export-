@@ -724,6 +724,8 @@
         // Schadenswürfel ohne Modifikatoren und Schadensart (für den Stufenaufstieg-Bogen)
         dice: die ? `${dice}${die}` : "",
         damageAttr: !ranged || thrown ? "str" : traits.includes("propulsive") ? "str/2" : "",
+        // Material ohne Qualitätsgrad („Silber“) – für den Namen auf Seite 1
+        material: D.material(get(s, "material.type", null)),
         // Hinterhältiger Angriff möglich: agile/Finesse-Waffe oder echte Fernkampfwaffe
         sneakOk: traits.includes("agile") || traits.includes("finesse") || (ranged && !thrown),
         damageTypeKey: baseType,

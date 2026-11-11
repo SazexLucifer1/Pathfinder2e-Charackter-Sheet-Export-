@@ -434,3 +434,4 @@
 .cs-item-mat { color: var(--cs-orange); font-weight: 700; font-size: 7.4pt; margin-top: 0.4mm; }
 .cs-item-tags { font-weight: 400; font-size: 7.2pt; color: #333; margin-top: 0.3mm; line-height: 1.25; }
 .cs-item-tags span { white-space: nowrap; hyphens: none; }
+.cs-mat { color: var(--cs-orange); }

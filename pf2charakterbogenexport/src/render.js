@@ -202,7 +202,7 @@
             (st) => `<tr>
           <td class="c">–</td>
           <td>${st.ranged ? "Fernkampf" : "Nahkampf"}${st.unarmed ? " (waffenlos)" : ""}</td>
-          <td class="b">${esc(st.name)}</td>
+          <td class="b">${esc(st.name)}${st.material ? `<span class="cs-mat"> (${esc(st.material)})</span>` : ""}</td>
           <td class="c act">${costSymbol(1)}</td>
           <td class="desc">${
             blank.level
