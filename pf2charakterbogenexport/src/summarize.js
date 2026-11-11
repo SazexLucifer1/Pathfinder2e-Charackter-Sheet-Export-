@@ -29,7 +29,8 @@
       // Aktionssymbole der Foundry-Schrift
       .replace(/<span class="action-glyph">\s*([^<]*?)\s*<\/span>/gi, (_, g) => ({ "1": "◆", A: "◆", a: "◆", "2": "◆◆", D: "◆◆", d: "◆◆", "3": "◆◆◆", T: "◆◆◆", t: "◆◆◆", R: "⤾", r: "⤾", F: "◇", f: "◇" })[g] || g)
       // Verweise auf Effekt-Gegenstände ("Zaubereffekt: …") sind nur Foundry-Technik
-      .replace(/@UUID\[[^\]]*effect[^\]]*\](\{[^}]*\})?/gi, "")
+      // Effekt-Links: Beschriftung behalten („immun“), nur reine Technik-Verweise („Effekt: …“) entfernen
+      .replace(/@UUID\[[^\]]*effect[^\]]*\](?:\{([^}]*)\})?/gi, (_, label) => (label && !/effekt\s*:/i.test(label) ? label : ""))
       .replace(/@UUID\[[^\]]*\]\{([^}]*)\}/g, "$1")
       .replace(/@UUID\[[^\]]*?([^.\]]+)\]/g, "$1")
       .replace(/@Check\[[^\]]*\]\{([^}]*)\}/g, "$1")
@@ -65,6 +66,10 @@
 
   const MECHANIC_RE =
     /\d|Bonus|Malus|SG\b|Schaden|TP\b|Aktion|Reaktion|Wurf|würf|Angriff|Zustand|Stufe|Rüstungsklasse|RK\b|Rettungs|Fertigkeit|Kompetenz|Zauber|erhältst|Erhöhe|erhöh|Treffer|Bewegungsrate|Ziel|Runde|Minute|Stunde|Fokus|wirkst|Talent|immun|Resistenz|Schwäche|Sicht\b|Dunkelsicht|Wähle|Handlung|Fuß\b|Falschen Fuß|Hand\b/i;
+
+  // Wie MECHANIC_RE, aber ohne „irgendeine Zahl“ – zum Erkennen von reinen Stimmungsabsätzen
+  // Nur am Wortanfang, damit z. B. „Fingerfertigkeit“ nicht als „Fertigkeit“ zählt.
+  const RULE_RE = /(?:^|[^A-Za-zÄÖÜäöüß])(?:Bonus|Malus|SG|Schaden|TP|Aktion|Reaktion|Wurf|Fertigkeitswurf|würf|Angriff|Zustand|Rüstungsklasse|RK|Rettungswurf|Kompetenz|Zauber|erhältst|Erhöhe|Treffer|Bewegungsrate|Runde|Minute|Stunde|Fokus|Talent|immun|Resistenz|Schwäche|Handlung|Falschen Fuß|Auf dem falschen Fuß|identifizier)/i;
 
   function splitSentences(text) {
     // Abkürzungen ("z. B.") und Ordnungszahlen ("5. Stufe") schützen
@@ -143,6 +148,9 @@
       if (txt) bodyParts.push(txt);
       if (bodyParts.join(" ").length > maxLen * 3) break;
     }
+    // Einleitende Absätze ohne Regelinhalt (reiner Stimmungstext) überspringen.
+    // Zahlen allein zählen hier nicht als Regel („10 Züge vorausplanen“).
+    while (bodyParts.length > 1 && !RULE_RE.test(bodyParts[0])) bodyParts.shift();
     const body = bodyParts.join(" ") || (variantParts[0] && variantParts[0].text) || "";
     if (body) res.s = shorten(splitSentences(body), maxLen);
     // Klassenvarianten ("Streiter: …", "Mystiker: …") – zur Laufzeit passend zur Klasse gewählt

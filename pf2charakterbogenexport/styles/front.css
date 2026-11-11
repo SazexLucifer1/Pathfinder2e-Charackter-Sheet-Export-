@@ -421,3 +421,10 @@
 .cs-key-fx ul { margin: 0.4mm 0 0 3.5mm; padding: 0; }
 .cs-key-fx li { margin: 0.3mm 0; }
 .cs-key-act { margin-bottom: 0.6mm; }
+
+/* Schadensspalte breiter (Platz für Hinterhältigen Angriff) */
+.cs-wpn { grid-template-columns: 22mm minmax(0, 1fr) 26mm 5mm; }
+.cs-sneak { color: var(--cs-orange); font-weight: 700; }
+.cs-dmg-sneak { width: 100%; margin-bottom: 2.8mm; }
+.cs-dmg-sneak .v { width: 100%; font-size: 8.6pt; white-space: nowrap; font-weight: 700; }
+.cs-dmg-sneak .l { font-size: 5.4pt; }

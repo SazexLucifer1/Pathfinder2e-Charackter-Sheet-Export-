@@ -724,6 +724,8 @@
         // Schadenswürfel ohne Modifikatoren und Schadensart (für den Stufenaufstieg-Bogen)
         dice: die ? `${dice}${die}` : "",
         damageAttr: !ranged || thrown ? "str" : traits.includes("propulsive") ? "str/2" : "",
+        // Hinterhältiger Angriff möglich: agile/Finesse-Waffe oder echte Fernkampfwaffe
+        sneakOk: traits.includes("agile") || traits.includes("finesse") || (ranged && !thrown),
         damageTypeKey: baseType,
       };
     }
@@ -797,6 +799,23 @@
     if (numeric.sneakDice) {
       const sa = abilities.find((a) => a.slug === "sneak-attack");
       if (sa) sa.summary = `${sa.summary ? sa.summary + " " : ""}Aktuell: +${numeric.sneakDice}W${numeric.sneakFaces || 6} Präzisionsschaden gegen Gegner, die Auf dem falschen Fuß sind (mit agiler/Finesse- oder Fernkampfwaffe).`;
+      const sneak = `${numeric.sneakDice}W${numeric.sneakFaces || 6}`;
+      // Angriffe, mit denen der Hinterhältige Angriff geht, bekommen den Zusatzschaden
+      strikes.forEach((st) => {
+        if (st.sneakOk) st.sneak = sneak;
+      });
+      // Fähigkeiten, die Gegner auf den falschen Fuß bringen, lösen ihn aus – Schaden dazuschreiben
+      abilities.forEach((a) => {
+        if (a === sa || a.slug === "sneak-attack") return;
+        const txt = [a.summary, a.trigger, a.requirement].join(" ");
+        // Nur wenn ein Gegner dadurch auf den falschen Fuß GERÄT („erhält … den Zustand Auf dem
+        // Falschen Fuß“) – nicht wenn es vorausgesetzt wird („gegen eine Kreatur mit dem Zustand …“)
+        // oder dich selbst betrifft („Du erhältst den Zustand … nicht“).
+        const causes = /\berh(?:ält|alten)\b[^.]{0,90}Zustand Auf dem Falschen Fuß/i.test(txt);
+        if (causes && !/hinterhältig/i.test(a.summary || "")) {
+          a.summary = `${a.summary ? a.summary + " " : ""}→ Damit greift dein Hinterhältiger Angriff: +${sneak} Präzisionsschaden (mit agiler/Finesse- oder Fernkampfwaffe).`;
+        }
+      });
     }
 
     /* ---- Stufenplan 1–20 ---- */

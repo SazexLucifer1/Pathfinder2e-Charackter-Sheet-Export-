@@ -89,7 +89,7 @@
     { slug: "repair", skill: "crafting", cost: "M", when: "ausserhalb", vs: "SG", text: "Repariere einen beschädigten Gegenstand (10 Min., Werkzeug nötig)." },
     { slug: "craft", skill: "crafting", cost: "A", when: "ausserhalb", trained: true, vs: "SG", text: "Stelle einen Gegenstand her (mehrere Tage, Material & Formel nötig)." },
     // ---- Wissensfertigkeiten
-    { slug: "recall-knowledge", skill: "knowledge", cost: 1, when: "kampf", vs: "SG", text: "Erinnere dich an Wissen, z. B. über die Schwächen eines Monsters (Arkane Künste, Natur, Okkultismus, Religion, Gesellschaft …)." },
+    { slug: "recall-knowledge", skill: "knowledge", cost: 1, when: "kampf", vs: "SG", text: "Erinnere dich an Wissen, z. B. über die Schwächen eines Monsters (z. B. Arkane Künste, Naturkunde, Okkultismus, Religionskunde, Gesellschaftskunde)." },
     { slug: "identify-magic", skill: "magic", cost: "E", when: "ausserhalb", trained: true, vs: "SG", text: "Finde heraus, welche Magie in einem Gegenstand oder Effekt steckt (Arkane Künste, Natur, Okkultismus, Religion)." },
     { slug: "learn-a-spell", skill: "magic", cost: "A", when: "ausserhalb", trained: true, vs: "SG", text: "Lerne einen neuen Zauber (nur für Zauberwirkende)." },
     { slug: "decipher-writing", skill: "knowledge", cost: "E", when: "ausserhalb", trained: true, vs: "SG", text: "Entschlüssle fremde, alte oder verschlüsselte Texte." },

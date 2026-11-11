@@ -391,6 +391,11 @@
     // Wurfwaffe mit gleichen Werten: Hinweis in der Beschriftung unter dem Namen
     const thrownNote = has && w.thrownRange != null ? ` · AUCH WURF${w.thrownRange ? ` ${w.thrownRange} FUSS` : ""}` : "";
     const attrLabel = has ? (w.attr === "dex" ? "GE" : "ST") : ranged ? "GE" : "ST";
+    // Hinterhältiger Angriff: Zusatzwürfel orange hinter dem Schaden (Würfelzahl steigt mit der Stufe)
+    const sneak = has && w.sneak ? (blank.level ? "+__W6" : `+${w.sneak}`) : "";
+    const dmgField = sneak
+      ? `<span class="cs-blank cs-dmg-sneak"><span class="v">${esc(dmg)} <b class="cs-sneak">${esc(sneak)}</b></span><span class="l">SCHADEN · HINTERHÄLTIG</span></span>`
+      : field(dmg, "SCHADEN");
     const typeCells = ["W", "S", "H"].map((l) => `<span class="${dmgType === l ? "on" : ""}">${l}</span>`).join("");
     return `
     <div class="cs-wpn">
@@ -402,7 +407,7 @@
       </div>
       <div class="cs-wpn-calc"><span class="cs-eq">=</span>${field(attr, attrLabel)}<span class="cs-op">+</span>${field(prof, "KOMP.")}<span class="cs-op">+</span>${field(item, "GEGENST.")}</div>
       <div class="cs-wpn-name">${field(name, (ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE") + thrownNote, has ? lengthClass(name, 30, 60) : "")}</div>
-      <div class="cs-wpn-dmg">${field(dmg, "SCHADEN")}</div>
+      <div class="cs-wpn-dmg">${dmgField}</div>
       <div class="cs-wpn-side">${teml(rank, "col")}<span class="cs-dtype">${typeCells}</span></div>
     </div>`;
   }
