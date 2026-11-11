@@ -88,17 +88,34 @@
   const diamond = (x, fill) =>
     `<polygon points="${x},10 ${x + 8},2 ${x + 16},10 ${x + 8},18" fill="${fill}" stroke="#111" stroke-width="1.5" stroke-linejoin="round"/><polyline points="${x + 5},6 ${x + 9},10 ${x + 5},14" fill="none" stroke="#fff" stroke-width="2"/>`;
 
+  // Reaktion: gebogener Pfeil gegen den Uhrzeigersinn
+  const REACTION_SVG = `<svg viewBox="0 0 24 20"><path d="M12 17.5 A7.5 7.5 0 1 0 4.8 8" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/><polygon points="1,4.5 9.5,6.5 3,12.5" fill="#111"/></svg>`;
+  const FREE_SVG = `<svg viewBox="0 0 20 20"><polygon points="2,10 10,2 18,10 10,18" fill="#fff" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/><polygon points="6,10 10,6 14,10 10,14" fill="#111"/></svg>`;
+
+  /** Aktionssymbol als HTML (für Tabellen der Folgeseiten): 1–3 Aktionen, F, R, sonst Text. */
+  function actionIcon(cost) {
+    if (cost === "R") return `<span class="cs-ico">${REACTION_SVG}</span>`;
+    if (cost === "F") return `<span class="cs-ico">${FREE_SVG}</span>`;
+    if (typeof cost === "number" && cost >= 1) {
+      const n = Math.min(cost, 3);
+      let d = "";
+      for (let i = 0; i < n; i++) d += diamond(2 + i * 10, "#111");
+      return `<span class="cs-ico n${n}"><svg viewBox="0 0 ${n * 10 + 10} 20">${d}</svg></span>`;
+    }
+    return "";
+  }
+
   const ACTION_ICONS = [
     { label: "Einzelaktion", svg: `<svg viewBox="0 0 20 20">${diamond(2, "#111")}</svg>` },
     { label: "Zwei-Aktionen-Aktivität", svg: `<svg viewBox="0 0 30 20">${diamond(2, "#111")}${diamond(12, "#111")}</svg>` },
     { label: "Drei-Aktionen-Aktivität", svg: `<svg viewBox="0 0 40 20">${diamond(2, "#111")}${diamond(12, "#111")}${diamond(22, "#111")}</svg>` },
     {
       label: "Freie Aktion",
-      svg: `<svg viewBox="0 0 20 20"><polygon points="2,10 10,2 18,10 10,18" fill="#fff" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/><polygon points="6,10 10,6 14,10 10,14" fill="#111"/></svg>`,
+      svg: FREE_SVG,
     },
     {
       label: "Reaktion",
-      svg: `<svg viewBox="0 0 24 20"><path d="M6 4 A8 7 0 1 1 7 17" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/><polygon points="1,2 10,2 6,9" fill="#111"/></svg>`,
+      svg: REACTION_SVG,
     },
   ];
 
@@ -167,7 +184,7 @@
       .map(
         (a) => `
         <div class="cs-abil">
-          <div class="cs-abil-name"><strong>${esc(a.name)}</strong><label><span class="cs-check"></span>Teilsteigerung</label></div>
+          <div class="cs-abil-name"><strong>${esc(a.name)}</strong><label><span class="cs-check ${!blank.level && model.partialBoosts && model.partialBoosts[a.key] ? "on" : ""}"></span>Teilsteigerung</label></div>
           <div class="cs-abil-box">${esc(L(sign(model.abilities[a.key] || 0)))}</div>
           <div class="cs-abil-short">${esc(a.short)}</div>
         </div>`
@@ -240,7 +257,7 @@
         <div class="cs-skill-calc">
           <span class="cs-eq">=</span>${field(nameIsInput && !name ? "" : L(sign(attr)), short)}
           <span class="cs-op">+</span>${field(nameIsInput && !name ? "" : L(plain(prof)), "KOMP.")}${teml(R(rank), "grid")}
-          <span class="cs-op">+</span>${field(item ? plain(item) : "", "GEGENST.", "wide")}
+          <span class="cs-op">+</span>${field(item ? plain(item) : "", "GEG.", "wide")}
           ${armor ? `<span class="cs-op">−</span>${field(penalty ? plain(-penalty) : "", "RÜST.", "wide")}` : ""}
         </div>
       </div>`;
@@ -369,6 +386,10 @@
         dmg = typeWord ? w.damage.replace(new RegExp("\\s*" + typeWord + "\\b"), "") : w.damage;
       }
     }
+    // Wurfwaffe mit gleichen Werten: ein Feld, Hinweis am Namen
+    const name = has ? w.name : "";
+    // Wurfwaffe mit gleichen Werten: Hinweis in der Beschriftung unter dem Namen
+    const thrownNote = has && w.thrownRange != null ? ` · AUCH WURF${w.thrownRange ? ` ${w.thrownRange} FUSS` : ""}` : "";
     const attrLabel = has ? (w.attr === "dex" ? "GE" : "ST") : ranged ? "GE" : "ST";
     const typeCells = ["W", "S", "H"].map((l) => `<span class="${dmgType === l ? "on" : ""}">${l}</span>`).join("");
     return `
@@ -380,34 +401,65 @@
         <span class="cs-map-note">*Mehrfach&shy;angriffsmalus</span>
       </div>
       <div class="cs-wpn-calc"><span class="cs-eq">=</span>${field(attr, attrLabel)}<span class="cs-op">+</span>${field(prof, "KOMP.")}<span class="cs-op">+</span>${field(item, "GEGENST.")}</div>
-      <div class="cs-wpn-name">${field(has ? w.name : "", ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE", has ? lengthClass(w.name, 30, 60) : "")}</div>
+      <div class="cs-wpn-name">${field(name, (ranged ? "FERNKAMPFWAFFE" : "NAHKAMPFWAFFE") + thrownNote, has ? lengthClass(name, 30, 60) : "")}</div>
       <div class="cs-wpn-dmg">${field(dmg, "SCHADEN")}</div>
       <div class="cs-wpn-side">${teml(rank, "col")}<span class="cs-dtype">${typeCells}</span></div>
     </div>`;
   }
 
   /**
-   * Verteilt die Angriffe auf die je 3 Nah- und Fernkampfplätze von Seite 1:
-   * gehaltene Waffen zuerst, waffenlose Angriffe zuletzt. Was keinen Platz
-   * findet, steht in "rest" (wird auf der Fähigkeiten-Seite aufgeführt).
+   * Verteilt die Angriffe auf die 6 Angriffsplätze von Seite 1.
+   *  - Eine Wurf-Variante („Sternmesser (geworfen)“) mit gleichem Angriff und
+   *    Schaden wie die Nahkampfwaffe wird nicht doppelt aufgeführt; die
+   *    Nahkampfwaffe bekommt stattdessen den Hinweis „auch geworfen“.
+   *  - Normal 3 Nah- und 3 Fernkampfplätze; gibt es von einer Art weniger,
+   *    bekommt die andere die freien Plätze.
+   *  - Reihenfolge: gehaltene Waffen zuerst, waffenlose Angriffe zuletzt.
+   * Liefert die 6 Plätze (null = leerer Platz, mit Art) und "rest" (kein Platz).
    */
   function attackSlots(model) {
+    const strikes = (model.strikes || []).map((s) => Object.assign({}, s));
+    const merged = [];
+    strikes.forEach((s) => {
+      const m = /^(.*) \(geworfen\)$/.exec(s.name);
+      const base = m && strikes.find((o) => !o.ranged && o.name === m[1]);
+      if (base && base.bonus === s.bonus && base.damage === s.damage) {
+        base.thrownRange = s.range || null;
+      } else {
+        merged.push(s);
+      }
+    });
     const order = (a) => (a.unarmed ? 2 : 0) + (a.equipped ? 0 : 1);
-    const sorted = (model.strikes || []).slice().sort((a, b) => order(a) - order(b));
+    const sorted = merged.sort((a, b) => order(a) - order(b));
     const meleeAll = sorted.filter((a) => !a.ranged);
     const rangedAll = sorted.filter((a) => a.ranged);
-    return {
-      melee: meleeAll.slice(0, 3),
-      ranged: rangedAll.slice(0, 3),
-      rest: meleeAll.slice(3).concat(rangedAll.slice(3)),
-    };
+    const SLOTS = 6;
+    let meleeN;
+    let rangedN;
+    if (meleeAll.length + rangedAll.length <= SLOTS) {
+      meleeN = meleeAll.length;
+      rangedN = rangedAll.length;
+    } else {
+      rangedN = rangedAll.length ? Math.min(rangedAll.length, Math.max(1, SLOTS - meleeAll.length)) : 0;
+      meleeN = SLOTS - rangedN;
+    }
+    const melee = meleeAll.slice(0, meleeN);
+    const ranged = rangedAll.slice(0, rangedN);
+    // Leere Plätze: möglichst auf 3/3 auffüllen
+    const free = SLOTS - melee.length - ranged.length;
+    const emptyMelee = Math.min(Math.max(0, 3 - melee.length), free);
+    const emptyRanged = free - emptyMelee;
+    const slots = melee
+      .map((w) => ({ w, ranged: false }))
+      .concat(Array.from({ length: emptyMelee }, () => ({ w: null, ranged: false })))
+      .concat(ranged.map((w) => ({ w, ranged: true })))
+      .concat(Array.from({ length: emptyRanged }, () => ({ w: null, ranged: true })));
+    return { slots, rest: meleeAll.slice(meleeN).concat(rangedAll.slice(rangedN)) };
   }
 
   function weapons(model) {
     // Waffen vor waffenlosen Angriffen, getragene vor verstauten; je 3 Plätze Nah-/Fernkampf
-    const { melee, ranged } = attackSlots(model);
-    const blocks = [0, 1, 2].map((i) => weaponBlock(melee[i], false)).join("") +
-      [0, 1, 2].map((i) => weaponBlock(ranged[i], true)).join("");
+    const blocks = attackSlots(model).slots.map((sl) => weaponBlock(sl.w, sl.ranged)).join("");
     const wp = (model.proficiencies && model.proficiencies.attacks) || {};
     return `
     <div class="cs-panel cs-weapons">
@@ -452,5 +504,5 @@
     </section>`;
   }
 
-  global.PF2_FRONT = { render, attackSlots, blankFor: (mode) => ({ session: true, level: mode === "aufstieg" }) };
+  global.PF2_FRONT = { render, attackSlots, actionIcon, blankFor: (mode) => ({ session: true, level: mode === "aufstieg" }) };
 })(window);

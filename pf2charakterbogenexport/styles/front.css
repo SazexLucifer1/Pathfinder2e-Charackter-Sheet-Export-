@@ -12,7 +12,7 @@
   padding: 7mm 8mm !important;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   color: var(--cs-black);
-  font-size: 7.5pt;
+  font-size: 8pt;
   line-height: 1.15;
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@
 .cs-id > div:nth-child(6),
 .cs-id > div:nth-child(7) { border-top: var(--cs-line) solid var(--cs-black); }
 .cs-id-name { grid-row: 1 / span 2; border-left: none !important; }
-.cs-id-val { min-height: 6mm; padding: 0.6mm 2mm; font-size: 9.5pt; font-weight: 700; display: flex; align-items: center; gap: 2mm; }
+.cs-id-val { min-height: 6mm; padding: 0.6mm 2mm; font-size: 10.5pt; font-weight: 700; display: flex; align-items: center; gap: 2mm; }
 .cs-id-val.big { font-size: 13pt; min-height: 7mm; }
 .cs-id-player { margin-top: auto; border-top: var(--cs-line) solid var(--cs-black); padding: 0.6mm 2mm; display: flex; flex-direction: column; align-items: center; }
 .cs-id-player span { font-size: 9pt; min-height: 3.5mm; }
@@ -81,20 +81,19 @@
 .cs-dice { flex: 7; display: flex; flex-direction: column; justify-content: space-around; padding: 1mm 0; }
 .cs-die { display: flex; align-items: flex-end; justify-content: center; gap: 1mm; }
 .cs-die svg { width: 11mm; height: 11mm; }
-.cs-die span { font-weight: 700; font-size: 7pt; }
+.cs-die span { font-weight: 700; font-size: 7.5pt; }
 .cs-acts { flex: 5; display: flex; flex-direction: column; }
 .cs-act {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  border-bottom: var(--cs-line) solid var(--cs-orange); text-align: center; font-weight: 700; font-size: 6.3pt; gap: 0.5mm;
+  border-bottom: var(--cs-line) solid var(--cs-orange); text-align: center; font-weight: 700; font-size: 7pt; gap: 0.5mm;
 }
 .cs-act svg { height: 4mm; width: auto; }
 .cs-profs { flex: 4; display: flex; flex-direction: column; }
 .cs-prof {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  border-bottom: var(--cs-line) solid var(--cs-orange); text-transform: uppercase; font-size: 6.5pt;
-}
+  border-bottom: var(--cs-line) solid var(--cs-orange); text-transform: uppercase; font-size: 7pt; gap: 0.6mm; line-height: 1.1; }
 .cs-prof:last-child { border-bottom: none; }
-.cs-prof span { font-size: 6pt; }
+.cs-prof span { font-size: 6.5pt; }
 
 /* ---------- Gemeinsame Bausteine ---------- */
 .cs-shape { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: none; }
@@ -116,18 +115,17 @@
 
 .cs-blank { display: inline-flex; flex-direction: column; align-items: center; position: relative; margin-bottom: 2mm; }
 .cs-blank .v {
-  min-width: 7mm; min-height: 3.6mm; text-align: center; font-size: 8pt; font-weight: 700;
+  min-width: 7mm; min-height: 3.6mm; text-align: center; font-size: 9pt; font-weight: 700;
   border-bottom: var(--cs-line) solid #444; padding: 0 0.5mm;
 }
-.cs-blank .l { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 5pt; color: var(--cs-gray); font-weight: 700; letter-spacing: 0.02em; margin-top: 0.1mm; white-space: nowrap; }
+.cs-blank .l { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); text-align: center; font-size: 5.8pt; color: var(--cs-gray); font-weight: 700; letter-spacing: 0.02em; margin-top: 0.1mm; white-space: nowrap; }
 .cs-blank.fixed .v { font-size: 9pt; }
-.cs-eq, .cs-op { font-weight: 700; font-size: 8pt; margin: 0 0.6mm 2mm; }
+.cs-eq, .cs-op { font-weight: 700; font-size: 9pt; margin: 0 0.6mm 2mm; }
 
 .cs-teml { display: inline-grid; flex: none; vertical-align: middle; border: var(--cs-line) solid var(--cs-black); }
 .cs-teml span {
-  width: 2.5mm; height: 2.5mm; font-size: 4.6pt; font-weight: 700; display: flex; align-items: center; justify-content: center;
-  border: calc(var(--cs-line) / 2) solid var(--cs-black); color: #555;
-}
+  width: 2.5mm; height: 2.5mm; font-size: 5.4pt; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  border: calc(var(--cs-line) / 2) solid var(--cs-black); color: #555; line-height: 1; }
 .cs-teml span.on { background: var(--cs-black); color: #fff; }
 .cs-teml.grid { grid-template-columns: 2.5mm 2.5mm; }
 .cs-teml.col { grid-template-columns: 2.5mm; margin-left: auto; }
@@ -136,64 +134,64 @@
 .cs-check { display: inline-block; width: 2.4mm; height: 2.4mm; border: var(--cs-line) solid var(--cs-black); margin-right: 0.8mm; vertical-align: -0.4mm; }
 
 .cs-notes { border: var(--cs-line) solid var(--cs-black); display: flex; justify-content: center; }
-.cs-notes span { font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; margin-top: 0.6mm; }
+.cs-notes span { font-size: 6pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; margin-top: 0.6mm; }
 
 /* ---------- Spalte A: Attribute / TP / Bewegung / Wahrnehmung ---------- */
 .cs-colA-top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 2mm; }
 .cs-abils { display: flex; flex-direction: column; }
 .cs-abil { flex: 1; display: flex; align-items: center; padding: 0.8mm 1mm; gap: 0.8mm; }
 .cs-abil-name { flex: 1; display: flex; flex-direction: column; }
-.cs-abil-name strong { font-size: 6.2pt; text-transform: uppercase; letter-spacing: -0.01em; }
-.cs-abil-name label { font-size: 5.8pt; margin-top: 0.4mm; }
+.cs-abil-name strong { font-size: 7pt; text-transform: uppercase; letter-spacing: -0.01em; }
+.cs-abil-name label { font-size: 6.5pt; margin-top: 0.4mm; }
 .cs-abil-box {
   width: 9mm; height: 6.5mm; border: 0.5mm solid var(--cs-orange); border-radius: 1mm; flex: none;
-  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10pt;
+  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11pt;
 }
-.cs-abil-short { width: 4.5mm; flex: none; font-weight: 700; font-size: 7.5pt; text-align: right; }
+.cs-abil-short { width: 4.5mm; flex: none; font-weight: 700; font-size: 8pt; text-align: right; }
 
 .cs-vitals { display: flex; flex-direction: column; gap: 2mm; }
 .cs-hp-top { display: grid; grid-template-columns: auto 1fr 1fr; align-items: end; gap: 0.5mm; padding: 1mm 1mm 0; }
 .cs-hp-cur { display: flex; flex-direction: column; align-items: center; }
-.cs-hp-cur .l { margin-top: 0.4mm; font-size: 5.5pt; font-weight: 700; color: var(--cs-orange); text-transform: uppercase; }
+.cs-hp-cur .l { margin-top: 0.4mm; font-size: 6pt; font-weight: 700; color: var(--cs-orange); text-transform: uppercase; }
 .cs-hp-max, .cs-hp-temp { display: flex; flex-direction: column; align-items: center; }
 .cs-hp-temp { border-left: var(--cs-line) solid var(--cs-black); height: 100%; justify-content: flex-end; }
 .cs-hp-max .v, .cs-hp-temp .v { font-weight: 700; font-size: 11pt; min-height: 5mm; }
-.cs-hp-max .l, .cs-hp-temp .l { font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
+.cs-hp-max .l, .cs-hp-temp .l { font-size: 6pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
 .cs-hp-cond { padding: 0.8mm 1.2mm 1.2mm; display: flex; flex-direction: column; gap: 0.6mm; }
 .cs-hp-cond > div { display: flex; align-items: center; justify-content: space-between; }
-.cs-hp-cond strong { font-size: 6.8pt; text-transform: uppercase; }
+.cs-hp-cond strong { font-size: 7.5pt; text-transform: uppercase; }
 .cs-dying { display: inline-flex; border: var(--cs-line) solid var(--cs-black); }
-.cs-dying span { width: 3mm; height: 3mm; font-size: 5.5pt; display: flex; align-items: center; justify-content: center; border-left: calc(var(--cs-line) / 2) solid var(--cs-black); color: #555; }
+.cs-dying span { width: 3mm; height: 3mm; font-size: 6pt; display: flex; align-items: center; justify-content: center; border-left: calc(var(--cs-line) / 2) solid var(--cs-black); color: #555; line-height: 1; }
 .cs-dying span.on { background: var(--cs-black); color: #fff; }
-.cs-wounded { width: 6mm; height: 3mm; border: var(--cs-line) solid var(--cs-black); font-size: 6.5pt; font-weight: 700; text-align: center; line-height: 3mm; }
+.cs-wounded { width: 6mm; height: 3mm; border: var(--cs-line) solid var(--cs-black); font-size: 7pt; font-weight: 700; text-align: center; line-height: 3mm; }
 
 .cs-speed-row { display: flex; align-items: center; justify-content: space-between; padding: 1mm 1.5mm; }
 .cs-unit { font-weight: 700; font-size: 8pt; text-transform: uppercase; }
-.cs-speed-other { font-size: 6pt; padding: 0 1.5mm 1mm; }
+.cs-speed-other { font-size: 6.8pt; padding: 0 1.5mm 1mm; }
 
 .cs-perc-row { display: flex; align-items: center; padding: 1mm 1mm 0.5mm; gap: 0.2mm; }
 .cs-perc-row .cs-blank .v { min-width: 5.5mm; }
 .cs-perc-row .cs-shape-lens { width: 13mm; height: 13mm; }
 .cs-perc-row .cs-eq, .cs-perc-row .cs-op { margin-left: 0.4mm; margin-right: 0.4mm; }
 .cs-perc-row .cs-teml { margin-left: auto; margin-bottom: 2mm; }
-.cs-perc-item { font-size: 5.8pt; padding: 0 1.5mm 0.8mm; color: #444; }
+.cs-perc-item { font-size: 6.8pt; padding: 0 1.5mm 0.8mm; color: #444; }
 
 /* ---------- Fertigkeiten ---------- */
 .cs-skills { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .cs-skill { flex: 1; display: flex; align-items: center; padding: 0 1.2mm; gap: 0.8mm; }
-.cs-skill-name { width: 21.5mm; flex: none; letter-spacing: -0.015em; text-align: right; font-weight: 700; font-size: 6.5pt; display: flex; flex-direction: column; align-items: flex-end; }
-.cs-lore { border-bottom: var(--cs-line) solid #444; width: 100%; min-height: 3mm; font-size: 6.3pt; text-align: right; line-height: 1.1; }
-.cs-lore.long { font-size: 5.4pt; }
-.cs-lore.xlong { font-size: 4.8pt; }
+.cs-skill-name { width: 22mm; flex: none; letter-spacing: -0.015em; text-align: right; font-weight: 700; font-size: 7.2pt; display: flex; flex-direction: column; align-items: flex-end; }
+.cs-lore { border-bottom: var(--cs-line) solid #444; width: 100%; min-height: 3mm; font-size: 7pt; text-align: right; line-height: 1.1; }
+.cs-lore.long { font-size: 6pt; }
+.cs-lore.xlong { font-size: 5.4pt; }
 .cs-lore-suffix { margin-top: 0.5mm; line-height: 1; }
-.cs-lore-suffix { font-size: 5.5pt; color: var(--cs-gray); }
+.cs-lore-suffix { font-size: 6pt; color: var(--cs-gray); }
 .cs-skill-calc {
   flex: 1; min-width: 0; display: flex; align-items: center; border: var(--cs-line) solid var(--cs-black); border-left: none;
   height: 6mm; margin-left: -1.2mm; padding: 0 1mm 0 1.6mm; gap: 0.2mm;
 }
-.cs-skill-calc .cs-blank .v { min-width: 5.4mm; min-height: 3.1mm; font-size: 7.5pt; }
-.cs-skill-calc .cs-blank .l { font-size: 4.3pt; letter-spacing: 0; }
-.cs-skill-calc .cs-op, .cs-skill-calc .cs-eq { margin: 0 0.45mm 1.6mm; }
+.cs-skill-calc .cs-blank .v { min-width: 5.6mm; min-height: 3.1mm; font-size: 8.6pt; }
+.cs-skill-calc .cs-blank .l { font-size: 5pt; letter-spacing: 0; }
+.cs-skill-calc .cs-op, .cs-skill-calc .cs-eq { margin: 0 0.3mm 1.6mm; }
 .cs-blank.wide .v { min-width: 7.6mm; }
 .cs-skill .cs-shape-box { width: 9.6mm; }
 .cs-skill-calc .cs-blank { margin-bottom: 1.6mm; }
@@ -202,26 +200,26 @@
 /* ---------- Spalte B: RK ---------- */
 .cs-ac-grid { display: grid; grid-template-columns: minmax(0, 1fr) 12mm; gap: 1.5mm; padding: 1mm 1.2mm 0; }
 .cs-ac-row { display: flex; align-items: center; gap: 0.6mm; margin-bottom: 0.8mm; }
-.cs-ac-label { width: 12.5mm; flex: none; text-transform: uppercase; font-size: 7pt; text-align: center; }
+.cs-ac-label { width: 12.5mm; flex: none; text-transform: uppercase; font-size: 7.8pt; text-align: center; }
 .cs-ac-calc { display: flex; flex-direction: column; gap: 0.4mm; }
 .cs-ac-calc > div { display: flex; align-items: center; }
 .cs-ac-calc .cs-blank .v { min-width: 7mm; }
 .cs-ac-calc .cs-blank { margin-bottom: 2.5mm; }
 .cs-ac-calc .cs-op { margin-bottom: 2.5mm; }
-.cs-ac-row > .cs-eq { margin: 0 1mm; }
-.cs-ac-items { font-size: 6pt; color: #444; padding-left: 1mm; }
+.cs-ac-row > .cs-eq { margin: 0 1.4mm 0 0.6mm; }
+.cs-ac-items { font-size: 6.8pt; color: #444; padding-left: 1mm; }
 .cs-ac-prof { display: flex; align-items: center; gap: 1.5mm; padding: 0.6mm 1.2mm 1mm; }
-.cs-ac-prof > strong { font-size: 5.8pt; text-transform: uppercase; width: 15mm; text-align: center; line-height: 1.1; }
+.cs-ac-prof > strong { font-size: 6.2pt; text-transform: uppercase; width: 19mm; text-align: center; line-height: 1.1; }
 .cs-ap-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 0.8mm 1.5mm; }
 .cs-ap { display: flex; align-items: center; justify-content: space-between; gap: 1mm; }
-.cs-ap em, .cs-wprof em { font-style: normal; font-weight: 700; font-size: 5.8pt; text-transform: uppercase; }
+.cs-ap em, .cs-wprof em { font-style: normal; font-weight: 700; font-size: 6.5pt; text-transform: uppercase; }
 
 /* ---------- Rettungswürfe ---------- */
 .cs-saves-grid { display: grid; grid-template-columns: minmax(0, 1fr) 12mm; gap: 1.5mm; padding: 0.8mm 1.2mm 1.2mm; }
 .cs-save { display: flex; align-items: center; gap: 0.6mm; padding: 0.6mm 0 0; border-bottom: var(--cs-line) solid #bbb; }
 .cs-save .cs-teml { margin-left: auto; margin-bottom: 1.6mm; }
 .cs-save:last-child { border-bottom: none; }
-.cs-save strong { width: 15mm; text-transform: uppercase; font-size: 7pt; }
+.cs-save strong { width: 15mm; text-transform: uppercase; font-size: 8pt; }
 
 /* ---------- Waffen ---------- */
 .cs-weapons { flex: 1; display: flex; flex-direction: column; min-height: 0; }
@@ -240,31 +238,31 @@
 .cs-wpn-shape { grid-area: shape; position: relative; display: flex; align-items: flex-start; }
 .cs-wpn-tag {
   position: absolute; left: 0.6mm; top: 9.3mm; z-index: 1; background: var(--cs-orange); color: #fff; font-weight: 700;
-  font-size: 5.3pt; text-transform: uppercase; padding: 0.2mm 0.8mm; border-radius: 0.6mm;
+  font-size: 5.8pt; text-transform: uppercase; padding: 0.2mm 0.8mm; border-radius: 0.6mm;
 }
 .cs-wpn-map { grid-area: map; display: flex; align-items: center; gap: 0.3mm 0.8mm; flex-wrap: wrap; white-space: nowrap; }
 .cs-map { flex: none; }
 .cs-map-note { flex-basis: 100%; line-height: 1; }
 .cs-map { display: inline-flex; align-items: center; border: 0.4mm solid var(--cs-orange); border-radius: 0.8mm; overflow: hidden; }
-.cs-map em { background: var(--cs-orange); color: #fff; font-style: normal; font-weight: 700; font-size: 4.8pt; padding: 0.3mm 0.8mm; text-transform: uppercase; }
-.cs-map b { min-width: 6mm; text-align: center; font-size: 7.5pt; }
-.cs-map-note { font-size: 4.3pt; font-weight: 700; color: var(--cs-orange); text-transform: uppercase; }
+.cs-map em { background: var(--cs-orange); color: #fff; font-style: normal; font-weight: 700; font-size: 5.6pt; padding: 0.3mm 0.8mm; text-transform: uppercase; }
+.cs-map b { min-width: 6mm; text-align: center; font-size: 8.6pt; }
+.cs-map-note { font-size: 5.2pt; font-weight: 700; color: var(--cs-orange); text-transform: uppercase; }
 .cs-wpn-calc { grid-area: calc; display: flex; align-items: center; padding-top: 0.6mm; }
 .cs-wpn-name { grid-area: name; }
 .cs-wpn-dmg { grid-area: dmg; }
 .cs-wpn-name .cs-blank, .cs-wpn-dmg .cs-blank { width: 100%; margin-bottom: 2mm; }
-.cs-wpn-name .cs-blank .v, .cs-wpn-dmg .cs-blank .v { width: 100%; font-size: 7.5pt; white-space: nowrap; }
-.cs-wpn-name .cs-blank.long .v { font-size: 5.8pt; white-space: normal; line-height: 1; }
-.cs-wpn-name .cs-blank.xlong .v { font-size: 5pt; white-space: normal; line-height: 1; letter-spacing: -0.01em; }
-.cs-wpn-name .cs-blank .l, .cs-wpn-dmg .cs-blank .l { font-size: 5.3pt; }
+.cs-wpn-name .cs-blank .v, .cs-wpn-dmg .cs-blank .v { width: 100%; font-size: 8.6pt; white-space: nowrap; }
+.cs-wpn-name .cs-blank.long .v { font-size: 7pt; white-space: normal; line-height: 1; }
+.cs-wpn-name .cs-blank.xlong .v { font-size: 6pt; white-space: normal; line-height: 1; letter-spacing: -0.01em; }
+.cs-wpn-name .cs-blank .l, .cs-wpn-dmg .cs-blank .l { font-size: 5.4pt; }
 .cs-wpn-side { grid-area: side; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5mm; border-left: var(--cs-line) solid var(--cs-black); padding-top: 0.2mm; }
 .cs-wpn-side .cs-teml { margin: 0; }
 .cs-dtype { display: inline-grid; grid-template-columns: 2.5mm; border: var(--cs-line) solid var(--cs-black); }
-.cs-dtype span { width: 2.5mm; height: 2.5mm; font-size: 4.6pt; font-weight: 700; display: flex; align-items: center; justify-content: center; border: calc(var(--cs-line) / 2) solid var(--cs-black); color: #555; }
+.cs-dtype span { width: 2.5mm; height: 2.5mm; font-size: 5.4pt; font-weight: 700; display: flex; align-items: center; justify-content: center; border: calc(var(--cs-line) / 2) solid var(--cs-black); color: #555; line-height: 1; }
 .cs-dtype span.on { background: var(--cs-black); color: #fff; }
 
 .cs-wprof { padding: 0.8mm 1.2mm 1.2mm; }
-.cs-wprof-title { text-align: center; font-weight: 700; font-size: 8.5pt; text-transform: uppercase; border-bottom: var(--cs-line) solid var(--cs-black); margin: 0 -1.2mm 1mm; padding-bottom: 0.5mm; }
+.cs-wprof-title { text-align: center; font-weight: 700; font-size: 9pt; text-transform: uppercase; border-bottom: var(--cs-line) solid var(--cs-black); margin: 0 -1.2mm 1mm; padding-bottom: 0.5mm; }
 .cs-wprof-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8mm 2mm; }
 .cs-wprof-grid > span { display: flex; align-items: center; justify-content: space-between; gap: 1mm; }
 .cs-wprof-grid > span.wide { grid-column: span 2; }
@@ -287,9 +285,9 @@
 .cs-page .cs-top { margin-bottom: 0; }
 .cs-pagename { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 0.5mm solid var(--cs-black); padding-bottom: 0.8mm; flex: none; }
 .cs-pagename span { font-weight: 700; font-size: 11pt; }
-.cs-pagename em { font-style: normal; font-weight: 700; font-size: 7.5pt; color: var(--cs-gray); text-transform: uppercase; }
+.cs-pagename em { font-style: normal; font-weight: 700; font-size: 8pt; color: var(--cs-gray); text-transform: uppercase; }
 .cs-fill { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.cs-bar small { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 6.5pt; margin-left: 1mm; }
+.cs-bar small { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 7pt; margin-left: 1mm; }
 .cs-check.on { background: var(--cs-black); }
 
 /* Zustände */
@@ -298,35 +296,35 @@
 .cs-cond .cs-check { flex: none; width: 3mm; height: 3mm; margin-top: 0.3mm; }
 .cs-cond-body { flex: 1; min-width: 0; }
 .cs-cond-head { display: flex; align-items: center; gap: 1.5mm; }
-.cs-cond-head strong { font-size: 7.5pt; text-transform: uppercase; }
-.cs-cond-val { width: 6mm; height: 3.6mm; border: 0.4mm solid var(--cs-orange); border-radius: 0.8mm; font-size: 7pt; font-weight: 700; text-align: center; line-height: 3mm; margin-left: auto; }
-.cs-cond-text { font-size: 6pt; color: #333; line-height: 1.2; margin-top: 0.2mm; }
+.cs-cond-head strong { font-size: 8.6pt; text-transform: uppercase; }
+.cs-cond-val { width: 6mm; height: 3.6mm; border: 0.4mm solid var(--cs-orange); border-radius: 0.8mm; font-size: 8pt; font-weight: 700; text-align: center; line-height: 3mm; margin-left: auto; }
+.cs-cond-text { font-size: 7.2pt; color: #333; line-height: 1.2; margin-top: 0.2mm; }
 .cs-cond.on strong { color: var(--cs-orange); }
 
 /* Tabellen */
 .cs-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-.cs-page .cs-table th { background: #ededed; color: var(--cs-black); font-family: Arial, Helvetica, sans-serif; letter-spacing: 0.03em; font-size: 6pt; text-transform: uppercase; text-align: left; padding: 0.6mm 1.2mm; border-bottom: var(--cs-line) solid var(--cs-black); }
-.cs-page .cs-table td { font-size: 7pt; color: var(--cs-black); padding: 0.8mm 1.2mm; border-bottom: var(--cs-line) solid #bbb; vertical-align: top; height: 6.5mm; }
+.cs-page .cs-table th { background: #ededed; color: var(--cs-black); font-family: Arial, Helvetica, sans-serif; letter-spacing: 0.03em; font-size: 7pt; text-transform: uppercase; text-align: left; padding: 0.6mm 1.2mm; border-bottom: var(--cs-line) solid var(--cs-black); }
+.cs-page .cs-table td { font-size: 8.5pt; color: var(--cs-black); padding: 0.8mm 1.2mm; border-bottom: var(--cs-line) solid #bbb; vertical-align: top; height: 6.5mm; }
 .cs-table td + td, .cs-table th + th { border-left: var(--cs-line) solid #bbb; }
 .cs-table td.c, .cs-table th.c { text-align: center; }
 .cs-table td.b { font-weight: 700; }
 .cs-table td.act { font-size: 8pt; }
-.cs-table td.desc { font-size: 6.2pt; line-height: 1.22; color: #222; }
+.cs-table td.desc { font-size: 7.8pt; line-height: 1.22; color: #222; }
 .cs-table tr { break-inside: avoid; }
 
 /* Werte-Kästchen (Zauber, Vermögen, Traglast) */
 .cs-stat-row { display: flex; gap: 3mm; padding: 1.5mm 2mm; align-items: flex-end; }
 .cs-stat { display: flex; flex-direction: column; align-items: center; gap: 0.5mm; }
-.cs-stat em { font-style: normal; font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
+.cs-stat em { font-style: normal; font-size: 6.4pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
 .cs-stat-box { min-width: 13mm; height: 7mm; border: 0.5mm solid var(--cs-orange); border-radius: 1mm; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10pt; padding: 0 1.5mm; }
 .cs-stat-box.wide { min-width: 30mm; font-size: 8.5pt; }
 .cs-stat-pips { display: flex; gap: 1.5mm; height: 7mm; align-items: center; }
 .cs-pip { width: 4.5mm; height: 4.5mm; border: 0.5mm solid var(--cs-orange); border-radius: 50%; }
 .cs-pip.on { background: var(--cs-orange); }
 .cs-slots { border-collapse: collapse; margin: 0 2mm 2mm; width: calc(100% - 4mm); table-layout: fixed; }
-.cs-slots th, .cs-slots td { border: var(--cs-line) solid var(--cs-black); font-size: 6.5pt; text-align: center; height: 5.5mm; }
+.cs-slots th, .cs-slots td { border: var(--cs-line) solid var(--cs-black); font-size: 7.5pt; text-align: center; height: 5.5mm; }
 .cs-slots tr:first-child th { background: var(--cs-black); color: #fff; }
-.cs-slots th:first-child { width: 17mm; text-transform: uppercase; font-size: 5.8pt; background: #ededed; color: var(--cs-black); }
+.cs-slots th:first-child { width: 17mm; text-transform: uppercase; font-size: 6.6pt; background: #ededed; color: var(--cs-black); }
 .cs-slots tr:first-child th:first-child { background: var(--cs-black); color: #fff; }
 
 /* Ausrüstung */
@@ -345,7 +343,7 @@
 
 /* Gruppenzeilen in Tabellen (Fähigkeiten nach Kampf/außerhalb, Zauber je Quelle) */
 .cs-page .cs-table tr.cs-grp td {
-  background: #fbe7d9; color: var(--cs-black); font-weight: 700; font-size: 6.8pt; text-transform: uppercase;
+  background: #fbe7d9; color: var(--cs-black); font-weight: 700; font-size: 7.6pt; text-transform: uppercase;
   letter-spacing: 0.04em; padding: 0.7mm 1.2mm; height: auto; border-left: none; border-top: var(--cs-line) solid var(--cs-orange);
 }
 .cs-page .cs-table tr.cs-grp td small { font-weight: 400; text-transform: none; letter-spacing: 0; color: #555; }
@@ -357,12 +355,12 @@
 .cs-plan tr.reached td { background: #fff7f0; }
 .cs-plan .cs-check { width: 3mm; height: 3mm; margin: 0; vertical-align: middle; }
 .cs-plan-cell { display: flex; flex-wrap: wrap; gap: 0.8mm 3mm; align-items: baseline; }
-.cs-plan-entry { display: inline-flex; align-items: baseline; gap: 1mm; font-size: 6.8pt; }
-.cs-plan-entry em { font-style: normal; color: var(--cs-gray); font-weight: 700; font-size: 5.6pt; text-transform: uppercase; }
+.cs-plan-entry { display: inline-flex; align-items: baseline; gap: 1mm; font-size: 8pt; }
+.cs-plan-entry em { font-style: normal; color: var(--cs-gray); font-weight: 700; font-size: 6.4pt; text-transform: uppercase; }
 .cs-plan-blank { display: inline-block; width: 30mm; border-bottom: var(--cs-line) solid #444; height: 3mm; }
 
 /* Zustände: englischer Name klein daneben */
-.cs-cond-en { font-size: 5.5pt; color: var(--cs-gray); }
+.cs-cond-en { font-size: 6.4pt; color: var(--cs-gray); }
 
 /* Zauberquellen-Tabelle mit Fokuspunkten daneben */
 .cs-spell-head { display: flex; gap: 3mm; align-items: flex-start; padding: 1.5mm 2mm; }
@@ -370,6 +368,49 @@
 .cs-page .cs-entries td { height: 5.5mm; vertical-align: middle; }
 .cs-page .cs-entries td.cs-num { font-size: 9pt; font-weight: 700; color: var(--cs-black); }
 .cs-focus { display: flex; flex-direction: column; align-items: center; gap: 0.6mm; padding-top: 1mm; min-width: 22mm; }
-.cs-focus em { font-style: normal; font-size: 5.5pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
+.cs-focus em { font-style: normal; font-size: 6.4pt; font-weight: 700; color: var(--cs-gray); text-transform: uppercase; }
 .cs-slots.multi th:first-child { width: 30mm; }
-.cs-slot-src { display: block; font-size: 5.6pt; text-transform: none; line-height: 1.1; margin-bottom: 0.5mm; }
+.cs-slot-src { display: block; font-size: 6.4pt; text-transform: none; line-height: 1.1; margin-bottom: 0.5mm; }
+
+/* Aktionssymbole in Tabellen */
+.cs-ico { display: inline-block; height: 3.6mm; vertical-align: middle; }
+.cs-ico svg { height: 100%; width: auto; display: block; }
+
+.cs-plan-entry small { font-size: 7pt; color: #555; margin-left: 0.6mm; }
+.cs-plan-hint { font-size: 7.2pt; color: #444; padding: 1mm 1.5mm; border-bottom: var(--cs-line) solid #ccc; flex: none; }
+
+/* Piktogramme in der Ausrüstungsliste */
+.cs-page .cs-table td.ico { padding: 0.5mm 0; vertical-align: middle; }
+.cs-item-ico { display: inline-block; width: 5mm; height: 5mm; vertical-align: middle; }
+.cs-item-ico svg { width: 100%; height: 100%; display: block; }
+
+.cs-page .cs-table td { overflow-wrap: anywhere; hyphens: auto; }
+.cs-page .cs-table th { white-space: nowrap; }
+
+/* Felder mindestens so breit wie ihre Beschriftung */
+.cs-wpn-calc .cs-blank .v { min-width: 7mm; }
+.cs-wpn-calc .cs-blank .l { font-size: 5.4pt; }
+.cs-wpn-calc .cs-blank:last-child .v { min-width: 11mm; }
+.cs-wpn-calc .cs-op { margin-left: 1mm; margin-right: 1mm; }
+.cs-perc-row .cs-blank .v { min-width: 6.4mm; }
+.cs-perc-row .cs-shape-lens { width: 12.5mm; height: 12.5mm; }
+.cs-perc-row .cs-eq, .cs-perc-row .cs-op { margin-left: 0.2mm; margin-right: 0.2mm; }
+.cs-perc-row .cs-blank .l { font-size: 5.4pt; }
+
+/* Attributnamen: lange Namen (GESCHICKLICHKEIT) dürfen das Wertkästchen nicht verschieben */
+.cs-abil-name { min-width: 0; }
+.cs-abil-name strong { font-size: 6.6pt; letter-spacing: -0.01em; white-space: nowrap; }
+.cs-ac-row > .cs-eq { margin: 0 2mm 0 0.6mm; }
+.cs-skill-calc { height: 6.8mm; }
+.cs-skill-calc .cs-blank, .cs-skill-calc .cs-op, .cs-skill-calc .cs-eq { margin-bottom: 2mm; }
+.cs-wpn-name .cs-blank, .cs-wpn-dmg .cs-blank { margin-bottom: 2.8mm; }
+.cs-wpn-calc .cs-blank, .cs-wpn-calc .cs-op, .cs-wpn-calc .cs-eq { margin-bottom: 2.8mm; }
+.cs-wpn-calc { align-items: flex-start; padding-top: 0.8mm; }
+/* 6 belegte Angriffsplätze: etwas kompaktere Formen und Abstände */
+.cs-shape-melee, .cs-shape-ranged { height: 7.6mm; }
+.cs-wpn-tag { top: 8.4mm; }
+.cs-wpn { padding-top: 0.3mm; }
+.cs-wpn-calc { padding-top: 0.2mm; }
+.cs-wpn-map { gap: 0.1mm 0.8mm; }
+.cs-wpn-map { row-gap: 0.4mm; }
+.cs-page .cs-table td.ico { vertical-align: top; padding-top: 0.6mm; }

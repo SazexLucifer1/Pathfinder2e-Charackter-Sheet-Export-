@@ -70,7 +70,8 @@
     // Abkürzungen ("z. B.") und Ordnungszahlen ("5. Stufe") schützen
     const protectedText = text
       .replace(/\b(z|d|u|bzw|ggf|ca|evtl|max|min|bspw|inkl|vgl|usw|S|Nr)\.\s?(?=\w)/g, "$1§ ")
-      .replace(/(\d)\.\s(?=(?:Stufe|Grad|Rang|Kreis)\b)/g, "$1§ ");
+      // Ordnungszahlen: „5. Stufe“, „2. Grades“, „3. Rang“ …
+      .replace(/(\d)\.\s(?=(?:Stufe|Grad|Rang|Kreis|Level)\w*\b)/g, "$1§ ");
     return protectedText
       .split(/(?<=[.!?])\s+(?=[A-ZÄÖÜ„"(])/)
       .map((s) => s.replace(/§/g, ".").trim())
@@ -85,8 +86,8 @@
     for (let i = start; i < sentences.length; i++) {
       const s = sentences[i];
       if (!out) {
+        // Der erste Satz bleibt immer vollständig – nie mitten im Satz abschneiden.
         out = s;
-        if (out.length > maxLen) out = out.slice(0, maxLen - 1).replace(/\s+\S*$/, "") + " …";
         continue;
       }
       if (out.length + 1 + s.length > maxLen) break;
@@ -215,7 +216,7 @@
       const rules = all.filter((x) => ITEM_RULE_RE.test(x));
       let out = "";
       for (const x of rules) {
-        if (!out) out = x.length > maxLen ? x.slice(0, maxLen - 1).replace(/\s+\S*$/, "") + " …" : x;
+        if (!out) out = x; // erster Satz immer vollständig
         else if (out.length + 1 + x.length <= maxLen) out += " " + x;
         else break;
       }

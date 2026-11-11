@@ -239,6 +239,9 @@
 
     /* ---- Attribute ---- */
     const attrs = { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 };
+    // Für den Stufenplan: gewählte Steigerungen und Attributwerte nach Stufe 1/5/10/15/20
+    const attrBoosts = {};
+    const attrHistory = {};
     const manual = system.abilities && typeof system.abilities === "object" && Object.keys(system.abilities).length > 0;
     if (manual) {
       for (const a of ATTRS) {
@@ -288,6 +291,8 @@
         if (l > level) continue;
         const b = lvlBoosts[l];
         (Array.isArray(b) ? b.slice(0, 4) : []).forEach(boost);
+        attrBoosts[l] = Array.isArray(b) ? b.slice(0, 4) : [];
+        attrHistory[l] = Object.assign({}, attrs);
       }
       const apex = get(system, "build.attributes.apex", null);
       if (apex && apex in attrs) attrs[apex] = Math.max(attrs[apex] + 1, 4);
@@ -422,6 +427,9 @@
       rules.filter((x) => x.rule.key === "ActiveEffectLike").forEach((x) => applyAE(x.rule, x.item, opts));
     }
     for (const [a, v] of Object.entries(numeric.attrAdd)) attrs[a] += v;
+    // Offene Teilsteigerung (z. B. +4,5): auf Seite 1 als „Teilsteigerung“ ankreuzen
+    const partialBoosts = {};
+    for (const a of ATTRS) partialBoosts[a] = !manual && attrs[a] % 1 !== 0;
     for (const a of ATTRS) attrs[a] = Math.trunc(Math.max(-5, Math.min(10, attrs[a])));
 
     const options = baseOptions();
@@ -792,7 +800,7 @@
     }
 
     /* ---- Stufenplan 1–20 ---- */
-    const levelPlan = buildLevelPlan(items, cls, level);
+    const levelPlan = buildLevelPlan(items, cls, level, { system, attrBoosts, attrHistory, background });
 
     /* ---- Zauber ---- */
     const spellcasting = parseSpellcasting(items, { level, attrs, rank: r.spellcasting, modsFor, focusMax: numeric.focusMax, system });
@@ -861,6 +869,7 @@
         manualAttributes: manual,
       },
       abilities: attrs,
+      partialBoosts,
       hp,
       ac: { value: acValue, armor: armor ? D.itemName(armor) : "Keine Rüstung", armorCategory: armorCat, dexCap: dexCap < 99 ? dexCap : null, rank: armorRank },
       shield: shieldInfo,
@@ -1007,7 +1016,94 @@
   }
 
   /** Für jede Stufe: welche Talentplätze/Steigerungen es gibt und was gewählt wurde. */
-  function buildLevelPlan(items, cls, level) {
+  const ATTR_SHORT = { str: "ST", dex: "GE", con: "KO", int: "IN", wis: "WE", cha: "CH" };
+  const SKILL_EN = {
+    acrobatics: "acrobatics", arcana: "arcana", athletics: "athletics", crafting: "crafting", deception: "deception",
+    diplomacy: "diplomacy", intimidation: "intimidation", medicine: "medicine", nature: "nature", occultism: "occultism",
+    performance: "performance", religion: "religion", society: "society", stealth: "stealth", survival: "survival", thievery: "thievery",
+  };
+  const RANK_DE = ["Ungeübt", "Geübt", "Experte", "Meister", "Legendär"];
+  const RANK_MIN_LEVEL = { 2: 2, 3: 7, 4: 15 }; // ab welcher Stufe eine Steigerung diesen Rang erlauben darf
+
+  /**
+   * Rekonstruiert die Fertigkeitssteigerungen. Foundry speichert nur den
+   * Endrang jeder Fertigkeit, nicht wann gesteigert wurde. Aus den gewählten
+   * Rängen (system.skills.*.rank, ohne Ränge aus Regeln/Hintergrund) und den
+   * Lore-Fertigkeiten ergibt sich, welche Steigerungen es gab; die Reihenfolge
+   * richtet sich nach Talent-Voraussetzungen („expert in Medicine“ für ein
+   * Talent der Stufe 4 ⇒ Experte spätestens auf Stufe 4) und den Regeln
+   * (Meister ab Stufe 7, Legendär ab Stufe 15). Ohne solche Hinweise ist die
+   * Reihenfolge geschätzt.
+   */
+  function reconstructSkillIncreases(items, cls, level, skillIncLevels, ctx) {
+    const raw = get(ctx.system, "skills", {}) || {};
+    const ups = []; // je Rangstufe über „Geübt“ eine Steigerung
+    Object.keys(SKILL_EN).forEach((k) => {
+      const rank = num(get(raw, `${k}.rank`, 0), 0);
+      for (let rk = 2; rk <= rank; rk++) ups.push({ key: k, name: D.SKILL_DE ? D.SKILL_DE[k] || k : k, rank: rk });
+    });
+    items
+      .filter((it) => it.type === "lore")
+      .forEach((it) => {
+        const rank = num(get(it, "system.proficient.value", 0), 0);
+        const name = D.itemName(it);
+        for (let rk = 2; rk <= rank; rk++) ups.push({ key: null, lore: true, name, rank: rk });
+      });
+    // Gewählte geübte Fertigkeiten über das Budget von Stufe 1 hinaus ⇒ durch Steigerungen geübt
+    const cs = (cls && cls.system) || {};
+    const trainedRaw = Object.keys(SKILL_EN).filter((k) => num(get(raw, `${k}.rank`, 0), 0) >= 1).length;
+    const intL1 = Math.trunc((ctx.attrHistory[1] || {}).int || 0);
+    const budgetL1 = (get(cs, "trainedSkills.value", []) || []).length + num(get(cs, "trainedSkills.additional", 0), 0) + intL1;
+    const extraTrained = Math.max(0, trainedRaw - budgetL1);
+
+    // Fristen aus Talent-Voraussetzungen („expert in X“, „master in X“)
+    const deadline = (u) => {
+      let best = Infinity;
+      items
+        .filter((it) => it.type === "feat")
+        .forEach((f) => {
+          const lv = num(get(f, "system.level.taken", get(f, "system.level.value", 0)), 0);
+          (get(f, "system.prerequisites.value", []) || []).forEach((pr) => {
+            const t = String((pr && pr.value) || "").toLowerCase();
+            const want = /legendary/.test(t) ? 4 : /master/.test(t) ? 3 : /expert/.test(t) ? 2 : 0;
+            if (want >= u.rank && u.key && new RegExp(`\\b${u.key}\\b`).test(t)) best = Math.min(best, lv);
+          });
+        });
+      return best;
+    };
+    ups.forEach((u) => (u.deadline = deadline(u)));
+    const levels = skillIncLevels.filter((l) => l <= level);
+    const result = {};
+    const pending = ups.slice();
+    let hinted = false;
+    levels.forEach((l) => {
+      // verfügbar: Rang erlaubt und vorherige Rangstufe derselben Fertigkeit schon vergeben
+      const avail = pending.filter((u) => (RANK_MIN_LEVEL[u.rank] || 1) <= l && !pending.some((o) => o !== u && o.name === u.name && o.rank < u.rank));
+      avail.sort((a, b) => a.deadline - b.deadline || a.rank - b.rank || a.name.localeCompare(b.name, "de"));
+      const pick = avail[0];
+      if (pick) {
+        if (pick.deadline !== Infinity) hinted = true;
+        pending.splice(pending.indexOf(pick), 1);
+        result[l] = { skill: pick, guessed: pick.deadline === Infinity };
+      }
+    });
+    // übrige Steigerungen ⇒ neue Fertigkeit geübt (welche, ist im Export nicht erkennbar)
+    let extra = extraTrained;
+    levels.forEach((l) => {
+      if (!result[l] && extra > 0) {
+        result[l] = { newTrained: true };
+        extra--;
+      }
+    });
+    // Rest: Steigerung wurde genutzt, lässt sich aus dem Endstand aber nicht zuordnen
+    levels.forEach((l) => {
+      if (!result[l]) result[l] = { unknown: true };
+    });
+    return { byLevel: result, hinted };
+  }
+
+  function buildLevelPlan(items, cls, level, ctx) {
+    ctx = ctx || { attrBoosts: {}, attrHistory: {}, system: {} };
     const cs = (cls && cls.system) || {};
     const lv = (k, def) => (get(cs, `${k}.value`, def) || def);
     const slots = {
@@ -1025,6 +1121,7 @@
       if (typeof loc === "string" && /^[a-z]+-\d+$/.test(loc)) bySlot.set(loc, D.itemName(f));
     });
     const features = cls ? feats.filter((f) => get(f, "system.location", null) === cls._id) : [];
+    const incs = reconstructSkillIncreases(items, cls, level, skillInc, ctx);
     const plan = [];
     for (let l = 1; l <= 20; l++) {
       const entries = [];
@@ -1041,10 +1138,42 @@
       for (const k of ["ancestry", "class", "skill", "general"]) {
         if (slots[k].includes(l)) entries.push({ kind: LABEL[k], name: bySlot.get(`${k}-${l}`) || "" });
       }
-      if (skillInc.includes(l)) entries.push({ kind: "Fertigkeitssteigerung", name: "" });
-      if ([5, 10, 15, 20].includes(l)) entries.push({ kind: "Attributsteigerungen (4×)", name: "" });
+      if (skillInc.includes(l)) {
+        const inc = l <= level ? incs.byLevel[l] : null;
+        let name = "";
+        let note = "";
+        if (inc && inc.skill) {
+          const sk = inc.skill;
+          name = `${sk.name} → ${RANK_DE[sk.rank]}`;
+          // Wert der Fertigkeit auf dieser Stufe (Attribut der Stufe + Kompetenz, ohne Gegenstände)
+          const ab = sk.key && I18N.SKILLS[sk.key] ? I18N.SKILLS[sk.key].ability : sk.lore ? "int" : null;
+          const hist = ctx.attrHistory[[20, 15, 10, 5, 1].find((x) => x <= l && ctx.attrHistory[x])] || {};
+          if (ab != null && hist[ab] != null) {
+            const v = Math.trunc(hist[ab]) + l + 2 * sk.rank;
+            note = `${v >= 0 ? "+" : ""}${v}`;
+          }
+          if (inc.guessed) note = note ? `${note}, Stufe geschätzt` : "Stufe geschätzt";
+        } else if (inc && inc.newTrained) {
+          name = "weitere Fertigkeit → Geübt";
+          note = "welche, steht nicht im Export";
+        } else if (inc && inc.unknown) {
+          name = "nicht eindeutig";
+          note = "vermutlich eine weitere Fertigkeit geübt – im Export nicht erkennbar";
+        }
+        entries.push({ kind: "Fertigkeitssteigerung", name, note });
+      }
+      if ([1, 5, 10, 15, 20].includes(l)) {
+        const b = l <= level ? ctx.attrBoosts[l] || [] : [];
+        const h = l <= level ? ctx.attrHistory[l] : null;
+        const name = b.length ? b.map((a) => ATTR_SHORT[a] || a).join(", ") : "";
+        const note = h
+          ? "danach " + Object.keys(ATTR_SHORT).map((a) => `${ATTR_SHORT[a]} ${Math.trunc(h[a]) >= 0 ? "+" : ""}${Math.trunc(h[a])}${h[a] % 1 ? "½" : ""}`).join(" · ")
+          : "";
+        if (l > 1 || name) entries.push({ kind: l === 1 ? "Freie Attributsteigerungen (4×)" : "Attributsteigerungen (4×)", name, note });
+      }
       plan.push({ level: l, reached: l <= level, entries });
     }
+    plan.skillIncreasesHinted = incs.hinted;
     return plan;
   }
 
@@ -1201,7 +1330,37 @@
       runes,
       spell,
       usage: get(s, "usage.value", ""),
+      kind: itemKind(it, traits),
     };
+  }
+
+  /** Art eines Gegenstands für das Piktogramm in der Ausrüstungsliste. */
+  function itemKind(it, traits) {
+    const s = it.system || {};
+    const slug = String(s.slug || D.slug(it.name || ""));
+    const usage = String(get(s, "usage.value", ""));
+    const has = (t) => traits.includes(t);
+    if (it.type === "weapon") {
+      if (has("staff")) return "stecken";
+      return num(s.range, 0) > 0 && !traits.some((t) => /^thrown/.test(t)) ? "fernkampf" : "waffe";
+    }
+    if (it.type === "armor") return get(s, "category", "") === "shield" ? "schild" : "ruestung";
+    if (it.type === "shield") return "schild";
+    if (it.type === "ammo" || has("ammunition")) return "munition";
+    if (it.type === "backpack") return "behaelter";
+    if (it.type === "book" || /spellbook|book|formula/.test(slug)) return "buch";
+    if (it.type === "treasure") return "schatz";
+    if (has("staff")) return "stecken";
+    if (has("wand")) return "zauberstab";
+    if (has("scroll")) return "schriftrolle";
+    if (has("potion") || has("elixir") || has("mutagen")) return "trank";
+    if (has("oil")) return "oel";
+    if (has("talisman")) return "talisman";
+    if (/torch|lantern|candle|sunrod/.test(slug)) return "licht";
+    if (has("invested") || /^worn./.test(usage) || usage === "worn") return "schmuck";
+    if (it.type === "kit" || /tool|kit|set$|thieves/.test(slug)) return "werkzeug";
+    if (it.type === "consumable") return "verbrauch";
+    return "ausruestung";
   }
 
   function parseInventory(items, attrs, numeric) {

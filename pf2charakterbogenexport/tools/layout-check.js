@@ -67,7 +67,9 @@ const server = http.createServer((req, res) => {
     const out = [];
     const label = (el) => {
       const t = (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 30);
-      return `${el.className || el.tagName}「${t}」`;
+      const panel = el.closest('.cs-panel');
+      const where = panel ? ' in ' + [...panel.classList].filter((c) => c !== 'cs-panel')[0] : '';
+      return `${el.className || el.tagName}「${t}」${where}`;
     };
     // 1) Text-Rechtecke pro Textknoten sammeln
     const texts = [];
@@ -93,7 +95,7 @@ const server = http.createServer((req, res) => {
     for (const t of texts) {
       const box = t.el.closest(boxSel); if (!box) continue;
       const br = box.getBoundingClientRect();
-      const tol = 0.5;
+      const tol = -0.5; // Text muss mind. 0,5 px Abstand zum Rand seines Kastens haben
       if (t.rc.left < br.left - tol || t.rc.right > br.right + tol || t.rc.top < br.top - tol || t.rc.bottom > br.bottom + tol)
         out.push(`RAGT HERAUS ${label(t.el)} aus ${box.className || box.tagName}`);
     }
@@ -118,6 +120,9 @@ const server = http.createServer((req, res) => {
       if (a.el === c.el || a.page !== c.page) continue;
       const gx = Math.max(a.rc.left, c.rc.left) - Math.min(a.rc.right, c.rc.right);
       const gy = Math.max(a.rc.top, c.rc.top) - Math.min(a.rc.bottom, c.rc.bottom);
+      // Buchstaben in getrennten, umrandeten Kästchen (G/E/M/L, W/S/H, Sterbend 1–4) stören sich nicht
+      const boxed = '.cs-teml, .cs-dtype, .cs-dying';
+      if (a.el.closest(boxed) && a.el.closest(boxed) === c.el.closest(boxed)) continue;
       if (gx < 1.2 && gy < 0.5 && !(gx < 0.8 && gy < -2)) out.push('ZU ENG ' + label(a.el) + ' ↔ ' + label(c.el));
     }
     // 3d) Rahmen/Kästchen/Formen müssen vollständig in ihrem Panel bzw. ihrer Seite liegen

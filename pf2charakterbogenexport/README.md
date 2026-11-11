@@ -11,7 +11,7 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
 - **Seite 1 = klassischer Charakterbogen** im Aufbau des bekannten Einsteigerbox-Bogens:
   Würfel-, Aktions- und Kompetenzleiste links; Attributsmodifikatoren, Trefferpunkte,
   Bewegungsrate, Wahrnehmung (mit Sinnen), Fertigkeiten; Rüstungsklasse mit Schild,
-  Rettungswürfe, je 3 Nah- und Fernkampfangriffe mit Mehrfachangriffsmalus, Waffenkompetenzen.
+  Rettungswürfe, 6 Angriffsplätze mit Mehrfachangriffsmalus, Waffenkompetenzen.
   Jeder Wert steht mit Aufschlüsselung da (Attribut + Kompetenz + Gegenstand, bei Fertigkeiten
   zusätzlich Rüstungsmalus); Kompetenz als Kästchen **G / E / M / L**.
 - **Werte werden berechnet**: Foundry exportiert nur Rohdaten (keine fertigen Boni). Das Tool
@@ -28,14 +28,24 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
     Zauber-SG/-angriff, Zauberplätze, Traglast-Grenzen). Namen, Ausrüstung, Waffenwürfel
     (z. B. „2W8 + ST“), Gegenstandsboni, Talente und Zauber bleiben stehen – ideal, um die Werte
     mit Bleistift zu führen.
-- **Fähigkeiten & Talente** auf das Nötigste gekürzt und nach Einsatz sortiert: Aktionen &
+- **Angriffe**: Die 6 Plätze werden automatisch verteilt (normal 3 Nah- und 3 Fernkampf; gibt es
+  von einer Art weniger, bekommt die andere die freien Plätze). Eine Wurfwaffe mit gleichem Angriff
+  und Schaden steht nur einmal da („Nahkampfwaffe · auch Wurf 20 Fuß“). Angriffe, für die kein Platz
+  mehr ist, stehen unter „Weitere Angriffe“ auf der Fähigkeiten-Seite.
+- **Fähigkeiten & Talente** in vollständigen Sätzen (nie mitten im Satz abgeschnitten) und nach Einsatz sortiert: Aktionen &
   Reaktionen im Kampf (mit Auslöser/Voraussetzung), im Kampf immer aktiv, außerhalb des Kampfes,
   immer aktiv, schon auf Seite 1 eingerechnet.
-- **Stufenplan 1–20**: bereits Gewähltes ist eingetragen, künftige Klassenmerkmale vorgemerkt,
-  freie Talentplätze und Steigerungen als Linien zum Ausfüllen.
+- **Stufenplan 1–20**: bereits Gewähltes ist eingetragen – Talente, Klassenmerkmale,
+  Attributsteigerungen (mit den Attributwerten danach) und Fertigkeitssteigerungen (mit dem Bonus auf
+  dieser Stufe). Foundry speichert bei Fertigkeiten nur den Endstand; welche Fertigkeit auf welcher
+  Stufe gesteigert wurde, wird daraus zurückgerechnet (Talent-Voraussetzungen und Regeln wie „Meister
+  ab Stufe 7“ bestimmen die Reihenfolge, sonst ist sie als geschätzt markiert). Künftige
+  Klassenmerkmale sind vorgemerkt, freie Plätze als Linien zum Ausfüllen.
 - **Zauber** mit allen Zauberquellen (Zauber-SG, Zauberangriff), Zauberplätzen für Rang 1–10 zum
   Abhaken, Fokuspunkten und Kurzbeschreibung, Reichweite und Verteidigung jedes Zaubers.
-- **Ausrüstung**: alle Gegenstände mit Anzahl, Traglast, angelegt/investiert und Kurzinfo
+- **Ausrüstung**: alle Gegenstände mit Piktogramm je Art (Waffe, Rüstung, Schild, Trank, Öl,
+  Schriftrolle, Zauberstab, Talisman, Schmuck, Werkzeug, Behälter …), Anzahl, Traglast,
+  angelegt/investiert und Kurzinfo
   (Aktivierung, Wirkung, Runen); Vermögen, Traglast und Notizen.
 - **Zustände** zum Ankreuzen mit Wertkästchen, Kurzerklärung und englischem Namen.
 - **Komplett deutsch**: Namen von Talenten, Zaubern, Gegenständen, Merkmalen usw. stammen aus der
@@ -78,6 +88,7 @@ src/i18n.js                Grundbegriffe (Attribute, Fertigkeiten, Zustände)
 src/skill-actions.js       Grund- und Fertigkeitsaktionen (für die Einordnung von Fähigkeiten)
 src/parser.js              Foundry-JSON → berechnetes Charaktermodell
 src/front.js               Seite 1: klassischer Charakterbogen
+src/item-icons.js          Piktogramme für die Ausrüstungsliste
 src/render.js              Folgeseiten + Bogen-Arten (spielbereit / Stufenaufstieg)
 src/main.js                UI (Datei laden, Beispiele, Bogen-Art, Drucken)
 styles/front.css           Aussehen aller Bogen-Seiten

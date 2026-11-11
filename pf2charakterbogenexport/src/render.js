@@ -14,6 +14,7 @@
   const I18N = global.PF2_I18N;
   const D = global.PF2_DICT;
   const FRONT = global.PF2_FRONT;
+  const ICONS = global.PF2_ITEM_ICONS;
 
   function esc(s) {
     if (s == null) return "";
@@ -30,24 +31,13 @@
     return n >= 0 ? `+${n}` : `${n}`;
   }
 
-  function shorten(text, max) {
-    if (!text) return "";
-    text = String(text).replace(/…$/, "").trim();
-    if (text.length <= max) return text;
-    const cut = text.slice(0, max);
-    return cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 20)) + " …";
-  }
-
-  /** Aktionskosten als Symbol: 1–3 ◆, F ◇, R ⤾, sonst Kurztext. */
+  /** Aktionskosten als Symbol (HTML): gezeichnete Symbole wie auf Seite 1, sonst Kurztext. */
   function costSymbol(cost) {
+    const icon = FRONT.actionIcon(cost);
+    if (icon) return icon;
     if (cost == null || cost === "") return "—";
-    if (cost === "R") return "⤾";
-    if (cost === "F") return "◇";
-    if (cost === "E") return "Erk.";
-    if (cost === "A") return "Ausz.";
-    if (cost === "M") return "Min.";
-    if (typeof cost === "number") return "◆".repeat(Math.min(Math.max(cost, 1), 3));
-    return String(cost);
+    const TEXT = { E: "Erk.", A: "Ausz.", M: "Min." };
+    return esc(TEXT[cost] || String(cost));
   }
 
   // Bogen-Art: siehe PF2_FRONT.blankFor – wird in render() gesetzt.
@@ -74,10 +64,10 @@
     return `<div class="cs-lines"><table class="cs-table cs-table-blank">${colgroup}<tbody>${row.repeat(45)}</tbody></table></div>`;
   }
 
-  const ABILITY_COLS = `<colgroup><col style="width:9mm"><col style="width:27mm"><col style="width:40mm"><col style="width:11mm"><col></colgroup>`;
-  const PLAN_COLS = `<colgroup><col style="width:11mm"><col style="width:7mm"><col></colgroup>`;
-  const SPELL_COLS = `<colgroup><col style="width:11mm"><col style="width:38mm"><col style="width:11mm"><col style="width:17mm"><col style="width:22mm"><col></colgroup>`;
-  const ITEM_COLS = `<colgroup><col style="width:13mm"><col style="width:14mm"><col style="width:16mm"><col style="width:52mm"><col></colgroup>`;
+  const ABILITY_COLS = `<colgroup><col style="width:11mm"><col style="width:28mm"><col style="width:40mm"><col style="width:14mm"><col></colgroup>`;
+  const PLAN_COLS = `<colgroup><col style="width:12mm"><col style="width:7mm"><col></colgroup>`;
+  const SPELL_COLS = `<colgroup><col style="width:12mm"><col style="width:36mm"><col style="width:13mm"><col style="width:19mm"><col style="width:24mm"><col></colgroup>`;
+  const ITEM_COLS = `<colgroup><col style="width:8mm"><col style="width:14mm"><col style="width:17mm"><col style="width:18mm"><col style="width:46mm"><col></colgroup>`;
 
   function page(title, model, body, extraCls) {
     return `<section class="sheet-page cs-page ${extraCls || ""}">${pageHead(title, model)}${body}</section>`;
@@ -99,10 +89,10 @@
 
   function abilityDesc(a) {
     const parts = [];
-    if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(shorten(a.trigger, 110))}`);
-    if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(shorten(a.requirement, 110))}`);
+    if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(a.trigger)}`);
+    if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
     if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(a.frequency)}`);
-    if (a.summary) parts.push(esc(shorten(a.summary, a.when === "eingerechnet" ? 120 : 240)));
+    if (a.summary) parts.push(esc(a.summary));
     return parts.join(" ");
   }
 
@@ -121,7 +111,7 @@
           <td class="c">${a.level || "–"}</td>
           <td>${esc(a.categoryName || "")}</td>
           <td class="b">${esc(a.name)}</td>
-          <td class="c act">${esc(costSymbol(a.cost))}</td>
+          <td class="c act">${costSymbol(a.cost)}</td>
           <td class="desc">${abilityDesc(a)}</td>
         </tr>`
           )
@@ -138,7 +128,7 @@
           <td class="c">–</td>
           <td>${st.ranged ? "Fernkampf" : "Nahkampf"}${st.unarmed ? " (waffenlos)" : ""}</td>
           <td class="b">${esc(st.name)}</td>
-          <td class="c act">◆</td>
+          <td class="c act">${costSymbol(1)}</td>
           <td class="desc">${
             blank.level
               ? `<b>Angriff:</b> ______ (2./3.: ______ / ______) · <b>Schaden:</b> ${esc(st.dice || "")}${st.damageAttr === "str" ? " + ST" : st.damageAttr === "str/2" ? " + ½ST" : ""}`
@@ -176,8 +166,8 @@
           .map(
             (e) =>
               `<span class="cs-plan-entry"><em>${esc(e.kind)}</em>${
-                e.name ? `<b>${esc(e.name)}</b>` : `<i class="cs-plan-blank"></i>`
-              }</span>`
+                e.name && !(blank.level && e.note) ? `<b>${esc(e.name)}</b>` : `<i class="cs-plan-blank"></i>`
+              }${e.note && !blank.level ? `<small>(${esc(e.note)})</small>` : ""}</span>`
           )
           .join("");
         return `<tr class="${reached ? "reached" : ""}">
@@ -192,6 +182,7 @@
       model,
       `<div class="cs-panel cs-fill">
         <div class="cs-bar">Stufenaufstieg 1–20 <small>– Gewähltes steht schon drin, leere Linien beim Aufstieg ausfüllen</small></div>
+        ${blank.level ? "" : `<div class="cs-plan-hint">Foundry speichert bei Fertigkeiten nur den Endstand. Welche Fertigkeit auf welcher Stufe gesteigert wurde, ist daraus zurückgerechnet; der Wert in Klammern ist der Bonus auf dieser Stufe (Attribut + Kompetenz, ohne Gegenstände).</div>`}
         <table class="cs-table cs-plan">
           ${PLAN_COLS}
           <thead><tr><th class="c">Stufe</th><th class="c">✔</th><th>Was du auf dieser Stufe erhältst</th></tr></thead>
@@ -228,7 +219,7 @@
     const entryStats = `
       <div class="cs-spell-head">
         <table class="cs-table cs-entries">
-          <colgroup><col><col style="width:22mm"><col style="width:18mm"><col style="width:17mm"><col style="width:22mm"></colgroup>
+          <colgroup><col><col style="width:22mm"><col style="width:18mm"><col style="width:19mm"><col style="width:25mm"></colgroup>
           <thead><tr><th>Zauberquelle</th><th>Art</th><th>Tradition</th><th class="c">Zauber-SG</th><th class="c">Zauberangriff</th></tr></thead>
           <tbody>${entryRows}</tbody>
         </table>
@@ -259,10 +250,10 @@
               (s) => `<tr>
             <td class="c">${s.cantrip ? "Trick" : s.focus ? `F${s.rank || ""}` : s.rank}</td>
             <td class="b">${esc(s.name)}</td>
-            <td class="c act">${esc(costSymbol(s.cost))}</td>
+            <td class="c act">${costSymbol(s.cost)}</td>
             <td>${esc(s.range || "")}</td>
             <td>${esc(s.defense || "")}</td>
-            <td class="desc">${esc(shorten(s.summary, 200))}</td>
+            <td class="desc">${esc(s.summary)}</td>
           </tr>`
             )
             .join("")
@@ -294,7 +285,7 @@
     const parts = [];
     const d = it.desc || {};
     if (d.act) parts.push(`<b>${esc(d.act)}</b>`);
-    if (d.s) parts.push(esc(shorten(d.s, 140)));
+    if (d.s) parts.push(esc(d.s));
     (it.runes || []).forEach((r) => parts.push(`<b>${esc(r.name)}</b>`));
     return parts.join(" ");
   }
@@ -304,6 +295,7 @@
     const rows = items
       .map(
         (it) => `<tr>
+        <td class="c ico">${ICONS ? ICONS.icon(it.kind) : ""}</td>
         <td class="c">${esc(it.quantity)}</td>
         <td class="c">${esc(it.bulk == null || it.bulk === "" ? "–" : it.bulk)}</td>
         <td class="c">${it.invested ? "✔ inv." : it.equipped ? "✔" : ""}</td>
@@ -335,10 +327,10 @@
         <div class="cs-bar">Gegenstände</div>
         <table class="cs-table">
           ${ITEM_COLS}
-          <thead><tr><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Angelegt</th><th>Gegenstand</th><th>Wirkung / Kurzinfo</th></tr></thead>
+          <thead><tr><th class="c">Art</th><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Angelegt</th><th>Gegenstand</th><th>Wirkung / Kurzinfo</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-        ${lines(ITEM_COLS, 5)}
+        ${lines(ITEM_COLS, 6)}
       </div>
       <div class="cs-panel cs-notes-panel"><div class="cs-bar">Notizen</div>${lines("<colgroup><col></colgroup>", 1)}</div>`
     );
