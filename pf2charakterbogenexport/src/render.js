@@ -128,6 +128,26 @@
           .join("")
       );
     }).join("");
+    // Angriffe ohne Platz auf Seite 1 (mehr als 3 Nah- oder Fernkampfangriffe)
+    const rest = FRONT.attackSlots(model).rest;
+    const restRows = rest.length
+      ? groupRow("Weitere Angriffe", 5, "kein Platz mehr auf Seite 1") +
+        rest
+          .map(
+            (st) => `<tr>
+          <td class="c">–</td>
+          <td>${st.ranged ? "Fernkampf" : "Nahkampf"}${st.unarmed ? " (waffenlos)" : ""}</td>
+          <td class="b">${esc(st.name)}</td>
+          <td class="c act">◆</td>
+          <td class="desc">${
+            blank.level
+              ? `<b>Angriff:</b> ______ (2./3.: ______ / ______) · <b>Schaden:</b> ${esc(st.dice || "")}${st.damageAttr === "str" ? " + ST" : st.damageAttr === "str/2" ? " + ½ST" : ""}`
+              : `<b>Angriff:</b> ${esc(sign(st.bonus))} (2./3.: ${esc(sign(st.map[1]))} / ${esc(sign(st.map[2]))}) · <b>Schaden:</b> ${esc(st.damage)}`
+          }${st.traits && st.traits.length ? ` · ${esc(st.traits.join(", "))}` : ""}</td>
+        </tr>`
+          )
+          .join("")
+      : "";
     return page(
       "Fähigkeiten & Talente",
       model,
@@ -136,7 +156,7 @@
         <table class="cs-table">
           ${ABILITY_COLS}
           <thead><tr><th class="c">Stufe</th><th>Art</th><th>Name</th><th class="c">Aktion</th><th>Kurzbeschreibung</th></tr></thead>
-          <tbody>${body || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
+          <tbody>${restRows}${body || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
         </table>
         ${lines(ABILITY_COLS, 5)}
       </div>`

@@ -386,12 +386,26 @@
     </div>`;
   }
 
-  function weapons(model) {
-    // Waffen vor waffenlosen Angriffen, getragene vor verstauten; je 3 Plätze Nah-/Fernkampf
+  /**
+   * Verteilt die Angriffe auf die je 3 Nah- und Fernkampfplätze von Seite 1:
+   * gehaltene Waffen zuerst, waffenlose Angriffe zuletzt. Was keinen Platz
+   * findet, steht in "rest" (wird auf der Fähigkeiten-Seite aufgeführt).
+   */
+  function attackSlots(model) {
     const order = (a) => (a.unarmed ? 2 : 0) + (a.equipped ? 0 : 1);
     const sorted = (model.strikes || []).slice().sort((a, b) => order(a) - order(b));
-    const melee = sorted.filter((a) => !a.ranged);
-    const ranged = sorted.filter((a) => a.ranged);
+    const meleeAll = sorted.filter((a) => !a.ranged);
+    const rangedAll = sorted.filter((a) => a.ranged);
+    return {
+      melee: meleeAll.slice(0, 3),
+      ranged: rangedAll.slice(0, 3),
+      rest: meleeAll.slice(3).concat(rangedAll.slice(3)),
+    };
+  }
+
+  function weapons(model) {
+    // Waffen vor waffenlosen Angriffen, getragene vor verstauten; je 3 Plätze Nah-/Fernkampf
+    const { melee, ranged } = attackSlots(model);
     const blocks = [0, 1, 2].map((i) => weaponBlock(melee[i], false)).join("") +
       [0, 1, 2].map((i) => weaponBlock(ranged[i], true)).join("");
     const wp = (model.proficiencies && model.proficiencies.attacks) || {};
@@ -438,5 +452,5 @@
     </section>`;
   }
 
-  global.PF2_FRONT = { render, blankFor: (mode) => ({ session: true, level: mode === "aufstieg" }) };
+  global.PF2_FRONT = { render, attackSlots, blankFor: (mode) => ({ session: true, level: mode === "aufstieg" }) };
 })(window);
