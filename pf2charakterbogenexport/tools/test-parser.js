@@ -34,7 +34,7 @@ for (const f of files) {
         m.strikes.map((s) => `${s.name} ${fmt(s.bonus)} ${s.damage}`).join("; ")
     );
     if (process.env.VERBOSE) console.log(JSON.stringify(m, null, 1));
-    if (window.PF2_RENDER) ["spielbereit", "aufstieg"].forEach((mode) => window.PF2_RENDER.render(m, { mode }));
+    if (window.PF2_RENDER) ["spielbereit", "kompakt", "aufstieg"].forEach((mode) => window.PF2_RENDER.render(m, { mode }));
   } catch (e) {
     failures++;
     console.log(`${path.basename(f)}: FEHLER ${e.stack}`);

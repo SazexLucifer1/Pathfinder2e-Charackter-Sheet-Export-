@@ -19,9 +19,13 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
   Fertigkeiten, Angriffe/Schaden (Runen, Waffenspezialisierung, Lieblingswaffe …), Zauber-SG,
   Zauberplätze und Traglast selbst aus. Situative Boni („+2 gegen Furcht“) werden nicht
   eingerechnet – sie stehen bei der Fähigkeit.
-- **Zwei Bogen-Arten**:
+- **Drei Bogen-Arten**:
   - **Spielbereit** – alles ausgefüllt; leer bleibt nur, was sich während einer Spielrunde ändert
     (aktuelle TP, temporäre TP, Heldenpunkte, Sterbend/Verwundet, Zustände, aktuelle Fokuspunkte).
+  - **Spielbereit, kompakt** – wie „Spielbereit“, aber alle Texte auf das regeltechnisch Nötigste
+    gekürzt: nur Sätze mit Regelinhalt (Einschränkungen wie „für einen Tag immun“ bleiben immer
+    stehen), keine Beschreibungen; Waffen und Rüstungen nur mit Merkmalen, Material und Runen;
+    „schon eingerechnete“ Talente nur mit Namen. Sätze werden nie mitten drin gekürzt.
   - **Für Stufenaufstieg** – zusätzlich bleibt alles leer, was sich beim Stufenaufstieg ändert
     (Stufe, EP, maximale TP, Attributsmodifikatoren, Kompetenzen und Kompetenzboni, RK,
     Rettungswürfe, Wahrnehmung, Fertigkeiten, Angriffswerte inkl. Mehrfachangriffsmalus,
@@ -67,7 +71,7 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
    **„Export Data“** → eine `.json`-Datei wird heruntergeladen.
 2. `index.html` im Browser öffnen (Doppelklick genügt).
 3. Die `.json`-Datei hineinziehen (oder den Inhalt einfügen).
-4. **Art des Bogens** wählen (spielbereit / für Stufenaufstieg) und **„Bogen erzeugen“** klicken.
+4. **Art des Bogens** wählen (spielbereit / spielbereit kompakt / für Stufenaufstieg) und **„Bogen erzeugen“** klicken.
    Ein Wechsel der Bogen-Art baut den Bogen sofort neu auf.
 5. **„Drucken / Als PDF speichern“** → im Druckdialog *Hintergrundgrafiken* aktivieren und
    „Als PDF speichern“ wählen (oder direkt drucken).
@@ -136,7 +140,8 @@ node tools/layout-check.js                      # Beispiel: Valeros
 node tools/layout-check.js mein-charakter.json  # eigener Export
 ```
 
-Das Ergebnis landet in `layout-check/spielbereit/` und `layout-check/aufstieg/`
+Geprüft werden alle drei Bogen-Arten; das Ergebnis landet in `layout-check/spielbereit/`,
+`layout-check/kompakt/` und `layout-check/aufstieg/`
 (PDF + `seite-N.png`); bei Problemen endet das Skript mit Exit-Code 1.
 
 ## Quellen & Lizenzen

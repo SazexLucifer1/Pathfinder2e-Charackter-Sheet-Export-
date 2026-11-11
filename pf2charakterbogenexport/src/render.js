@@ -15,6 +15,13 @@
   const D = global.PF2_DICT;
   const FRONT = global.PF2_FRONT;
   const ICONS = global.PF2_ITEM_ICONS;
+  const SUM = global.PF2_SUMMARIZE;
+
+  /** Beschreibungstext je nach Bogen-Art: voll oder (Kompakt) nur der Regelkern. */
+  function T(text) {
+    if (!text) return "";
+    return blank.compact && SUM && SUM.compact ? SUM.compact(text) : text;
+  }
 
   function esc(s) {
     if (s == null) return "";
@@ -98,7 +105,8 @@
     if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(a.trigger)}`);
     if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
     if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(a.frequency)}`);
-    if (a.summary) parts.push(esc(a.summary));
+    // Kompakt: „schon eingerechnet“ braucht keinen Text – steckt in den Zahlen
+    if (a.summary && !(blank.compact && a.when === "eingerechnet")) parts.push(esc(T(a.summary)));
     return parts.join(" ");
   }
 
@@ -153,7 +161,7 @@
               if (b.requirement) extra.push(`<b>Voraussetzung:</b> ${esc(b.requirement)}`);
               if (b.frequency) extra.push(`<b>Häufigkeit:</b> ${esc(b.frequency)}`);
               const head = extra.length ? extra.join(" · ").replace(/[.\s]+$/, "") + ". " : "";
-              return `<li><b>${esc(b.name)}:</b> ${head}${esc(b.summary || "")}</li>`;
+              return `<li><b>${esc(b.name)}:</b> ${head}${esc(T(b.summary || ""))}</li>`;
             })
             .join("");
           const isSkill = g.items.some((k) => k.skillName || k.choices);
@@ -327,7 +335,7 @@
             <td class="c act">${costSymbol(s.cost)}</td>
             <td>${esc(s.range || "")}</td>
             <td>${esc(s.defense || "")}</td>
-            <td class="desc">${esc(s.summary)}</td>
+            <td class="desc">${esc(T(s.summary))}</td>
           </tr>`
             )
             .join("")
@@ -359,7 +367,9 @@
     const parts = [];
     const d = it.desc || {};
     if (d.act) parts.push(`<b>${esc(d.act)}</b>`);
-    if (d.s) parts.push(esc(d.s));
+    // Kompakt: Waffen/Rüstungen brauchen keine Beschreibung – Merkmale, Material und Runen stehen schon da
+    const ds = !blank.compact ? d.s : TAG_KINDS.has(it.kind) ? "" : SUM && SUM.compactItem ? SUM.compactItem(d.s) : d.s;
+    if (ds) parts.push(esc(ds));
     (it.runes || []).forEach((r) => parts.push(`<b>${esc(r.name)}</b>`));
     return parts.join(" ");
   }

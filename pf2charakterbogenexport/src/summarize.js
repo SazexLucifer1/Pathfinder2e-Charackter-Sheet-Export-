@@ -235,5 +235,45 @@
     return Object.keys(res).length ? res : null;
   }
 
-  return { summarize, summarizeItem, looksEnglish, htmlToText, setActionNames };
+  // Für die Kompakt-Variante: Satz enthält Regelinhalt (Regelbegriff oder Spielwert)
+  const VALUE_RE = /[+−–-]\s?\d|\d+\s?W\d|\d+\s?Fuß|bonus|malus|schaden|\bSG\s?\d|einmal pro|pro Tag|immun/i;
+  const isRuleSentence = (x) => RULE_RE.test(x) || VALUE_RE.test(x);
+
+  /**
+   * Kompakt: nur das regeltechnisch Nötigste. Behält ganze Sätze mit
+   * Regelinhalt – den ersten, und einen zweiten nur, wenn beide zusammen
+   * kurz bleiben. Reiner Beschreibungstext fällt ganz weg (leerer String).
+   */
+  function compact(text, maxLen) {
+    maxLen = maxLen || 120;
+    if (!text) return "";
+    // Ergänzte Hinweise („→ Damit greift dein Hinterhältiger Angriff …“) abtrennen und immer behalten
+    const parts = String(text).split(/\s(?=→)/);
+    const notes = parts.slice(1).join(" ");
+    const all = splitSentences(parts[0]);
+    // Ohne erkannten Regelsatz den ersten Satz behalten – nie die ganze Beschreibung verlieren
+    const rules = all.filter(isRuleSentence).length ? all.filter(isRuleSentence) : all.slice(0, 1);
+    if (!rules.length) return notes;
+    if (!rules.length) return "";
+    let out = rules[0];
+    if (rules[1] && out.length + 1 + rules[1].length <= maxLen) out += " " + rules[1];
+    // Einschränkungen sind immer nötig (Immunität, Häufigkeit, Dauer …)
+    const LIMIT_RE = /immun|einmal pro|nur einmal|pro Tag|pro Stunde|nicht erneut|nicht mehr als|Tag lang|bis zu deiner nächsten täglichen Vorbereitung/i;
+    rules.slice(1).forEach((x) => {
+      if (LIMIT_RE.test(x) && !out.includes(x)) out += " " + x;
+    });
+    return notes ? out + " " + notes : out;
+  }
+
+  /** Kompakt für Gegenstände: Kurzfassung ist schon auf Regelsätze gefiltert – erster Satz, zweiter nur wenn kurz. */
+  function compactItem(text) {
+    if (!text) return "";
+    const all = splitSentences(String(text));
+    let out = all[0] || "";
+    // Die Wirkung steht oft im zweiten Satz („Triffst du …, erhält das Ziel …“)
+    if (all[1] && out.length + 1 + all[1].length <= 230) out += " " + all[1];
+    return out;
+  }
+
+  return { summarize, summarizeItem, compact, compactItem, looksEnglish, htmlToText, setActionNames };
 });

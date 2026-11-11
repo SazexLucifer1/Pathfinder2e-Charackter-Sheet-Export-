@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
   fs.mkdirSync(outDir, { recursive: true });
   const b = await chromium.launch();
   let failed = false;
-  for (const mode of ["spielbereit", "aufstieg"]) {
+  for (const mode of ["spielbereit", "kompakt", "aufstieg"]) {
   const dir = path.join(outDir, mode);
   fs.mkdirSync(dir, { recursive: true });
   const p = await (await b.newContext({ deviceScaleFactor: 2 })).newPage();

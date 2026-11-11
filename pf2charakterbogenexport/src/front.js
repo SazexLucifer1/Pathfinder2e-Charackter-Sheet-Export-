@@ -515,5 +515,5 @@
     </section>`;
   }
 
-  global.PF2_FRONT = { render, attackSlots, actionIcon, blankFor: (mode) => ({ session: true, level: mode === "aufstieg" }) };
+  global.PF2_FRONT = { render, attackSlots, actionIcon, blankFor: (mode) => ({ session: true, level: mode === "aufstieg", compact: mode === "kompakt" }) };
 })(window);
