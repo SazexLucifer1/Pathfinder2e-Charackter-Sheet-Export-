@@ -89,6 +89,10 @@
 
   function abilityDesc(a) {
     const parts = [];
+    // Zusatzeffekt einer Kernaktion: steht vollständig bei der Kernaktion oben
+    if (a.keyActions && a.keyActions.length && keyActionNames(a).length) {
+      return `<i>Zusatzeffekt für ${keyActionNames(a).map((n) => `<b>${esc(n)}</b>`).join(" und ")} – siehe „Deine Kernaktionen“ oben.</i>`;
+    }
     if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(a.trigger)}`);
     if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
     if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(a.frequency)}`);
@@ -96,7 +100,39 @@
     return parts.join(" ");
   }
 
+  let currentKeyActions = [];
+  function keyActionNames(a) {
+    return currentKeyActions.filter((k) => (a.keyActions || []).includes(k.slug)).map((k) => k.name);
+  }
+
+  /** Kernaktionen: Wurf, Regeltext und alle Zusatzeffekte aus Talenten/Merkmalen. */
+  function keyActionRows(model) {
+    const list = model.keyActions || [];
+    if (!list.length) return "";
+    return (
+      groupRow("Deine Kernaktionen", 5, "nutzt du voraussichtlich oft – mehrere Talente verbessern sie") +
+      list
+        .map((k) => {
+          const roll = k.skillName
+            ? `<b>${esc(k.skillName)} ${blank.level || k.bonus == null ? "______" : esc(sign(k.bonus))}${k.vs ? ` gegen ${esc(k.vs)}` : ""}.</b> `
+            : "";
+          const effects = k.by
+            .map((b) => `<li><b>${esc(b.name)}:</b> ${esc(b.summary || "")}</li>`)
+            .join("");
+          return `<tr class="cs-key">
+          <td class="c">–</td>
+          <td>${k.skillName ? "Fertigkeitsaktion" : "Aktion"}</td>
+          <td class="b">${esc(k.name)}</td>
+          <td class="c act">${costSymbol(k.cost)}</td>
+          <td class="desc">${roll}${esc(k.text)}<div class="cs-key-fx"><b>Zusatzeffekte durch deine Talente:</b><ul>${effects}</ul></div></td>
+        </tr>`;
+        })
+        .join("")
+    );
+  }
+
   function abilitiesPage(model) {
+    currentKeyActions = model.keyActions || [];
     const list = model.abilitiesList || [];
     const order = { 1: 1, 2: 2, 3: 3, F: 4, R: 5 };
     const body = WHEN_GROUPS.map(([key, title, hint]) => {
@@ -146,7 +182,7 @@
         <table class="cs-table">
           ${ABILITY_COLS}
           <thead><tr><th class="c">Stufe</th><th>Art</th><th>Name</th><th class="c">Aktion</th><th>Kurzbeschreibung</th></tr></thead>
-          <tbody>${restRows}${body || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
+          <tbody>${keyActionRows(model)}${restRows}${body || `<tr><td colspan="5" class="desc">Keine Talente im Export gefunden.</td></tr>`}</tbody>
         </table>
         ${lines(ABILITY_COLS, 5)}
       </div>`
@@ -181,8 +217,7 @@
       "Stufenplan",
       model,
       `<div class="cs-panel cs-fill">
-        <div class="cs-bar">Stufenaufstieg 1–20 <small>– Gewähltes steht schon drin, leere Linien beim Aufstieg ausfüllen</small></div>
-        ${blank.level ? "" : `<div class="cs-plan-hint">Foundry speichert bei Fertigkeiten nur den Endstand. Welche Fertigkeit auf welcher Stufe gesteigert wurde, ist daraus zurückgerechnet; der Wert in Klammern ist der Bonus auf dieser Stufe (Attribut + Kompetenz, ohne Gegenstände).</div>`}
+        <div class="cs-bar">Stufenaufstieg 1–20</div>
         <table class="cs-table cs-plan">
           ${PLAN_COLS}
           <thead><tr><th class="c">Stufe</th><th class="c">✔</th><th>Was du auf dieser Stufe erhältst</th></tr></thead>

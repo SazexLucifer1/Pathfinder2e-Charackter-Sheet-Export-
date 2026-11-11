@@ -180,7 +180,28 @@ const header = `/*
  * Regeltexten von Ulisses Spiele; Kurzfassungen sind automatisch gekürzt.
  */
 `;
-const body = `window.PF2_DICT_DATA = ${JSON.stringify({ items, ui })};\n`;
+// Aktions-IDs → Slug (z. B. "21WIfSu7Xd7uKqV8" → "tumble-through"), damit Verweise in Talenten
+// (@UUID[Compendium.pf2e.actionspf2e.Item.<id>]) der richtigen Aktion zugeordnet werden können.
+const actionIds = {};
+if (enPacksDir) {
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return;
+    for (const f of fs.readdirSync(dir)) {
+      const p = path.join(dir, f);
+      if (fs.statSync(p).isDirectory()) walk(p);
+      else if (f.endsWith(".json") && !f.startsWith("_")) {
+        try {
+          const a = readJson(p);
+          if (a && a._id && a.name) actionIds[a._id] = (a.system && a.system.slug) || slug(a.name);
+        } catch (e) {
+          /* ignorieren */
+        }
+      }
+    }
+  };
+  walk(path.join(enPacksDir, "actions"));
+}
+const body = `window.PF2_DICT_DATA = ${JSON.stringify({ items, ui, actionIds })};\n`;
 fs.writeFileSync(outFile, header + body);
 console.log(
   `geschrieben: ${outFile} (${(Buffer.byteLength(body) / 1024 / 1024).toFixed(2)} MB, ` +

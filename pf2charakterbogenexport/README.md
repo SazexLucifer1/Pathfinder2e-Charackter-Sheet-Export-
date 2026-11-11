@@ -32,6 +32,10 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
   von einer Art weniger, bekommt die andere die freien Plätze). Eine Wurfwaffe mit gleichem Angriff
   und Schaden steht nur einmal da („Nahkampfwaffe · auch Wurf 20 Fuß“). Angriffe, für die kein Platz
   mehr ist, stehen unter „Weitere Angriffe“ auf der Fähigkeiten-Seite.
+- **Kernaktionen**: Verweisen mehrere Talente/Merkmale auf dieselbe Aktion (z. B. „Dahinterturnen“
+  und „Hilfreiches Hindurchturnen“ auf *Hindurchturnen*), wird die Aktion ganz oben auf der
+  Fähigkeiten-Seite erklärt – mit deinem Bonus, wogegen gewürfelt wird, und allen Zusatzeffekten,
+  die deine Talente dabei auslösen.
 - **Fähigkeiten & Talente** in vollständigen Sätzen (nie mitten im Satz abgeschnitten) und nach Einsatz sortiert: Aktionen &
   Reaktionen im Kampf (mit Auslöser/Voraussetzung), im Kampf immer aktiv, außerhalb des Kampfes,
   immer aktiv, schon auf Seite 1 eingerechnet.

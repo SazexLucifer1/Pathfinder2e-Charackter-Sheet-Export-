@@ -207,5 +207,10 @@
     return map[s] || s || "";
   }
 
-  global.PF2_DICT = { slug, entry, englishName, titleFromSlug, setClass, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
+  /** Slug einer Aktion zu ihrer Foundry-ID (aus @UUID[...actionspf2e.Item.<id>]). */
+  function actionSlugById(id) {
+    return (DATA.actionIds || {})[id] || null;
+  }
+
+  global.PF2_DICT = { actionSlugById, slug, entry, englishName, titleFromSlug, setClass, lookupItem, itemName, itemSummary, term, trait, damageType, language, size, SKILL_DE };
 })(typeof window !== "undefined" ? window : globalThis);

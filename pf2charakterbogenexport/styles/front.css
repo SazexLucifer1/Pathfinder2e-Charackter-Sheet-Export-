@@ -414,3 +414,9 @@
 .cs-wpn-map { gap: 0.1mm 0.8mm; }
 .cs-wpn-map { row-gap: 0.4mm; }
 .cs-page .cs-table td.ico { vertical-align: top; padding-top: 0.6mm; }
+
+/* Kernaktionen */
+.cs-page .cs-table tr.cs-key td { background: #fff7f0; }
+.cs-key-fx { margin-top: 0.8mm; }
+.cs-key-fx ul { margin: 0.4mm 0 0 3.5mm; padding: 0; }
+.cs-key-fx li { margin: 0.3mm 0; }

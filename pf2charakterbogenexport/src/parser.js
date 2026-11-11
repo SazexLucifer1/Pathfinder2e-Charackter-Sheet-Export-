@@ -882,6 +882,7 @@
       lores,
       strikes,
       abilitiesList: abilities,
+      keyActions: buildKeyActions(abilities, skills),
       levelPlan,
       spellcasting,
       inventory: inv.items,
@@ -1009,6 +1010,7 @@
         trigger: summary ? summary.trigger || "" : "",
         requirement: summary ? summary.req || "" : "",
         frequency: summary ? summary.freq || "" : "",
+        actionRefs: actionRefsOf(it, slug),
         when,
       });
     });
@@ -1175,6 +1177,74 @@
     }
     plan.skillIncreasesHinted = incs.hinted;
     return plan;
+  }
+
+  // Zu allgemein, um als „Kernaktion“ hervorgehoben zu werden
+  const GENERIC_ACTIONS = new Set(["strike", "stride", "step", "interact", "cast-a-spell", "sustain", "sustain-a-spell", "release"]);
+
+  /**
+   * Auf welche Aktionen verweist ein Talent/Merkmal? Erkannt werden
+   * Regel-Bedingungen ("action:tumble-through"), Links auf Aktionen
+   * (@UUID[Compendium.pf2e.actionspf2e.Item.<id>]) und [[/act …]] im Text.
+   */
+  function actionRefsOf(it, ownSlug) {
+    const blob = JSON.stringify(it.system || {});
+    const refs = new Set();
+    let m;
+    const reId = /actionspf2e\.Item\.([A-Za-z0-9]{16})/g;
+    while ((m = reId.exec(blob))) {
+      const sl = D.actionSlugById(m[1]);
+      if (sl) refs.add(sl);
+    }
+    const rePred = /"action:([a-z][a-z-]+)"/g;
+    while ((m = rePred.exec(blob))) refs.add(m[1]);
+    const reAct = /\[\[\/act ([a-z][a-z-]+)/g;
+    while ((m = reAct.exec(blob))) refs.add(m[1]);
+    refs.delete(ownSlug);
+    GENERIC_ACTIONS.forEach((g) => refs.delete(g));
+    return Array.from(refs);
+  }
+
+  /**
+   * Kernaktionen: Aktionen, auf die sich mindestens zwei Talente/Merkmale des
+   * Charakters beziehen (z. B. Hindurchturnen bei einem Schurken mit
+   * „Dahinterturnen“ und „Hilfreiches Hindurchturnen“). Der Charakter wird sie
+   * voraussichtlich regelmäßig nutzen – der Bogen erklärt sie deshalb
+   * gesondert, mit Bonus und den Zusatzeffekten aus den Talenten.
+   */
+  function buildKeyActions(abilities, skills) {
+    const ACTS = global.PF2_ACTIONS || { SKILL_ACTIONS: [], BASIC_ACTIONS: [] };
+    const known = ACTS.SKILL_ACTIONS.concat(ACTS.BASIC_ACTIONS);
+    const by = new Map();
+    abilities.forEach((a) =>
+      (a.actionRefs || []).forEach((sl) => {
+        if (!by.has(sl)) by.set(sl, []);
+        if (!by.get(sl).includes(a)) by.get(sl).push(a);
+      })
+    );
+    const out = [];
+    by.forEach((list, sl) => {
+      if (list.length < 2) return;
+      const def = known.find((k) => k.slug === sl) || {};
+      const e = D.entry(sl) || {};
+      const skill = def.skill && def.skill !== "perception" ? def.skill : null;
+      out.push({
+        slug: sl,
+        name: e.n || def.name || D.titleFromSlug(sl),
+        cost: def.cost != null ? def.cost : null,
+        skill,
+        skillName: skill ? D.SKILL_DE[skill] || skill : def.skill === "perception" ? "Wahrnehmung" : "",
+        bonus: skill && skills[skill] ? skills[skill].mod : null,
+        rank: skill && skills[skill] ? skills[skill].rank : null,
+        vs: def.vs || "",
+        text: def.text || e.s || "",
+        by: list.map((a) => ({ name: a.name, slug: a.slug, summary: a.summary, level: a.level })),
+      });
+      list.forEach((a) => {
+        a.keyActions = (a.keyActions || []).concat(sl);
+      });
+    });
+    return out.sort((a, b) => b.by.length - a.by.length || a.name.localeCompare(b.name, "de"));
   }
 
   function actionCost(type, count) {
