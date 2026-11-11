@@ -17,10 +17,21 @@
   const ICONS = global.PF2_ITEM_ICONS;
   const SUM = global.PF2_SUMMARIZE;
 
-  /** Beschreibungstext je nach Bogen-Art: voll oder (Kompakt) nur der Regelkern. */
-  function T(text) {
-    if (!text) return "";
-    return blank.compact && SUM && SUM.compact ? SUM.compact(text) : text;
+  /**
+   * Beschreibungstext je nach Bogen-Art: voll oder (Kompakt) Stichwortfassung.
+   * Kompakt: von Hand geschriebene Stichworte (src/data/stichworte.js), sonst
+   * automatisch auf ganze Regelsätze gekürzt. Ergänzte Hinweise („→ …“,
+   * „Aktuell: …“) bleiben immer erhalten.
+   */
+  function T(text, key) {
+    if (!text && !(key && global.PF2_STICHWORTE && key in global.PF2_STICHWORTE)) return "";
+    if (!blank.compact) return text || "";
+    const SW = global.PF2_STICHWORTE || {};
+    if (key && key in SW) {
+      const notes = (String(text || "").match(/(?:→|Aktuell:)[^→]*$/) || [""])[0].trim();
+      return [SW[key], notes].filter(Boolean).join(" ");
+    }
+    return SUM && SUM.compact ? SUM.compact(text) : text;
   }
 
   function esc(s) {
@@ -106,7 +117,7 @@
     if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
     if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(a.frequency)}`);
     // Kompakt: „schon eingerechnet“ braucht keinen Text – steckt in den Zahlen
-    if (a.summary && !(blank.compact && a.when === "eingerechnet")) parts.push(esc(T(a.summary)));
+    if (a.summary && !(blank.compact && a.when === "eingerechnet")) parts.push(esc(T(a.summary, a.slug)));
     return parts.join(" ");
   }
 
@@ -148,8 +159,8 @@
           const rules = g.items
             .map((k) => {
               const roll = rollOf(k);
-              if (multi) return `<div class="cs-key-act"><b>${esc(k.name)}${roll ? ` (${roll})` : ""}:</b> ${esc(k.text)}</div>`;
-              return `${roll ? `<b>${roll}.</b> ` : ""}${esc(k.text)}`;
+              if (multi) return `<div class="cs-key-act"><b>${esc(k.name)}${roll ? ` (${roll})` : ""}:</b> ${esc(T(k.text, "act:" + k.slug))}</div>`;
+              return `${roll ? `<b>${roll}.</b> ` : ""}${esc(T(k.text, "act:" + k.slug))}`;
             })
             .join("");
           // Talente, die selbst eine Aktion sind (z. B. Feldsanitäter), mit Symbol, Auslöser und Voraussetzung
@@ -161,7 +172,7 @@
               if (b.requirement) extra.push(`<b>Voraussetzung:</b> ${esc(b.requirement)}`);
               if (b.frequency) extra.push(`<b>Häufigkeit:</b> ${esc(b.frequency)}`);
               const head = extra.length ? extra.join(" · ").replace(/[.\s]+$/, "") + ". " : "";
-              return `<li><b>${esc(b.name)}:</b> ${head}${esc(T(b.summary || ""))}</li>`;
+              return `<li><b>${esc(b.name)}:</b> ${head}${esc(T(b.summary || "", b.slug))}</li>`;
             })
             .join("");
           const isSkill = g.items.some((k) => k.skillName || k.choices);
@@ -335,7 +346,7 @@
             <td class="c act">${costSymbol(s.cost)}</td>
             <td>${esc(s.range || "")}</td>
             <td>${esc(s.defense || "")}</td>
-            <td class="desc">${esc(T(s.summary))}</td>
+            <td class="desc">${esc(T(s.summary, "sp:" + s.slug))}</td>
           </tr>`
             )
             .join("")
@@ -368,7 +379,14 @@
     const d = it.desc || {};
     if (d.act) parts.push(`<b>${esc(d.act)}</b>`);
     // Kompakt: Waffen/Rüstungen brauchen keine Beschreibung – Merkmale, Material und Runen stehen schon da
-    const ds = !blank.compact ? d.s : TAG_KINDS.has(it.kind) ? "" : SUM && SUM.compactItem ? SUM.compactItem(d.s) : d.s;
+    const SW = global.PF2_STICHWORTE || {};
+    const ds = !blank.compact
+      ? d.s
+      : TAG_KINDS.has(it.kind)
+        ? ""
+        : "eq:" + it.slug in SW
+          ? SW["eq:" + it.slug]
+          : SUM && SUM.compactItem ? SUM.compactItem(d.s) : d.s;
     if (ds) parts.push(esc(ds));
     (it.runes || []).forEach((r) => parts.push(`<b>${esc(r.name)}</b>`));
     return parts.join(" ");

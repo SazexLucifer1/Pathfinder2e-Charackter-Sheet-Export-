@@ -22,10 +22,11 @@ Kein Server, kein Upload, keine Installation – alles läuft lokal im Browser.
 - **Drei Bogen-Arten**:
   - **Spielbereit** – alles ausgefüllt; leer bleibt nur, was sich während einer Spielrunde ändert
     (aktuelle TP, temporäre TP, Heldenpunkte, Sterbend/Verwundet, Zustände, aktuelle Fokuspunkte).
-  - **Spielbereit, kompakt** – wie „Spielbereit“, aber alle Texte auf das regeltechnisch Nötigste
-    gekürzt: nur Sätze mit Regelinhalt (Einschränkungen wie „für einen Tag immun“ bleiben immer
-    stehen), keine Beschreibungen; Waffen und Rüstungen nur mit Merkmalen, Material und Runen;
-    „schon eingerechnete“ Talente nur mit Namen. Sätze werden nie mitten drin gekürzt.
+  - **Spielbereit, kompakt** – wie „Spielbereit“, aber alle Texte im Stichwortstil, nur das
+    regeltechnisch Nötigste (z. B. „Entkommen mit Akrobatik/Athletik: MAP −4/−8; Meister −3/−6;
+    Legende kein MAP.“). Die Stichworte sind von Hand geschrieben (`src/data/stichworte.js`); fehlt
+    ein Eintrag, wird automatisch auf ganze Regelsätze gekürzt. Waffen und Rüstungen nur mit
+    Merkmalen, Material und Runen; „schon eingerechnete“ Talente nur mit Namen.
   - **Für Stufenaufstieg** – zusätzlich bleibt alles leer, was sich beim Stufenaufstieg ändert
     (Stufe, EP, maximale TP, Attributsmodifikatoren, Kompetenzen und Kompetenzboni, RK,
     Rettungswürfe, Wahrnehmung, Fertigkeiten, Angriffswerte inkl. Mehrfachangriffsmalus,
@@ -111,6 +112,8 @@ sample/                    Beispiel-Charaktere im echten Foundry-Exportformat
 tools/build-dictionary.mjs Erzeugt src/data/dictionary-de.js
 tools/test-parser.js       Testet Parser + Renderer (beide Bogen-Arten) mit Foundry-JSON-Dateien
 tools/layout-check.js      Automatische Layout-Prüfung mit PDF und Screenshots
+tools/stichworte-fehlend.js Listet Texte eines Exports ohne Stichwortfassung (Vorlage für stichworte.js)
+src/data/stichworte.js     Stichwort-Kurzfassungen für „Spielbereit, kompakt“
 ```
 
 ### Wörterbuch neu erzeugen

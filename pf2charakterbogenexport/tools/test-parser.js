@@ -8,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 const root = path.join(__dirname, "..");
 globalThis.window = globalThis;
-for (const f of ["src/data/dictionary-de.js", "src/summarize.js", "src/i18n.js", "src/dictionary.js", "src/explanations.js", "src/skill-actions.js", "src/parser.js", "src/item-icons.js", "src/front.js", "src/render.js"]) {
+for (const f of ["src/data/dictionary-de.js", "src/data/stichworte.js", "src/summarize.js", "src/i18n.js", "src/dictionary.js", "src/explanations.js", "src/skill-actions.js", "src/parser.js", "src/item-icons.js", "src/front.js", "src/render.js"]) {
   const p = path.join(root, f);
   if (fs.existsSync(p)) eval(fs.readFileSync(p, "utf-8")); // eslint-disable-line no-eval
 }

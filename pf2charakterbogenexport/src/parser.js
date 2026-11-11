@@ -1329,6 +1329,7 @@
           return {
             name: D.itemName(sp),
             en: D.englishName(sp),
+            slug: get(sp, "system.slug", null) || D.slug(D.englishName(sp) || sp.name),
             rank: cantrip ? 0 : num(get(sp, "system.level.value", 1), 1),
             cantrip,
             focus: traits.includes("focus"),
@@ -1498,6 +1499,7 @@
       if (carry !== "dropped") bulkTenths += itemBulk;
       list.push({
         name: D.itemName(it),
+        slug: get(s, "slug", null) || D.slug(D.englishName(it) || it.name),
         type: it.type,
         quantity: qty,
         bulk: bulkLabel,
