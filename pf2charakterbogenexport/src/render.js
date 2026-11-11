@@ -93,10 +93,7 @@
     if (a.keyActions && a.keyActions.length && keyActionNames(a).length) {
       const names = keyActionNames(a).map((n) => `<b>${esc(n)}</b>`);
       const joined = names.length > 1 ? names.slice(0, -1).join(", ") + " und " + names[names.length - 1] : names[0];
-      const hint = `<i>Zusatzeffekt für ${joined} – siehe „Deine Kernaktionen“ oben.</i>`;
-      // Ist das Talent selbst eine Aktion, bleibt seine eigene Beschreibung stehen.
-      if (a.cost == null || a.cost === "") return hint;
-      parts.push(`<i>Bezieht sich auf ${joined} (siehe „Deine Kernaktionen“).</i>`);
+      return `<i>Zusatzeffekt für ${joined} – siehe „Deine Kernaktionen“ oben.</i>`;
     }
     if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(a.trigger)}`);
     if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
@@ -147,7 +144,18 @@
               return `${roll ? `<b>${roll}.</b> ` : ""}${esc(k.text)}`;
             })
             .join("");
-          const effects = first.by.map((b) => `<li><b>${esc(b.name)}:</b> ${esc(b.summary || "")}</li>`).join("");
+          // Talente, die selbst eine Aktion sind (z. B. Feldsanitäter), mit Symbol, Auslöser und Voraussetzung
+          const effects = first.by
+            .map((b) => {
+              const extra = [];
+              if (b.cost != null && b.cost !== "") extra.push(`${costSymbol(b.cost)} eigene Aktion`);
+              if (b.trigger) extra.push(`<b>Auslöser:</b> ${esc(b.trigger)}`);
+              if (b.requirement) extra.push(`<b>Voraussetzung:</b> ${esc(b.requirement)}`);
+              if (b.frequency) extra.push(`<b>Häufigkeit:</b> ${esc(b.frequency)}`);
+              const head = extra.length ? extra.join(" · ").replace(/[.\s]+$/, "") + ". " : "";
+              return `<li><b>${esc(b.name)}:</b> ${head}${esc(b.summary || "")}</li>`;
+            })
+            .join("");
           const isSkill = g.items.some((k) => k.skillName || k.choices);
           const sameCost = g.items.every((k) => k.cost === first.cost);
           return `<tr class="cs-key">
@@ -356,20 +364,49 @@
     return parts.join(" ");
   }
 
-  function inventoryPage(model) {
-    const items = model.inventory || [];
-    const rows = items
-      .map(
-        (it) => `<tr>
+  // Leere Zeilen für Gegenstände, die in der Sitzung dazukommen
+  const MIN_NEW_ITEM_ROWS = 8;
+  const NEW_ITEM_ROW = `<tr class="cs-new">${"<td></td>".repeat(6)}</tr>`;
+
+  // Reihenfolge der Gegenstandsarten innerhalb einer Gruppe
+  const KIND_ORDER = ["waffe", "fernkampf", "stecken", "munition", "ruestung", "schild", "schmuck", "trank", "oel", "schriftrolle",
+    "zauberstab", "talisman", "werkzeug", "licht", "buch", "behaelter", "verbrauch", "ausruestung", "schatz"];
+  const LOCATION_GROUPS = [
+    ["hand", "In der Hand"],
+    ["angelegt", "Angelegt", "Rüstung, Kleidung, Schmuck – investiert oder im Slot"],
+    ["koerper", "Am Körper / Gürtel", "griffbereit, nicht verstaut"],
+    ["behaelter", null],
+    ["abgelegt", "Abgelegt / zurückgelassen", "zählt nicht zur Traglast"],
+  ];
+
+  function itemRow(it) {
+    return `<tr>
         <td class="c ico">${ICONS ? ICONS.icon(it.kind) : ""}</td>
         <td class="c">${esc(it.quantity)}</td>
         <td class="c">${esc(it.bulk == null || it.bulk === "" ? "–" : it.bulk)}</td>
-        <td class="c">${it.invested ? "✔ inv." : it.equipped ? "✔" : ""}</td>
-        <td class="b">${it.container ? "↳ " : ""}${esc(it.name)}</td>
+        <td class="c">${it.invested ? "✔" : ""}</td>
+        <td class="b">${esc(it.name)}</td>
         <td class="desc">${itemInfo(it)}</td>
-      </tr>`
-      )
-      .join("");
+      </tr>`;
+  }
+
+  function inventoryPage(model) {
+    const items = model.inventory || [];
+    const kindIdx = (k) => (KIND_ORDER.indexOf(k) < 0 ? 99 : KIND_ORDER.indexOf(k));
+    const sortItems = (list) => list.slice().sort((a, b) => kindIdx(a.kind) - kindIdx(b.kind) || a.name.localeCompare(b.name, "de"));
+    let rows = "";
+    LOCATION_GROUPS.forEach(([loc, title, hint]) => {
+      const inLoc = items.filter((it) => (it.location || "koerper") === loc);
+      if (!inLoc.length) return;
+      if (loc === "behaelter") {
+        // je Behälter eine eigene Gruppe
+        Array.from(new Set(inLoc.map((it) => it.container))).forEach((c) => {
+          rows += groupRow(`Im ${c}`, 6, "verstaut") + sortItems(inLoc.filter((it) => it.container === c)).map(itemRow).join("");
+        });
+      } else {
+        rows += groupRow(title, 6, hint) + sortItems(inLoc).map(itemRow).join("");
+      }
+    });
     const cur = model.currency || {};
     const bulk = model.bulk || {};
     const coin = (v, l) => `<div class="cs-stat"><span class="cs-stat-box">${esc(v || "")}</span><em>${l}</em></div>`;
@@ -391,10 +428,10 @@
       </div>
       <div class="cs-panel cs-fill">
         <div class="cs-bar">Gegenstände</div>
-        <table class="cs-table">
+        <table class="cs-table" data-fill-rows="6" data-min-rows="${MIN_NEW_ITEM_ROWS}">
           ${ITEM_COLS}
-          <thead><tr><th class="c">Art</th><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Angelegt</th><th>Gegenstand</th><th>Wirkung / Kurzinfo</th></tr></thead>
-          <tbody>${rows}</tbody>
+          <thead><tr><th class="c">Art</th><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Investiert</th><th>Gegenstand</th><th>Wirkung / Kurzinfo</th></tr></thead>
+          <tbody>${rows}${groupRow("Neue Gegenstände", 6, "in der Sitzung gefunden oder gekauft")}${NEW_ITEM_ROW}</tbody>
         </table>
         ${lines(ITEM_COLS, 6)}
       </div>
@@ -464,5 +501,62 @@
     )}${spellsPage(model)}${inventoryPage(model)}${conditionsPage(model)}</div>`;
   }
 
-  global.PF2_RENDER = { render };
+  /**
+   * Füllt die Ausrüstungsseite bis zum Ende der letzten Druckseite mit leeren
+   * Zeilen für neue Gegenstände. Dazu wird der Seitenumbruch des Drucks
+   * nachgebildet: Zeilen werden nicht geteilt (sie rutschen ganz auf die
+   * nächste Seite), der Tabellenkopf wiederholt sich, der Notizblock bleibt
+   * zusammen. Gemessen wird in der Bildschirmansicht – sie hat dieselbe
+   * Inhaltsbreite wie der Druck (194 mm), daher stimmen die Zeilenhöhen.
+   * Passt alles auf eine Seite (mit genug freien Zeilen), füllt das Layout
+   * selbst (.cs-lines).
+   */
+  function fillPages(root) {
+    const PAGE_MM = 279; // nutzbare Höhe einer A4-Druckseite (297 mm − 2 × 8 mm Rand, kleiner Puffer)
+    root.querySelectorAll("table[data-fill-rows]").forEach((table) => {
+      const sec = table.closest(".sheet-page");
+      const tbody = table.tBodies[0];
+      const proto = tbody && tbody.querySelector("tr.cs-new");
+      if (!sec || !proto) return;
+      const px = sec.getBoundingClientRect().width / 210;
+      if (!px) return;
+      const top = sec.getBoundingClientRect().top + parseFloat(getComputedStyle(sec).paddingTop);
+      const mm = (v) => v / px;
+      const rows = Array.from(tbody.rows).map((r) => mm(r.getBoundingClientRect().height));
+      const firstRowTop = mm(tbody.rows[0].getBoundingClientRect().top - top);
+      const theadH = table.tHead ? mm(table.tHead.getBoundingClientRect().height) : 0;
+      const rowH = mm(proto.getBoundingClientRect().height) || 7;
+      const notes = sec.querySelector(".cs-notes-panel");
+      const notesH = notes ? mm(notes.getBoundingClientRect().height) : 0;
+      const gap = notes ? mm(notes.getBoundingClientRect().top - table.closest(".cs-panel").getBoundingClientRect().bottom) : 0;
+      const minRows = parseInt(table.dataset.minRows || "0", 10);
+
+      // Druck nachbilden: n zusätzliche Leerzeilen → Seitenzahl und Rest auf der letzten Seite
+      const simulate = (n) => {
+        let page = 1;
+        let y = firstRowTop;
+        const all = rows.concat(Array(n).fill(rowH));
+        for (const h of all) {
+          if (y + h > page * PAGE_MM) {
+            y = page * PAGE_MM + theadH + 1; // Tabellenkopf + Rahmen auf der neuen Seite
+            page++;
+          }
+          y += h;
+        }
+        y += 0.6 + gap; // Rahmen unten + Abstand
+        if (y + notesH > page * PAGE_MM) {
+          y = page * PAGE_MM;
+          page++;
+        }
+        return page;
+      };
+      const pages = simulate(minRows);
+      if (pages === 1) return; // passt auf ein Blatt – die Linien des Layouts füllen den Rest
+      let n = minRows;
+      while (n < 400 && simulate(n + 1) === pages) n++;
+      for (let i = 1; i < n; i++) tbody.appendChild(proto.cloneNode(true)); // eine Leerzeile steht schon im HTML
+    });
+  }
+
+  global.PF2_RENDER = { render, fillPages };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -1267,7 +1267,10 @@
         rank: skill && skills[skill] ? skills[skill].rank : null,
         vs: def.vs || "",
         text: def.text || e.s || "",
-        by: list.map((a) => ({ name: a.name, slug: a.slug, summary: a.summary, level: a.level })),
+        by: list.map((a) => ({
+          name: a.name, slug: a.slug, summary: a.summary, level: a.level,
+          cost: a.cost, trigger: a.trigger, requirement: a.requirement, frequency: a.frequency,
+        })),
       });
       list.forEach((a) => {
         a.keyActions = (a.keyActions || []).concat(sl);
@@ -1498,6 +1501,13 @@
         held: carry === "held",
         invested: traitsOf(it).includes("invested") ? !!get(s, "equipped.invested", false) : null,
         container: inContainer ? D.itemName(inContainer) : null,
+        // Wo ist der Gegenstand? hand | angelegt | koerper (am Gürtel/griffbereit) | behaelter | abgelegt
+        location:
+          carry === "dropped" ? "abgelegt"
+          : inContainer ? "behaelter"
+          : carry === "held" ? "hand"
+          : get(s, "equipped.inSlot", false) === true || (traitsOf(it).includes("invested") && get(s, "equipped.invested", false)) ? "angelegt"
+          : "koerper",
         level: num(get(s, "level.value", 0), 0),
         ...itemDetails(it),
       });

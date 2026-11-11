@@ -71,6 +71,8 @@
       const html = window.PF2_RENDER.render(model, { mode: selectedMode() });
       lastGeneratedText = text;
       output.innerHTML = html;
+      // Überlaufende Seiten (z. B. lange Ausrüstungsliste) bis zum Seitenende mit Leerzeilen füllen
+      if (window.PF2_RENDER.fillPages) window.PF2_RENDER.fillPages(output);
       printBtn.disabled = false;
       const warnCount = model.warnings.length;
       setStatus(

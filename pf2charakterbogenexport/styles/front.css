@@ -428,3 +428,4 @@
 .cs-dmg-sneak { width: 100%; margin-bottom: 2.8mm; }
 .cs-dmg-sneak .v { width: 100%; font-size: 8.6pt; white-space: nowrap; font-weight: 700; }
 .cs-dmg-sneak .l { font-size: 5.4pt; }
+.cs-page .cs-table tr.cs-new td { height: 7mm; }
