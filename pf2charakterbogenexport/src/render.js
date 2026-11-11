@@ -91,7 +91,12 @@
     const parts = [];
     // Zusatzeffekt einer Kernaktion: steht vollständig bei der Kernaktion oben
     if (a.keyActions && a.keyActions.length && keyActionNames(a).length) {
-      return `<i>Zusatzeffekt für ${keyActionNames(a).map((n) => `<b>${esc(n)}</b>`).join(" und ")} – siehe „Deine Kernaktionen“ oben.</i>`;
+      const names = keyActionNames(a).map((n) => `<b>${esc(n)}</b>`);
+      const joined = names.length > 1 ? names.slice(0, -1).join(", ") + " und " + names[names.length - 1] : names[0];
+      const hint = `<i>Zusatzeffekt für ${joined} – siehe „Deine Kernaktionen“ oben.</i>`;
+      // Ist das Talent selbst eine Aktion, bleibt seine eigene Beschreibung stehen.
+      if (a.cost == null || a.cost === "") return hint;
+      parts.push(`<i>Bezieht sich auf ${joined} (siehe „Deine Kernaktionen“).</i>`);
     }
     if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(a.trigger)}`);
     if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
@@ -105,26 +110,52 @@
     return currentKeyActions.filter((k) => (a.keyActions || []).includes(k.slug)).map((k) => k.name);
   }
 
-  /** Kernaktionen: Wurf, Regeltext und alle Zusatzeffekte aus Talenten/Merkmalen. */
+  /**
+   * Kernaktionen: Wurf, Regeltext und alle Zusatzeffekte aus Talenten/Merkmalen.
+   * Aktionen, die von genau denselben Talenten verbessert werden (z. B. alle
+   * Athletik-Manöver durch „Riesenringer“), stehen zusammen in einer Zeile,
+   * damit derselbe Zusatzeffekt nicht mehrfach dasteht.
+   */
   function keyActionRows(model) {
     const list = model.keyActions || [];
     if (!list.length) return "";
+    const groups = [];
+    list.forEach((k) => {
+      const key = k.when + "|" + k.by.map((b) => b.name).sort().join("|");
+      let g = groups.find((x) => x.key === key);
+      if (!g) groups.push((g = { key, items: [] }));
+      g.items.push(k);
+    });
+    const val = (b) => (blank.level || b == null ? "______" : esc(sign(b)));
+    const rollOf = (k) => {
+      const vs = k.vs ? ` gegen ${esc(k.vs)}` : "";
+      if (k.choices && k.choices.length) return `${k.choices.map((c) => `${esc(c.name)} ${val(c.bonus)}`).join(" · ")}${vs}`;
+      if (k.choices) return `Passende Wissensfertigkeit${vs}`;
+      if (k.skillName) return `${esc(k.skillName)} ${val(k.bonus)}${vs}`;
+      return "";
+    };
     return (
-      groupRow("Deine Kernaktionen", 5, "nutzt du voraussichtlich oft – mehrere Talente verbessern sie") +
-      list
-        .map((k) => {
-          const roll = k.skillName
-            ? `<b>${esc(k.skillName)} ${blank.level || k.bonus == null ? "______" : esc(sign(k.bonus))}${k.vs ? ` gegen ${esc(k.vs)}` : ""}.</b> `
-            : "";
-          const effects = k.by
-            .map((b) => `<li><b>${esc(b.name)}:</b> ${esc(b.summary || "")}</li>`)
+      groupRow("Deine Kernaktionen", 5, "deine Talente verbessern sie – du nutzt sie voraussichtlich oft") +
+      groups
+        .map((g) => {
+          const multi = g.items.length > 1;
+          const first = g.items[0];
+          const rules = g.items
+            .map((k) => {
+              const roll = rollOf(k);
+              if (multi) return `<div class="cs-key-act"><b>${esc(k.name)}${roll ? ` (${roll})` : ""}:</b> ${esc(k.text)}</div>`;
+              return `${roll ? `<b>${roll}.</b> ` : ""}${esc(k.text)}`;
+            })
             .join("");
+          const effects = first.by.map((b) => `<li><b>${esc(b.name)}:</b> ${esc(b.summary || "")}</li>`).join("");
+          const isSkill = g.items.some((k) => k.skillName || k.choices);
+          const sameCost = g.items.every((k) => k.cost === first.cost);
           return `<tr class="cs-key">
           <td class="c">–</td>
-          <td>${k.skillName ? "Fertigkeitsaktion" : "Aktion"}</td>
-          <td class="b">${esc(k.name)}</td>
-          <td class="c act">${costSymbol(k.cost)}</td>
-          <td class="desc">${roll}${esc(k.text)}<div class="cs-key-fx"><b>Zusatzeffekte durch deine Talente:</b><ul>${effects}</ul></div></td>
+          <td>${isSkill ? "Fertigkeitsaktion" : "Aktion"}${first.when === "ausserhalb" ? "<br><small>außerhalb des Kampfes</small>" : ""}</td>
+          <td class="b">${g.items.map((k) => esc(k.name)).join("<br>")}</td>
+          <td class="c act">${sameCost ? costSymbol(first.cost) : g.items.map((k) => costSymbol(k.cost)).join("<br>")}</td>
+          <td class="desc">${rules}<div class="cs-key-fx"><b>Zusatzeffekte durch deine Talente:</b><ul>${effects}</ul></div></td>
         </tr>`;
         })
         .join("")

@@ -1206,11 +1206,10 @@
   }
 
   /**
-   * Kernaktionen: Aktionen, auf die sich mindestens zwei Talente/Merkmale des
-   * Charakters beziehen (z. B. Hindurchturnen bei einem Schurken mit
-   * „Dahinterturnen“ und „Hilfreiches Hindurchturnen“). Der Charakter wird sie
-   * voraussichtlich regelmäßig nutzen – der Bogen erklärt sie deshalb
-   * gesondert, mit Bonus und den Zusatzeffekten aus den Talenten.
+   * Kernaktionen: Aktionen, auf die sich ein Talent/Merkmal des Charakters
+   * bezieht (z. B. Hindurchturnen bei „Dahinterturnen“). Wer ein Talent für
+   * eine Aktion nimmt, wird sie regelmäßig nutzen – der Bogen erklärt sie
+   * deshalb gesondert, mit Bonus und den Zusatzeffekten aus den Talenten.
    */
   function buildKeyActions(abilities, skills) {
     const ACTS = global.PF2_ACTIONS || { SKILL_ACTIONS: [], BASIC_ACTIONS: [] };
@@ -1224,11 +1223,22 @@
     );
     const out = [];
     by.forEach((list, sl) => {
-      if (list.length < 2) return;
+      // Schon ein Talent, das eine Aktion verbessert, zeigt: der Charakter nutzt sie.
       const def = known.find((k) => k.slug === sl) || {};
       const e = D.entry(sl) || {};
-      const skill = def.skill && def.skill !== "perception" ? def.skill : null;
+      let skill = def.skill && !["perception", "knowledge"].includes(def.skill) ? def.skill : null;
+      // Wissensaktionen (Wissen abrufen, Schrift entziffern …): alle geübten Wissensfertigkeiten
+      let choices = null;
+      if (def.skill === "knowledge") {
+        const KS = ACTS.KNOWLEDGE_SKILLS || ["arcana", "crafting", "medicine", "nature", "occultism", "religion", "society"];
+        choices = KS.filter((k) => skills[k] && skills[k].rank >= 1)
+          .map((k) => ({ name: D.SKILL_DE[k] || k, bonus: skills[k].mod }))
+          .sort((a, b) => b.bonus - a.bonus);
+        skill = null;
+      }
       out.push({
+        when: def.when || "kampf",
+        choices,
         slug: sl,
         name: e.n || def.name || D.titleFromSlug(sl),
         cost: def.cost != null ? def.cost : null,
@@ -1244,7 +1254,9 @@
         a.keyActions = (a.keyActions || []).concat(sl);
       });
     });
-    return out.sort((a, b) => b.by.length - a.by.length || a.name.localeCompare(b.name, "de"));
+    // Kampfaktionen zuerst, dann nach Anzahl der verbessernden Talente
+    const W = { kampf: 0, ausserhalb: 1 };
+    return out.sort((a, b) => (W[a.when] || 0) - (W[b.when] || 0) || b.by.length - a.by.length || a.name.localeCompare(b.name, "de"));
   }
 
   function actionCost(type, count) {
