@@ -435,3 +435,9 @@
 .cs-item-tags { font-weight: 400; font-size: 7.2pt; color: #333; margin-top: 0.3mm; line-height: 1.25; }
 .cs-item-tags span { white-space: nowrap; hyphens: none; }
 .cs-mat { color: var(--cs-orange); }
+
+/* Ausrüstung: Wert je Stück, darunter Gesamtwert */
+.cs-page .cs-table td.price { font-size: 7.6pt; line-height: 1.2; }
+.cs-page .cs-table td.price small { display: block; font-size: 6.5pt; color: #555; white-space: nowrap; }
+/* Zauber: Werte beim aktuellen Grad */
+.cs-heighten b { color: #b4561b; }

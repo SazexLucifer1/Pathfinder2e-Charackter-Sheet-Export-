@@ -34,6 +34,14 @@
     return SUM && SUM.compact ? SUM.compact(text) : text;
   }
 
+  /** Gesteigerte Zauberwerte: aktueller Grad (nicht im Stufenaufstieg) und Zuwachs je Grad. */
+  function spellHeighten(s) {
+    const out = [];
+    if (s.heightenNow && !blank.level) out.push(`<b>Aktuell (Grad ${s.castRank}):</b> ${esc(s.heightenNow)}.`);
+    else if (s.heightenStep) out.push(`<b>Gesteigert:</b> ${esc(s.heightenStep)}.`);
+    return out.length ? ` <span class="cs-heighten">${out.join(" ")}</span>` : "";
+  }
+
   function esc(s) {
     if (s == null) return "";
     return String(s)
@@ -85,7 +93,7 @@
   const ABILITY_COLS = `<colgroup><col style="width:11mm"><col style="width:28mm"><col style="width:40mm"><col style="width:14mm"><col></colgroup>`;
   const PLAN_COLS = `<colgroup><col style="width:12mm"><col style="width:7mm"><col></colgroup>`;
   const SPELL_COLS = `<colgroup><col style="width:12mm"><col style="width:36mm"><col style="width:13mm"><col style="width:19mm"><col style="width:24mm"><col></colgroup>`;
-  const ITEM_COLS = `<colgroup><col style="width:8mm"><col style="width:14mm"><col style="width:17mm"><col style="width:18mm"><col style="width:46mm"><col></colgroup>`;
+  const ITEM_COLS = `<colgroup><col style="width:8mm"><col style="width:11mm"><col style="width:11mm"><col style="width:18mm"><col style="width:42mm"><col style="width:17mm"><col></colgroup>`;
 
   function page(title, model, body, extraCls) {
     return `<section class="sheet-page cs-page ${extraCls || ""}">${pageHead(title, model)}${body}</section>`;
@@ -346,12 +354,12 @@
           spells
             .map(
               (s) => `<tr>
-            <td class="c">${s.cantrip ? "Trick" : s.focus ? `F${s.rank || ""}` : s.rank}</td>
+            <td class="c">${s.cantrip ? "Trick" : s.focus ? `F${blank.level ? "" : s.castRank || s.rank || ""}` : s.rank}</td>
             <td class="b">${esc(s.name)}</td>
             <td class="c act">${costSymbol(s.cost)}</td>
             <td>${esc(s.range || "")}</td>
             <td>${esc(s.defense || "")}</td>
-            <td class="desc">${esc(T(s.summary, "sp:" + s.slug))}</td>
+            <td class="desc">${esc(T(s.summary, "sp:" + s.slug))}${spellHeighten(s)}</td>
           </tr>`
             )
             .join("")
@@ -399,7 +407,20 @@
 
   // Leere Zeilen für Gegenstände, die in der Sitzung dazukommen
   const MIN_NEW_ITEM_ROWS = 8;
-  const NEW_ITEM_ROW = `<tr class="cs-new">${"<td></td>".repeat(6)}</tr>`;
+  const NEW_ITEM_ROW = `<tr class="cs-new">${"<td></td>".repeat(7)}</tr>`;
+
+  /** Kupfer → „1 GM 5 SM“ (Platin wird als Gold gezählt, wie im Handel üblich). */
+  function money(cp) {
+    if (!cp) return "";
+    const gp = Math.floor(cp / 100), sp = Math.floor((cp % 100) / 10), c = cp % 10;
+    return [gp && `${gp.toLocaleString("de-DE")} GM`, sp && `${sp} SM`, c && `${c} KM`].filter(Boolean).join(" ");
+  }
+  function itemPrice(it) {
+    if (!it.priceCp) return "–";
+    const unit = money(it.priceCp) + (it.pricePer > 1 ? ` / ${it.pricePer}` : "");
+    const total = it.quantity > 1 ? Math.round((it.priceCp * it.quantity) / it.pricePer) : 0;
+    return esc(unit) + (it.quantity > it.pricePer && total ? `<small>ges. ${esc(money(total))}</small>` : "");
+  }
 
   // Reihenfolge der Gegenstandsarten innerhalb einer Gruppe
   const KIND_ORDER = ["waffe", "fernkampf", "stecken", "munition", "ruestung", "schild", "schmuck", "trank", "oel", "schriftrolle",
@@ -429,6 +450,7 @@
         <td class="c">${esc(it.bulk == null || it.bulk === "" ? "–" : it.bulk)}</td>
         <td class="c">${it.invested ? "✔" : ""}</td>
         <td class="b">${esc(it.name)}${itemTags(it)}</td>
+        <td class="c price">${itemPrice(it)}</td>
         <td class="desc">${itemInfo(it)}</td>
       </tr>`;
   }
@@ -444,10 +466,10 @@
       if (loc === "behaelter") {
         // je Behälter eine eigene Gruppe
         Array.from(new Set(inLoc.map((it) => it.container))).forEach((c) => {
-          rows += groupRow(`Im ${c}`, 6, "verstaut") + sortItems(inLoc.filter((it) => it.container === c)).map(itemRow).join("");
+          rows += groupRow(`Im ${c}`, 7, "verstaut") + sortItems(inLoc.filter((it) => it.container === c)).map(itemRow).join("");
         });
       } else {
-        rows += groupRow(title, 6, hint) + sortItems(inLoc).map(itemRow).join("");
+        rows += groupRow(title, 7, hint) + sortItems(inLoc).map(itemRow).join("");
       }
     });
     const cur = model.currency || {};
@@ -473,10 +495,10 @@
         <div class="cs-bar">Gegenstände</div>
         <table class="cs-table" data-fill-rows="6" data-min-rows="${MIN_NEW_ITEM_ROWS}">
           ${ITEM_COLS}
-          <thead><tr><th class="c">Art</th><th class="c">Anzahl</th><th class="c">Traglast</th><th class="c">Investiert</th><th>Gegenstand</th><th>Wirkung / Kurzinfo</th></tr></thead>
-          <tbody>${rows}${groupRow("Neue Gegenstände", 6, "in der Sitzung gefunden oder gekauft")}${NEW_ITEM_ROW}</tbody>
+          <thead><tr><th class="c">Art</th><th class="c">Anz.</th><th class="c">Last</th><th class="c">Investiert</th><th>Gegenstand</th><th class="c">Wert</th><th>Wirkung / Kurzinfo</th></tr></thead>
+          <tbody>${rows}${groupRow("Neue Gegenstände", 7, "in der Sitzung gefunden oder gekauft")}${NEW_ITEM_ROW}</tbody>
         </table>
-        ${lines(ITEM_COLS, 6)}
+        ${lines(ITEM_COLS, 7)}
       </div>
       <div class="cs-panel cs-notes-panel"><div class="cs-bar">Notizen</div>${lines("<colgroup><col></colgroup>", 1)}</div>`
     );

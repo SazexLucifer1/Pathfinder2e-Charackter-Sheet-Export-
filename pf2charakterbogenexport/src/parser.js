@@ -1330,6 +1330,10 @@
           const sum = D.itemSummary(sp);
           const cantrip = traits.includes("cantrip");
           const time = String(get(sp, "system.time.value", ""));
+          const baseRank = cantrip ? 1 : num(get(sp, "system.level.value", 1), 1);
+          // Fokuszauber und Zaubertricks werden automatisch auf halbe Stufe (aufgerundet) gesteigert
+          const castRank = cantrip || traits.includes("focus") || kind === "focus" ? Math.max(1, Math.min(10, Math.ceil(level / 2))) : baseRank;
+          const hn = heightenNotes(sp, baseRank, castRank, attrs[attr] || 0);
           return {
             name: D.itemName(sp),
             en: D.englishName(sp),
@@ -1345,6 +1349,9 @@
             range: translateRange(get(sp, "system.range.value", "")),
             defense: defenseName(get(sp, "system.defense", null)),
             summary: sum ? sum.s || "" : "",
+            castRank,
+            heightenStep: hn.step,
+            heightenNow: hn.now,
             prepared: preparedIds.has(sp._id),
             traits: traits.filter((t) => !["cantrip", "focus", "concentrate", "manipulate"].includes(t)).map(D.trait),
           };
@@ -1372,6 +1379,76 @@
       entries: outEntries.filter((e) => e.spells.length || e.slots.length),
       focus: { value: num(get(ctx.system, "resources.focus.value", 0), 0), max: focusMax },
     };
+  }
+
+  /**
+   * Werte eines gesteigerten Zaubers aus Foundrys Schadens-/Heilungsangaben
+   * (inkl. Überlagerungen wie „Heilung“/„gegen Untote“ bei Handauflegen).
+   * step: Zuwachs je Steigerung; now: Wert beim aktuellen Grad.
+   */
+  function heightenNotes(sp, baseRank, castRank, attrMod) {
+    const sys = sp.system || {};
+    const variants = [];
+    if (sys.damage && Object.keys(sys.damage).length) variants.push({ label: "", sys });
+    Object.values(sys.overlays || {})
+      .sort((a, b) => num(a.sort, 0) - num(b.sort, 0))
+      .forEach((o) => {
+        if (o && o.overlayType === "override" && o.system && o.system.damage && Object.keys(o.system.damage).length)
+        {
+          // Foundry führt Überlagerungen tief zusammen: gleiche Schadens-IDs erben Art/Steigerung der Grundfassung
+          const dmg = {};
+          Object.entries(o.system.damage).forEach(([id, p]) => (dmg[id] = Object.assign({}, (sys.damage || {})[id] || {}, p)));
+          const hBase = sys.heightening || {}, hO = o.system.heightening || {};
+          const heightening = Object.assign({}, hBase, hO, { damage: Object.assign({}, hBase.damage || {}, hO.damage || {}) });
+          variants.push({ label: ((String(o.name || "").match(/\(([^)]*)\)\s*$/) || [])[1] || ""), sys: Object.assign({}, sys, o.system, { damage: dmg, heightening }) });
+        }
+      });
+    const LABEL = { healing: "Heilung", "vs. undead": "gegen Untote", "vs. living": "gegen Lebende", damage: "Schaden", melee: "Nahkampf", ranged: "Fernkampf" };
+    const DTYPES = ["bludgeoning", "piercing", "slashing", "acid", "cold", "electricity", "fire", "sonic", "force", "vitality", "void", "mental", "poison", "spirit", "bleed"];
+    // Überlagerungen, die nur die Schadensart wählen (z. B. Wucht/Stich/Hieb): als Auswahl an der Grundvariante
+    const typeChoice = variants.filter((v) => DTYPES.includes(v.label.toLowerCase()));
+    if (variants.length > typeChoice.length && typeChoice.length) {
+      const base = variants.find((v) => !typeChoice.includes(v));
+      base.typeLabel = typeChoice.map((v) => D.damageType(v.label.toLowerCase())).join("/");
+      for (let i = variants.length - 1; i >= 0; i--) if (typeChoice.includes(variants[i])) variants.splice(i, 1);
+    }
+    const dice = (f) => String(f).match(/^\s*(\d+)d(\d+)\s*$/);
+    const fmt = (f, part, typeLabel) => {
+      const kinds = part.kinds || ["damage"];
+      const d = dice(f);
+      const val = d ? `${d[1]}W${d[2]}` : String(f).replace(/(\d)d(\d)/g, "$1W$2");
+      const mod = part.applyMod && attrMod ? `${attrMod > 0 ? "+" : ""}${attrMod}` : "";
+      const type = typeLabel || (part.type ? D.damageType(part.type) : "Schaden");
+      if (kinds.includes("healing") && kinds.includes("damage")) return `${val}${mod} (Heilung bzw. ${type})`;
+      if (kinds.includes("healing")) return `${val}${mod} TP`;
+      return `${val}${mod} ${type}`;
+    };
+    const add = (a, b, times) => {
+      if (!times) return a;
+      if (/^\d+$/.test(a) && /^\d+$/.test(b)) return String(Number(a) + Number(b) * times);
+      const da = dice(a), db = dice(b);
+      if (da && db && da[2] === db[2]) return `${Number(da[1]) + Number(db[1]) * times}d${da[2]}`;
+      return null;
+    };
+    const step = [], now = [];
+    variants.forEach((v) => {
+      const h = v.sys.heightening || {};
+      const lbl = v.label ? (LABEL[v.label.toLowerCase()] || v.label) + ": " : "";
+      Object.entries(v.sys.damage || {}).forEach(([id, part]) => {
+        let cur = String(part.formula || "");
+        if (h.type === "interval" && h.damage && h.damage[id]) {
+          const n = Math.floor((castRank - baseRank) / Math.max(1, num(h.interval, 1)));
+          step.push(`${lbl}+${fmt(h.damage[id], { ...part, applyMod: false }, v.typeLabel)} je ${num(h.interval, 1) > 1 ? h.interval + " Grade" : "Grad"}`);
+          cur = add(cur, String(h.damage[id]), n);
+        } else if (h.type === "fixed" && h.levels) {
+          Object.keys(h.levels).map(Number).filter((r) => r <= castRank).sort((a, b) => a - b)
+            .forEach((r) => { const f = get(h.levels[r], `damage.value.${id}.formula`, null) || get(h.levels[r], `damage.${id}.formula`, null); if (f) cur = f; });
+        }
+        if (cur) now.push(lbl + fmt(cur, part, v.typeLabel));
+      });
+    });
+    if (!step.length) return { step: "", now: "" };
+    return { step: step.join(" · "), now: castRank > baseRank ? now.join(" · ") : "" };
   }
 
   function defenseName(def) {
@@ -1476,6 +1553,11 @@
     return "ausruestung";
   }
 
+  function priceCp(v) {
+    if (!v || typeof v !== "object") return 0;
+    return num(v.pp, 0) * 1000 + num(v.gp, 0) * 100 + num(v.sp, 0) * 10 + num(v.cp, 0);
+  }
+
   function parseInventory(items, attrs, numeric) {
     const physical = items.filter((it) => PHYSICAL.includes(it.type));
     const containers = new Map(items.filter((it) => it.type === "backpack").map((b) => [b._id, b]));
@@ -1519,6 +1601,9 @@
           : get(s, "equipped.inSlot", false) === true || (traitsOf(it).includes("invested") && get(s, "equipped.invested", false)) ? "angelegt"
           : "koerper",
         level: num(get(s, "level.value", 0), 0),
+        // Wert in Kupfermünzen je Stück (Foundry: price.value + price.per, z. B. 1 SM für 10 Pfeile)
+        priceCp: priceCp(get(s, "price.value", null)),
+        pricePer: num(get(s, "price.per", 1), 1) || 1,
         ...itemDetails(it),
       });
       // Schriftrollen/Zauberstäbe: enthaltenen Zauber im Namen zeigen ("Schriftrolle (4. Grad) – Spiegelwand")
