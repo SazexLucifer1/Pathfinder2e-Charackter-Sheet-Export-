@@ -89,6 +89,7 @@
     bonus: "Bonustalent",
     familiar: "Vertrauten-Fähigkeit",
     ancestryfeature: "Volksmerkmal",
+    action: "Aktion",
     calling: undefined,
   };
 
@@ -157,7 +158,99 @@
     lb: "Pfund",
   };
 
+  const SIZES = { tiny: "Winzig", sm: "Klein", med: "Mittelgroß", lg: "Groß", huge: "Riesig", grg: "Gigantisch" };
+
+  const LANGUAGES = {
+    common: "Gemeinsprache", taldane: "Taldane", draconic: "Drakonisch", dwarven: "Zwergisch",
+    elven: "Elfisch", gnomish: "Gnomisch", goblin: "Goblinisch", halfling: "Halblingisch",
+    jotun: "Jotun", orcish: "Orkisch", sakvroth: "Sakvroth", undercommon: "Gemeinsprache der Unterwelt",
+    fey: "Feensprache", sylvan: "Sylvanisch", empyrean: "Empyrisch", celestial: "Celestisch",
+    diabolic: "Diabolisch", infernal: "Infernalisch", chthonian: "Chthonisch", abyssal: "Abyssisch",
+    necril: "Necril", aklo: "Aklo", petran: "Petran", pyric: "Pyrisch", sussuran: "Sussuran",
+    thalassic: "Thalassisch", muan: "Muan", kholo: "Kholo", tengu: "Tengu", kitsune: "Kitsune",
+    nagaji: "Nagaji", wayang: "Wayang", tien: "Tien", mwangi: "Mwangi", kelish: "Kelisch",
+    osiriani: "Osirianisch", skald: "Skald", varisian: "Varisisch", vudrani: "Vudrani",
+    minkaian: "Minkaiisch", shadowtongue: "Schattenzunge",
+  };
+
+  const DAMAGE_TYPES = {
+    slashing: "Hieb", piercing: "Stich", bludgeoning: "Wucht", fire: "Feuer", cold: "Kälte",
+    electricity: "Elektrizität", acid: "Säure", sonic: "Schall", mental: "Geistig", poison: "Gift",
+    bleed: "Blutung", force: "Kraft", spirit: "Geist", vitality: "Vitalität", void: "Leere",
+    holy: "Heilig", unholy: "Unheilig", precision: "Präzision", physical: "physisch",
+  };
+
+  const TRAITS = {
+    agile: "Flink", finesse: "Finesse", reach: "Reichweite", trip: "Zu-Fall-bringen", shove: "Stoßen",
+    disarm: "Entwaffnen", grapple: "Ringen", sweep: "Schwung", forceful: "Wuchtig", backstabber: "Hinterhältig",
+    backswing: "Ausholen", nonlethal: "Nichttödlich", parry: "Parieren", propulsive: "Antrieb",
+    "two-hand": "Zweihändig", unarmed: "Waffenlos", free_hand: "Freie Hand", "free-hand": "Freie Hand",
+    monk: "Mönch", magical: "Magisch", fire: "Feuer", cold: "Kälte", holy: "Heilig", unholy: "Unheilig",
+    concussive: "Erschütternd", modular: "Modular", attached: "Befestigt", ranged: "Fernkampf",
+    tethered: "Angebunden", hampering: "Behindernd", brutal: "Brutal", "cold-iron": "Kaltes Eisen",
+    silver: "Silber", elf: "Elf", human: "Mensch", humanoid: "Humanoid", aiuvarin: "Aiuvarin",
+    dromaar: "Dromaar", dwarf: "Zwerg", gnome: "Gnom", goblin: "Goblin", halfling: "Halbling",
+    orc: "Ork", leshy: "Leshy", comfort: "Bequem", flexible: "Flexibel", noisy: "Laut", bulwark: "Bollwerk",
+  };
+
+  // Merkmale mit Wertangabe, z. B. "deadly-d10", "thrown-20", "versatile-p"
+  function traitName(trait) {
+    if (!trait) return "";
+    if (TRAITS[trait]) return TRAITS[trait];
+    let m;
+    const die = (d) => d.replace(/^d/, "W");
+    if ((m = trait.match(/^deadly-(d\d+)$/))) return `Tödlich ${die(m[1])}`;
+    if ((m = trait.match(/^fatal-(d\d+)$/))) return `Fatal ${die(m[1])}`;
+    if ((m = trait.match(/^fatal-aim-(d\d+)$/))) return `Fatales Zielen ${die(m[1])}`;
+    if ((m = trait.match(/^two-hand-(d\d+)$/))) return `Zweihändig ${die(m[1])}`;
+    if ((m = trait.match(/^jousting-(d\d+)$/))) return `Lanzenstechen ${die(m[1])}`;
+    if ((m = trait.match(/^thrown-(\d+)$/))) return `Wurfwaffe ${m[1]} Fuß`;
+    if ((m = trait.match(/^volley-(\d+)$/))) return `Salve ${m[1]} Fuß`;
+    if ((m = trait.match(/^reach-(\d+)$/))) return `Reichweite ${m[1]} Fuß`;
+    if ((m = trait.match(/^range-increment-(\d+)$/))) return `Grundreichweite ${m[1]} Fuß`;
+    if ((m = trait.match(/^versatile-(\w+)$/))) {
+      const v = { p: "Stich", s: "Hieb", b: "Wucht", fire: "Feuer", cold: "Kälte" }[m[1]] || m[1];
+      return `Vielseitig (${v})`;
+    }
+    return trait;
+  }
+
+  function damageTypeName(t) {
+    return DAMAGE_TYPES[t] || t || "";
+  }
+
+  const SENSES = {
+    "low-light-vision": "Dämmersicht",
+    darkvision: "Dunkelsicht",
+    "greater-darkvision": "Verbesserte Dunkelsicht",
+    scent: "Geruchssinn",
+    tremorsense: "Erschütterungssinn",
+  };
+
+  const ANCESTRIES = {
+    human: "Mensch", dwarf: "Zwerg", elf: "Elf", gnome: "Gnom", goblin: "Goblin",
+    halfling: "Halbling", orc: "Ork", leshy: "Leshy",
+  };
+
+  const CLASSES = {
+    fighter: "Kämpfer", cleric: "Kleriker", rogue: "Schurke", wizard: "Magier", ranger: "Waldläufer",
+    bard: "Barde", druid: "Druide", sorcerer: "Hexenmeister", monk: "Mönch", barbarian: "Barbar",
+    champion: "Champion", alchemist: "Alchemist", witch: "Hexe",
+  };
+
+  const SANCTIFICATION = { holy: "Heilig", unholy: "Unheilig", none: "" };
+
   global.PF2_I18N = {
+    SIZES,
+    LANGUAGES,
+    DAMAGE_TYPES,
+    TRAITS,
+    traitName,
+    damageTypeName,
+    SENSES,
+    ANCESTRIES,
+    CLASSES,
+    SANCTIFICATION,
     ABILITIES,
     SAVES,
     SKILLS,

@@ -78,13 +78,15 @@
         <label>Erbe<input type="text" value="${esc(m.heritage)}"></label>
         <label>Klasse<input type="text" value="${esc(m.className)}"></label>
         <label>Hintergrund<input type="text" value="${esc(m.background)}"></label>
-        <label>Gesinnung<input type="text" value="${esc(m.alignment)}"></label>
+        <label>${esc(m.alignmentLabel || "Gesinnung")}<input type="text" value="${esc(m.alignment)}"></label>
         <label>Gottheit<input type="text" value="${esc(m.deity)}"></label>
         <label>Größe<input type="text" value="${esc(m.size)}"></label>
         <label>Alter<input type="text" value="${esc(m.age)}"></label>
         <label>Geschlecht<input type="text" value="${esc(m.gender)}"></label>
       </div>
       <div class="languages"><strong>Sprachen:</strong> ${esc((m.languages || []).join(", ")) || "—"}</div>
+      ${m.traits && m.traits.length ? `<div class="languages"><strong>Merkmale:</strong> ${esc(m.traits.join(", "))}</div>` : ""}
+      ${m.senses && m.senses.length ? `<div class="languages"><strong>Sinne:</strong> ${esc(m.senses.join(", "))}</div>` : ""}
       <div class="level-track">
         <strong>Stufenverlauf:</strong>
         ${Array.from({ length: 20 }, (_, i) => i + 1)
@@ -102,6 +104,12 @@
       <div class="stat-box big">
         <div class="stat-label">RK</div>
         <div class="stat-value">${esc(model.ac)}</div>
+        ${model.armor ? `<div class="speed-others">${esc(model.armor.name)}${model.armor.checkPenalty ? `, Rüstungsmalus ${esc(model.armor.checkPenalty)}` : ""}</div>` : ""}
+        ${
+          model.shield
+            ? `<div class="speed-others"><strong>Schild:</strong> ${esc(model.shield.name)}<br>Erhoben: RK ${esc(model.ac + model.shield.acBonus)} (${fmtMod(model.shield.acBonus)})<br>Härte ${esc(model.shield.hardness)} · TP ${esc(model.shield.hp)}/${esc(model.shield.maxHp)} · BS ${esc(model.shield.brokenThreshold)}</div>`
+            : ""
+        }
         ${explainBox("ac")}
       </div>
       <div class="stat-box big">
@@ -150,11 +158,20 @@
       </div>
       <div class="stat-box">
         <div class="stat-label">Klassen-SG</div>
-        <div class="stat-value">${model.classDC.mod != null ? fmtMod(model.classDC.mod) : "–"}</div>
+        <div class="stat-value">${model.classDC.dc != null ? esc(model.classDC.dc) : "–"}</div>
         ${proficiencyDots(model.classDC.rank)} <span class="rank-name">${esc(I18N.proficiencyName(model.classDC.rank))}</span>
       </div>
     </div>
+    ${defensesLine(model)}
     ${explainBox("saves")}${explainBox("perception")}${explainBox("classDC")}`;
+  }
+
+  function defensesLine(model) {
+    const parts = [];
+    if (model.resistances.length) parts.push(`<strong>Resistenzen:</strong> ${esc(model.resistances.map((r) => `${r.type} ${r.value}`).join(", "))}`);
+    if (model.weaknesses.length) parts.push(`<strong>Schwächen:</strong> ${esc(model.weaknesses.map((r) => `${r.type} ${r.value}`).join(", "))}`);
+    if (model.immunities.length) parts.push(`<strong>Immunitäten:</strong> ${esc(model.immunities.map((r) => r.type).join(", "))}`);
+    return parts.length ? `<div class="languages">${parts.join(" &nbsp;·&nbsp; ")}</div>` : "";
   }
 
   function skillsTable(model) {
@@ -202,20 +219,21 @@
     }
     return `
     <table class="attacks-table">
-      <thead><tr><th>Waffe</th><th>Bonus</th><th>Schaden</th><th>Merkmale</th></tr></thead>
+      <thead><tr><th>Waffe</th><th>Angriff (1./2./3.)</th><th>Schaden</th><th>Merkmale</th></tr></thead>
       <tbody>
         ${model.attacks
           .map(
             (a) => `<tr>
-          <td>${esc(a.name)}</td>
-          <td>${a.bonus != null ? fmtMod(a.bonus) : "–"}</td>
+          <td>${esc(a.name)}${a.carryType === "held" ? ' <span class="skill-ability">(in der Hand)</span>' : ""}</td>
+          <td>${a.bonusMap ? esc(a.bonusMap) : a.bonus != null ? fmtMod(a.bonus) : "–"}</td>
           <td>${esc(a.damage)}</td>
           <td>${esc(a.traits.join(", "))}</td>
         </tr>`
           )
           .join("")}
       </tbody>
-    </table>`;
+    </table>
+    <p class="hint">Angriff: 1. / 2. / 3. Angriff im selben Zug (Mehrfachangriffsmalus –5/–10, bei <em>Flink</em> –4/–8).</p>`;
   }
 
   function conditionsPage(model) {
@@ -290,7 +308,7 @@
     const rows = sc.spells
       .map(
         (s) => `<tr>
-        <td>${s.level === 0 ? "Trick" : s.level}</td>
+        <td>${esc(s.rankLabel || (s.level === 0 ? "Trick" : s.level))}</td>
         <td>${esc(s.name)}</td>
         <td>${esc(s.traditions.join(", "))}</td>
         <td>${esc(s.description).slice(0, 200)}${s.description.length > 200 ? "…" : ""}</td>
@@ -306,12 +324,18 @@
             (e) => `<div class="spell-entry-box">
           <strong>${esc(e.name)}</strong> (${esc(e.tradition)}) —
           Zauber-SG: ${e.dc != null ? esc(e.dc) : "–"},
-          Angriffsbonus: ${e.attack != null ? fmtMod(e.attack) : "–"}
+          Zauberangriff: ${e.attack != null ? fmtMod(e.attack) : "–"}
+          ${e.rank ? ` (${esc(I18N.proficiencyName(e.rank))})` : ""}
           ${e.focusPoints != null ? `, Fokuspunkte: ${esc(e.focusPoints)}` : ""}
         </div>`
           )
           .join("")}
       </div>
+      ${
+        model.focus && model.focus.max
+          ? `<div class="spell-entry-box"><strong>Fokuspunkte:</strong> ${Array.from({ length: model.focus.max }, (_, i) => `<span class="hero-pip ${i < model.focus.value ? "filled" : ""}"></span>`).join("")} (max. ${esc(model.focus.max)}; Fokuszauber werden automatisch auf Grad ${Math.ceil(model.meta.level / 2)} erhöht)</div>`
+          : ""
+      }
       <table class="spells-table">
         <thead><tr><th>Grad</th><th>Name</th><th>Tradition</th><th>Beschreibung</th></tr></thead>
         <tbody>${rows}</tbody>
@@ -325,8 +349,8 @@
         (it) => `<tr>
         <td>${esc(it.name)}</td>
         <td>${esc(it.quantity)}</td>
-        <td>${esc(it.bulk === "" || it.bulk == null ? "—" : it.bulk)}</td>
-        <td>${it.equipped ? "Ja" : "Nein"}</td>
+        <td>${esc(it.bulkLabel || (it.bulk === "" || it.bulk == null ? "—" : it.bulk))}</td>
+        <td>${esc(it.carry || (it.equipped ? "Ja" : "Nein"))}</td>
       </tr>`
       )
       .join("");
@@ -336,9 +360,14 @@
       <h2>Ausrüstung &amp; Inventar</h2>
       ${explainBox("bulk")}
       <table class="inventory-table">
-        <thead><tr><th>Gegenstand</th><th>Anzahl</th><th>Traglast</th><th>Angelegt</th></tr></thead>
+        <thead><tr><th>Gegenstand</th><th>Anzahl</th><th>Traglast</th><th>Wo?</th></tr></thead>
         <tbody>${rows || `<tr><td colspan="4" class="empty-hint">Keine Gegenstände im Export gefunden.</td></tr>`}</tbody>
       </table>
+      ${
+        model.totalBulk
+          ? `<div class="currency-row"><strong>Gesamte Traglast:</strong> ${esc(model.totalBulk.bulk)}${model.totalBulk.light ? ` + ${esc(model.totalBulk.light)} L` : ""} &nbsp;·&nbsp; Belastet ab mehr als ${esc(model.bulkLimits.encumbered)} &nbsp;·&nbsp; Maximum ${esc(model.bulkLimits.max)}</div>`
+          : ""
+      }
       <div class="currency-row">
         <strong>Vermögen:</strong>
         Platin: <input type="text" value="${esc(cur.pp)}" class="tiny">
@@ -347,6 +376,14 @@
         Kupfer: <input type="text" value="${esc(cur.cp)}" class="tiny">
       </div>
     </section>`;
+  }
+
+  function notesBlock(model) {
+    if (!model.notes || !model.notes.length) return "";
+    return `
+    <div class="notes-box">
+      <ul>${model.notes.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>
+    </div>`;
   }
 
   function warningsBlock(model) {
@@ -363,6 +400,7 @@
     <section class="sheet-page">
       ${headerBlock(model)}
       ${warningsBlock(model)}
+      ${notesBlock(model)}
       <div class="two-col">
         <div class="col-main">
           <div class="abilities-row">${abilityBlock(model)}</div>

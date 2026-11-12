@@ -123,6 +123,16 @@ input[type="number"] {
 }
 .warnings-box ul { margin: 4px 0 0 16px; padding: 0; }
 
+.notes-box {
+  border: 1px dashed #8a7a55;
+  padding: 4px 10px;
+  font-size: 9px;
+  font-style: italic;
+  color: #5a4b30;
+  margin-bottom: 8px;
+}
+.notes-box ul { margin: 2px 0 0 14px; padding: 0; }
+
 .two-col { display: flex; gap: 12px; }
 .col-main { flex: 3; }
 .col-side { flex: 1; min-width: 150px; }

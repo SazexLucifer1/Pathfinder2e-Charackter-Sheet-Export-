@@ -45,6 +45,12 @@ Kernfunktion (Drag & Drop / Einfügen) ist davon nicht betroffen.
 - Der Parser (`src/parser.js`) liest ein Foundry-`pf2e`-Actor-Export-JSON defensiv aus:
   Foundry-Exporte unterscheiden sich je nach Systemversion leicht in ihrer Struktur; fehlende
   Felder führen zu Hinweisen auf dem Bogen statt zu Fehlern.
+- **Foundry exportiert nur Grunddaten.** „Export Data" speichert keine berechneten Werte
+  (Attributsmodifikatoren, RK, max. TP, Rettungswürfe …). `src/derive.js` rechnet diese nach den
+  PF2-Remaster-Regeln aus den Grunddaten nach (Attributsteigerungen inkl. Teilsteigerungen ab +4,
+  Kompetenzen aus Klasse und Klassenmerkmalen, angelegte Rüstung, Runen, Zähigkeit, Gegenstandsboni
+  investierter Items, Waffenangriffe mit Mehrfachangriffsmalus, Zauber-SG, Traglast). Situative Boni
+  (Umstandsboni, aktive Effekte, erhobener Schild) werden bewusst nicht eingerechnet.
 - Alle Regel-Erklärtexte sind eigene, kurze Zusammenfassungen zum besseren Verständnis –
   maßgeblich bleibt immer das offizielle Regelwerk.
 
@@ -54,6 +60,7 @@ Kernfunktion (Drag & Drop / Einfügen) ist davon nicht betroffen.
 index.html              Haupt-App (Upload-Oberfläche + Bogen-Ausgabe)
 src/i18n.js              Deutsche Begriffsdatenbank (Fertigkeiten, Zustände, Kompetenz, …)
 src/explanations.js      Erklär-Texte für die Randnotiz-Kästen
+src/derive.js            Berechnung der Spielwerte aus den Foundry-Grunddaten
 src/parser.js            Foundry-Actor-JSON → normalisiertes Charaktermodell
 src/render.js             Charaktermodell → druckfertiges HTML
 src/main.js               UI-Verdrahtung (Datei-Upload, Buttons, Fehlerbehandlung)
