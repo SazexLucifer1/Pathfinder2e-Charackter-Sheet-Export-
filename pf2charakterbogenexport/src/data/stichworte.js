@@ -174,5 +174,11 @@
     "eq:charm-of-resistance": "Getragen: Resistenz 5 gegen die Schadensart im Namen.",
     "eq:cold-iron-chunk": "Rohmaterial Kaltes Eisen (zum Herstellen); keine eigene Wirkung.",
     "eq:crying-angel-pendant": "An Rüstung. Auslöser: krit. Fehlschlag bei Erste Hilfe (geübt in Heilkunde) → nur Fehlschlag.",
+    // ---- Dettlaff (Nachtrag) ----
+    "solo-dancer": "Initiative immer mit Darbietung möglich. 1. Kampfrunde: Kreaturen, die nach dir handeln, sind dir gegenüber Auf dem falschen Fuß.",
+    "eq:predictable-silver-piece": "1 Aktion (Interagieren): Münzwurf landet immer auf der geriebenen Seite.",
+    "eq:magnet-coin": "Fragment abtrennbar (bemerken: Wahrnehmung SG 19). 1×/Tag, 3 Aktionen, Fragment in der Hand: Münze teleportiert zu dir (max. 15 Meilen), mit bis zu 3W10 Münzen aus ihrer Nähe.",
+    "eq:oil-1-pint": "Füllt Laternen. Werfen: 1 Aktion vorbereiten (Interagieren) + Fernkampfangriff; Treffer → einfacher Wurf SG 10, bei Erfolg 1W6 Feuer.",
+    "eq:armory-bracelet-minor": "1×/Tag, 2 Aktionen: Anhänger wird zu gewöhnlicher Waffe der gewählten Gruppe (Waffenverbesserung +1 + Schadensrune; Fernkampfwaffe mit 20 Munition). Nach 1 Min. nicht magisch; zerfällt bei der nächsten tägl. Vorbereitung.",
   };
 })(typeof window !== "undefined" ? window : globalThis);

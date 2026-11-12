@@ -876,7 +876,13 @@
         level,
         ancestry: ancestry ? D.itemName(ancestry) : "",
         heritage: heritage ? D.itemName(heritage) : "",
-        background: background ? D.itemName(background) : "",
+        // Abenteuer-Hintergründe tragen ihre Variante englisch im Namen („(No Adjustment)“)
+        background: background
+          ? D.itemName(background)
+              .replace(/\s*\(No Adjustment\)\s*$/i, "")
+              .replace(/\(Family\)\s*$/i, "(Familie)")
+              .replace(/\(Foundling\)\s*$/i, "(Findelkind)")
+          : "",
         className: cls ? D.itemName(cls) : "",
         deity: deity ? D.itemName(deity) : "",
         size: D.size(get(ancestry, "system.size", "med")),
