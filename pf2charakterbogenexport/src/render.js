@@ -113,9 +113,12 @@
       const joined = names.length > 1 ? names.slice(0, -1).join(", ") + " und " + names[names.length - 1] : names[0];
       return `<i>Zusatzeffekt für ${joined} – siehe „Deine Kernaktionen“ oben.</i>`;
     }
-    if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(a.trigger)}`);
-    if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(a.requirement)}`);
-    if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(a.frequency)}`);
+    // Die Aktion ist selbst eine Kernaktion: steht dort komplett
+    if (currentKeyActions.some((k) => k.slug === a.slug)) return `<i>Kernaktion – steht mit allen Zusatzeffekten bei „Deine Kernaktionen“ oben.</i>`;
+    const dot = (t) => (/[.!?:]$/.test(t.trim()) ? t.trim() : t.trim() + ".");
+    if (a.trigger) parts.push(`<b>Auslöser:</b> ${esc(dot(a.trigger))}`);
+    if (a.requirement) parts.push(`<b>Voraussetzung:</b> ${esc(dot(a.requirement))}`);
+    if (a.frequency) parts.push(`<b>Häufigkeit:</b> ${esc(dot(a.frequency))}`);
     // Kompakt: „schon eingerechnet“ braucht keinen Text – steckt in den Zahlen
     if (a.summary && !(blank.compact && a.when === "eingerechnet")) parts.push(esc(T(a.summary, a.slug)));
     return parts.join(" ");
@@ -159,6 +162,8 @@
           const rules = g.items
             .map((k) => {
               const roll = rollOf(k);
+              const pre = [k.trigger && `<b>Auslöser:</b> ${esc(k.trigger.replace(/[.\s]+$/, ""))}.`, k.requirement && `<b>Voraussetzung:</b> ${esc(k.requirement.replace(/[.\s]+$/, ""))}.`].filter(Boolean).join(" ");
+              if (pre) return `${multi ? `<div class="cs-key-act"><b>${esc(k.name)}:</b> ` : ""}${pre} ${esc(T(k.text, "act:" + k.slug))}${multi ? "</div>" : ""}`;
               if (multi) return `<div class="cs-key-act"><b>${esc(k.name)}${roll ? ` (${roll})` : ""}:</b> ${esc(T(k.text, "act:" + k.slug))}</div>`;
               return `${roll ? `<b>${roll}.</b> ` : ""}${esc(T(k.text, "act:" + k.slug))}`;
             })
@@ -179,7 +184,7 @@
           const sameCost = g.items.every((k) => k.cost === first.cost);
           return `<tr class="cs-key">
           <td class="c">–</td>
-          <td>${isSkill ? "Fertigkeitsaktion" : "Aktion"}${first.when === "ausserhalb" ? "<br><small>außerhalb des Kampfes</small>" : ""}</td>
+          <td>${isSkill ? "Fertigkeitsaktion" : g.items.every((k) => k.cost === "R") ? "Reaktion" : "Aktion"}${first.when === "ausserhalb" ? "<br><small>außerhalb des Kampfes</small>" : ""}</td>
           <td class="b">${g.items.map((k) => esc(k.name)).join("<br>")}</td>
           <td class="c act">${sameCost ? costSymbol(first.cost) : g.items.map((k) => costSymbol(k.cost)).join("<br>")}</td>
           <td class="desc">${rules}<div class="cs-key-fx"><b>Zusatzeffekte durch deine Talente:</b><ul>${effects}</ul></div></td>

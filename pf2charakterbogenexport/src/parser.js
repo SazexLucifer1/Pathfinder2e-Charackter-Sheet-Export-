@@ -1257,18 +1257,22 @@
           .sort((a, b) => b.bonus - a.bonus);
         skill = null;
       }
+      // Hat der Charakter die Aktion selbst als Eintrag (z. B. Vergeltender Angriff), dessen Kosten/Auslöser nutzen
+      const own = abilities.find((a) => a.slug === sl) || {};
       out.push({
         when: def.when || "kampf",
         choices,
         slug: sl,
         name: e.n || def.name || D.titleFromSlug(sl),
-        cost: def.cost != null ? def.cost : null,
+        cost: def.cost != null ? def.cost : own.cost != null ? own.cost : null,
+        trigger: own.trigger || "",
+        requirement: own.requirement || "",
         skill,
         skillName: skill ? D.SKILL_DE[skill] || skill : def.skill === "perception" ? "Wahrnehmung" : "",
         bonus: skill && skills[skill] ? skills[skill].mod : null,
         rank: skill && skills[skill] ? skills[skill].rank : null,
         vs: def.vs || "",
-        text: def.text || e.s || "",
+        text: def.text || e.s || own.summary || "",
         by: list.map((a) => ({
           name: a.name, slug: a.slug, summary: a.summary, level: a.level,
           cost: a.cost, trigger: a.trigger, requirement: a.requirement, frequency: a.frequency,
