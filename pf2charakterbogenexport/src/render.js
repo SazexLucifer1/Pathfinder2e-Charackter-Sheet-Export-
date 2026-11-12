@@ -29,7 +29,7 @@
     const SW = global.PF2_STICHWORTE || {};
     if (key && key in SW) {
       const notes = (String(text || "").match(/(?:→|Aktuell:)[^→]*$/) || [""])[0].trim();
-      return [SW[key], notes].filter(Boolean).join(" ");
+      return [byLevel(SW[key]), notes].filter(Boolean).join(" ");
     }
     return SUM && SUM.compact ? SUM.compact(text) : text;
   }
@@ -68,6 +68,10 @@
 
   // Bogen-Art: siehe PF2_FRONT.blankFor – wird in render() gesetzt.
   let blank = { session: true, level: false };
+  let charLevel = 1;
+  /** Stichworte „[ab N: …]“ nur zeigen, wenn der Charakter Stufe N erreicht hat. */
+  const byLevel = (t) =>
+    String(t || "").replace(/\s*\[ab (\d+): ([^\]]*)\]/g, (_, n, x) => (charLevel >= Number(n) ? ` Ab Stufe ${n}: ${x}` : "")).trim();
 
   /** Seitenkopf wie auf Seite 1: Marke links, Seitentitel rechts, Name darunter. */
   function pageHead(title, model) {
@@ -561,6 +565,7 @@
   function render(model, opts) {
     const mode = (opts && opts.mode) || "spielbereit";
     blank = FRONT.blankFor(mode);
+    charLevel = Number(model.level) || 1;
     return `<div class="pf2-sheet">${warningsBlock(model)}${FRONT.render(model, { mode })}${abilitiesPage(model)}${levelPlanPage(
       model
     )}${spellsPage(model)}${inventoryPage(model)}${conditionsPage(model)}</div>`;

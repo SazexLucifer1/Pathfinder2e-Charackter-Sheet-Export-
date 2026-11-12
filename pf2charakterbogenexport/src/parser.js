@@ -1222,6 +1222,12 @@
     const reAct = /\[\[\/act ([a-z][a-z-]+)/g;
     while ((m = reAct.exec(blob))) refs.add(m[1]);
     refs.delete(ownSlug);
+    // Nur gewährt (z. B. Gerechtigkeit → Vergeltender Angriff): verbessert die Aktion nicht
+    (get(it, "system.rules", []) || []).forEach((r) => {
+      const g = r && r.key === "GrantItem" && String(r.uuid || "").match(/actionspf2e\.Item\.([A-Za-z0-9]{16})/);
+      const sl = g && D.actionSlugById(g[1]);
+      if (sl) refs.delete(sl);
+    });
     GENERIC_ACTIONS.forEach((g) => refs.delete(g));
     return Array.from(refs);
   }

@@ -11,6 +11,7 @@
  * Ergänzte Hinweise wie „→ Damit greift dein Hinterhältiger Angriff …“ oder
  * „Aktuell: +2W6 …“ hängt der Bogen selbst an.
  * Ein leerer String bedeutet: keine Regel – nichts anzeigen.
+ * „[ab 9: …]“ erscheint erst, wenn der Charakter Stufe 9 erreicht hat.
  */
 (function (global) {
   "use strict";
@@ -156,7 +157,7 @@
     "deific-weapon": "Bevorzugte Waffe deiner Gottheit: Einfache Waffe oder waffenlos mit W4 → Schadenswürfel +1 Stufe. Ungewöhnlich → Zugang. Spezialwaffe → zählt als Kriegswaffe.",
     "devotion-spells": "Stoßgebete = Fokuszauber (1 Fokuspunkt, Attribut Charisma). Fokuspunkte: tägl. Vorbereitung voll; Neu fokussieren (10 Min.) → +1.",
     "champions-aura": "Aura 15 Fuß: Reichweite deiner Streiterreaktion u. a. Anhänger deiner Gottheit erkennen dich. Unterdrücken/aufnehmen: 1 Aktion (Konzentration); endet bei Bewusstlos.",
-    "justice": "Gebote: Gesetz befolgen, legitime Autorität achten. Anathema: andere ausnutzen, betrügen. Streiterreaktion: Vergeltender Angriff; ab Stufe 9 Treffer → anhaltender Seelenschaden = CH-Mod.; ab Stufe 11 dürfen Verbündete in deiner Aura mit Ziel in Reichweite per Reaktion angreifen (−5).",
+    "justice": "Gebote: Gesetz befolgen, legitime Autorität achten. Anathema: andere ausnutzen, betrügen. Streiterreaktion: Vergeltender Angriff. [ab 9: Treffer → anhaltender Seelenschaden = CH-Mod.] [ab 11: Verbündete in deiner Aura mit Ziel in Reichweite dürfen per Reaktion angreifen (−5).]",
     "retributive-strike": "Verbündeter: Resistenz (Stufe + 2) gegen den auslösenden Schaden. Gegner in Reichweite → Nahkampfangriff gegen ihn.",
     "act:retributive-strike": "Verbündeter: Resistenz (Stufe + 2) gegen den auslösenden Schaden. Gegner in Reichweite → Nahkampfangriff gegen ihn.",
     "blessed-armament": "Geist in einer Waffe/Schlaghandwickel: Kritischer Spezialisierungseffekt + 1 Eigenschaftsrune nach Wahl (Furchteinflößend, Geister berührend, Untote zerstörend, Variabel, Zurückkehrend) – zählt nicht zum Runenlimit. Tägl. Vorbereitung: Waffe/Rune wechselbar.",
